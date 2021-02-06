@@ -1,6 +1,2 @@
 #pragma once
-class MapDriver
-{
-public:
-	int main();
-};
+int main();

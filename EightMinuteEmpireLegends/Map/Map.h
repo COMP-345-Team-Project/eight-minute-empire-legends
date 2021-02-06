@@ -13,9 +13,10 @@ class Territory
 private:
 	string name;
 	string owner;
-	string continent;
+	string continent;	
 	int armies;
-public:
+public:	
+
 	Territory(string name, string owner, string continent, int armies);
 	Territory(string name, string owner, string continent);
 
@@ -28,5 +29,6 @@ public:
 	string getOwner();
 	string getContinent();
 	int getArmies();
+	string toString();
 };
 
