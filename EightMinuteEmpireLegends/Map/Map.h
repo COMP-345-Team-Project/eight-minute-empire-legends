@@ -77,11 +77,11 @@ public:
 	vector<Edge> edges();
 	Edge* getEdge(Vertex v1, Vertex v2);
 	vector<Vertex> endVertices(Edge *e);
-	Vertex opposite(Vertex v, Edge *e);
+	Vertex* opposite(Vertex v, Edge *e);
 	int degree(Vertex v);
 	vector<Edge> edges(Vertex v);
-	void insertVertex(Territory t, string id);
-	bool insertEdge(Vertex v1, Vertex v2, string id);
+	bool insertVertex(Vertex v);
+	bool insertEdge(Edge e);
 	bool removeVertex(string id);
 	bool removeEdge(string id);
 };

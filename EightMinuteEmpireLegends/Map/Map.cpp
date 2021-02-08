@@ -32,21 +32,23 @@ Edge* Continent::getEdge(Vertex v1, Vertex v2) {
 			return &e;
 		}
 	}	
+	return NULL;
 }
 
 vector<Vertex> Continent::endVertices(Edge *e) {
 	return e != NULL ? e->getEndpoints() : vector<Vertex>();
 }
 
-Vertex Continent::opposite(Vertex v, Edge *e) {
+Vertex* Continent::opposite(Vertex v, Edge *e) {
 	if (e != NULL) {
 		if (e->getEndpoints()[0].compare(v)) {
-			return e->getEndpoints()[1];
+			return &e->getEndpoints()[1];
 		}
 		else {
-			return e->getEndpoints()[0];
+			return &e->getEndpoints()[0];
 		}
-	}	
+	}
+	return NULL;
 }
 
 int Continent::degree(Vertex v) {
@@ -69,13 +71,19 @@ vector<Edge> Continent::edges(Vertex v) {
 	return incidents;
 }
 
-void Continent::insertVertex(Territory t, string id) {	
-	this->v_vertices.push_back(Vertex(t, id));
+bool Continent::insertVertex(Vertex v) {	
+	for (Vertex ver : this->v_vertices) {
+		if (ver.getId() == v.getId()) {
+			return false;
+		}
+	}
+	this->v_vertices.push_back(v);
+	return true;
 }
 
-bool Continent::insertEdge(Vertex v1, Vertex v2, string id) {
-	if (getEdge(v1, v2) == NULL) {
-		this->v_edges.push_back(Edge(v1, v2, id));
+bool Continent::insertEdge(Edge e) {
+	if (getEdge(e.getEndpoints()[0], e.getEndpoints()[1]) == NULL) {
+		this->v_edges.push_back(e);
 		return true;
 	}
 	return false;
