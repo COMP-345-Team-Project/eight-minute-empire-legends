@@ -3,8 +3,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 int main() {
 
 	// Playing around with iterator object. Ignore this.
@@ -17,16 +15,16 @@ int main() {
 	v1.push_back(9);
 	v1.push_back(4);
 	
-	cout << v1.front() << ' ';
-	cout << v1.at(1) << ' ';
-	cout << v1.back() << endl;
+	std::cout << v1.front() << ' ';
+	std::cout << v1.at(1) << ' ';
+	std::cout << v1.back() << std::endl;
 
 	it = v1.begin();
 	v1.erase(it++);
 
 	string str = "V" + to_string(abs((int)&v1));
-	cout << (int)&v1 << endl;
-	cout << str;
+	std::cout << (int)&v1 << std::endl;
+	std::cout << str;
 
 	Vertex v1 = Vertex(t1, "V" + to_string((int)&v1));
 	Vertex v2 = Vertex(t2, "V" + to_string((int)&v2));
@@ -49,24 +47,23 @@ int main() {
 
 	Continent c1 = Continent("C1");	
 
-	cout << v1.getId() << endl << endl;
-	cout << v2.getId() << endl << endl;
-	cout << v1.getTerritory().toString()  << endl << endl;
+	std::cout << v1.getId() << std::endl << std::endl;
+	std::cout << v2.getId() << std::endl << std::endl;
+	std::cout << v1.getTerritory().toString()  << std::endl << std::endl;
 	
-	cout << e1.getId() << endl << endl;
-	cout << e1.getEndpoints()[0].getId() << ' ' << e1.getEndpoints()[1].getId() << endl << endl;	
+	std::cout << e1.getId() << std::endl << std::endl;
+	std::cout << e1.getEndpoints()[0].getId() << ' ' << e1.getEndpoints()[1].getId() << std::endl << std::endl;	
 
-	cout << c1.insertVertex(v1) << c1.insertVertex(v2) << c1.insertVertex(v3) << c1.insertVertex(v4) << endl << endl;
-	cout << c1.insertEdge(e1) << c1.insertEdge(e2) << c1.insertEdge(e3) << c1.insertEdge(e4) << endl << endl;
-	cout << c1.numVertices() << endl << endl;
-	cout << vertices_toString(c1.vertices()) << endl << endl;
-	cout << c1.numEdges() << endl << endl;
-	cout << edges_toString(c1.edges()) << endl << endl;
-	cout << c1.getEdge(v1, v2)->getId() << endl << endl;
-	cout << c1.getEdge(v1, v4) << endl << endl;
-	cout << c1.endVertices(&e1)[0].getId() << ' ' << c1.endVertices(&e1)[1].getId() << endl << endl;
-	cout << c1.opposite(v1, &e1)->getId() << endl << endl;
+	std::cout << c1.insertVertex(v1) << c1.insertVertex(v2) << c1.insertVertex(v3) << c1.insertVertex(v4) << std::endl << std::endl;
+	std::cout << c1.insertEdge(e1) << c1.insertEdge(e2) << c1.insertEdge(e3) << c1.insertEdge(e4) << std::endl << std::endl;
+	std::cout << c1.numVertices() << std::endl << std::endl;
+	std::cout << vertices_toString(c1.vertices()) << std::endl << std::endl;
+	std::cout << c1.numEdges() << std::endl << std::endl;
+	std::cout << edges_toString(c1.edges()) << std::endl << std::endl;
+	std::cout << c1.getEdge(v1, v2)->getId() << std::endl << std::endl;
+	std::cout << c1.getEdge(v1, v4) << std::endl << std::endl;
+	std::cout << c1.endVertices(&e1)[0].getId() << ' ' << c1.endVertices(&e1)[1].getId() << std::endl << std::endl;
+	std::cout << c1.opposite(v1, &e1)->getId() << std::endl << std::endl;
 
 	return 0;
 }
-

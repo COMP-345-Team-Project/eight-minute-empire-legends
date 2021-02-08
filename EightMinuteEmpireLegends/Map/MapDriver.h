@@ -3,10 +3,8 @@
 #include <vector>
 #include "Map.h"
 
-using namespace std;
-
-string vertices_toString(vector<Vertex> v) {
-	string str = "Vertices: [ ";
+std::string vertices_toString(std::vector<Vertex> v) {
+	std::string str = "Vertices: [ ";
 
 	for (Vertex ver : v) {
 		str += ver.getId() + " ";
@@ -14,8 +12,8 @@ string vertices_toString(vector<Vertex> v) {
 	return str + "]";
 }
 
-string edges_toString(vector<Edge> v) {
-	string str = "Edges: [ ";
+std::string edges_toString(std::vector<Edge> v) {
+	std::string str = "Edges: [ ";
 
 	for (Edge ed : v) {
 		str += ed.getId() + " ";
