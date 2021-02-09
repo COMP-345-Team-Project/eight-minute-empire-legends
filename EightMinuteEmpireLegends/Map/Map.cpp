@@ -105,12 +105,11 @@ bool Continent::removeVertex(std::string id) {
 	return false;
 }
 
-void Continent::removeEdgeCatalyst(std::string id) {
-	std::list<Edge*>  l{ std::begin(this->v_edges), std::end(this->v_edges) };	
+void Continent::removeEdgeCatalyst(std::string id) {	
+	std::vector<Edge*>::iterator begin = this->v_edges.begin();
+	std::vector<Edge*>::iterator end = this->v_edges.end();
 
-	l.remove_if([id](Edge* const e) { return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); });	
-
-	//this->v_edges = v{ std::begin(l.begin()), std::end(l.end()) };
+	this->v_edges.erase(std::remove_if(begin, end, [id](Edge* const e) { return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); }), end);
 }
 
 bool Continent::removeEdge(std::string id) {

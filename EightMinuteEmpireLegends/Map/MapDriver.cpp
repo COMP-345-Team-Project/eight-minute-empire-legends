@@ -82,9 +82,8 @@ int main() {
 	std::cout << "Now degree of vertex u is " << c1.degree(&v1) << " and degree of vertex z is " << c1.degree(&v4) << std::endl << std::endl;
 	std::cout << "Incident edges to vertex u are now " << edges_toString(c1.edges(&v1)) << std::endl << std::endl;
 
-	std::cout << c1.removeVertex("z") << c1.removeVertex("u") << std::endl << std::endl;
-	std::cout << edges_toString(c1.edges()) << std::endl << std::endl;
-	//std::cout << c1.opposite(&v3, &e4)->getId() << std::endl << std::endl;
+	c1.removeVertex("w");
+	std::cout <<"Removing Vertex w from the graph, remaining edges will be " << edges_toString(c1.edges()) << std::endl << std::endl;	
 
 	return 0;
 }
