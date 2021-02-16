@@ -2,17 +2,17 @@
 
 NameSorter::NameSorter()
 {
-	this->lastNameLeader = "Bob";
+	this->lastNameLeader = nullptr;
 }
 
 void NameSorter::addName(std::string newName)
 {
-	if (newName < this->lastNameLeader) {
-		this->lastNameLeader = newName;
+	if (newName < *this->lastNameLeader) {
+		*this->lastNameLeader = newName;
 	}
 }
 
 std::string NameSorter::getLeader()
 {
-	return this->lastNameLeader;
+	return *this->lastNameLeader;
 }

@@ -7,8 +7,7 @@
 class NameSorter
 {
 private:
-	//std::map<std::string, std::string> guidNameMap;
-	std::string lastNameLeader;
+	std::string * lastNameLeader;
 
 public:
 	NameSorter();

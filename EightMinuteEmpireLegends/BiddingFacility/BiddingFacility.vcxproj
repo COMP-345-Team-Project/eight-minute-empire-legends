@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bid.h" />
+    <ClInclude Include="BiddingFacility.h" />
     <ClInclude Include="BiddingTests.h" />
     <ClInclude Include="NameSorter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bid.cpp" />
+    <ClCompile Include="BiddingFacility.cpp" />
     <ClCompile Include="BiddingTests.cpp" />
     <ClCompile Include="NameSorter.cpp" />
   </ItemGroup>

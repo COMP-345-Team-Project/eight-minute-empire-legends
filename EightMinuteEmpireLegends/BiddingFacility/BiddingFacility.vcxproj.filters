@@ -15,18 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NameSorter.h">
+    <ClInclude Include="BiddingTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BiddingTests.h">
+    <ClInclude Include="BiddingFacility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NameSorter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NameSorter.cpp">
+    <ClCompile Include="BiddingTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BiddingTests.cpp">
+    <ClCompile Include="BiddingFacility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NameSorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
