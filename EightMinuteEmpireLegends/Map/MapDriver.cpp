@@ -30,7 +30,9 @@ int main() {
 	Vertex v4 = Vertex(t2, "V" + to_string((int)&v4));
 	*/
 	
-	Territory t1 = Territory("Quebec");	
+	Continent c1 = Continent("C1");
+
+	Territory t1 = Territory("Quebec", &c1);
 	Territory t2 = Territory(t1);	
 
 	Vertex v1 = Vertex(&t1, "u");
@@ -47,9 +49,7 @@ int main() {
 	Edge e1 = Edge(&v1, &v2, "e");
 	Edge e2 = Edge(&v1, &v3, "g");
 	Edge e3 = Edge(&v2, &v3, "f");
-	Edge e4 = Edge(&v3, &v4, "h");		
-
-	Continent c1 = Continent("C1");	
+	Edge e4 = Edge(&v3, &v4, "h");			
 
 	std::cout << "ID of vertex 1 is " << v1.getId() << std::endl << std::endl;
 	std::cout << "ID of vertex 2 is " << v2.getId() << std::endl << std::endl;
@@ -83,7 +83,7 @@ int main() {
 	std::cout << "Incident edges to vertex u are now " << edges_toString(c1.edges(&v1)) << std::endl << std::endl;
 
 	c1.removeVertex("w");
-	std::cout <<"Removing Vertex w from the graph, remaining edges will be " << edges_toString(c1.edges()) << std::endl << std::endl;	
+	std::cout <<"Removing Vertex w from the graph, remaining edges will be " << edges_toString(c1.edges()) << std::endl << std::endl;		
 
 	return 0;
 }
