@@ -82,6 +82,7 @@ private:
 	std::vector<Vertex*> v_vertices;
 	std::vector<Edge*> v_edges;
 	std::vector<Continent*> v_continents;	
+	Vertex* startingRegion;
 	void removeEdgeCatalyst(std::string id);
 	bool exists(std::string c);
 public:
@@ -89,6 +90,8 @@ public:
 	Map();
 	
 	std::string getName();
+	void setStartingRegion(Vertex* v);
+	Vertex* getStartingRegion();
 	int numVertices();
 	std::vector<Vertex*> vertices();		
 	int numEdges();

@@ -5,13 +5,21 @@
 // Map function/constructor definitions
 
 Map::Map(std::string name, std::vector<Continent*> c)
-	: name(name), v_vertices({}), v_edges({}), v_continents(c) { }
+	: name(name), v_vertices({}), v_edges({}), v_continents(c), startingRegion(nullptr) { }
 
 Map::Map()
-	: name(""), v_vertices({}), v_edges({}), v_continents({}) { }
+	: name(""), v_vertices({}), v_edges({}), v_continents({}), startingRegion(nullptr) { }
 
 std::string Map::getName() {
 	return this->name;
+}
+
+void Map::setStartingRegion(Vertex* v) {
+	this->startingRegion = v;
+}
+
+Vertex* Map::getStartingRegion() {
+	return this->startingRegion;
 }
 
 int Map::numVertices() {
