@@ -2,39 +2,43 @@
 #include <string>
 #include <vector>
 
-// Continent function/constructor definitions
+// Map function/constructor definitions
 
-Continent::Continent(std::string name)
-	: name(name) { }
+Map::Map(std::string name, std::vector<Continent*> c)
+	: name(name), v_vertices({}), v_edges({}), v_continents(c) { }
 
-Continent::Continent()
-	: name(""), v_vertices({}), v_edges({}) { }
+Map::Map()
+	: name(""), v_vertices({}), v_edges({}), v_continents({}) { }
 
-void Continent::setName(std::string name) {
-	this->name = name;
-}
-
-std::string Continent::getName() {
+std::string Map::getName() {
 	return this->name;
 }
 
-int Continent::numVertices() {
+int Map::numVertices() {
 	return this->v_vertices.size();
 }
 
-std::vector<Vertex*> Continent::vertices() {
+std::vector<Vertex*> Map::vertices() {
 	return this->v_vertices;
 }
 
-int Continent::numEdges() {
+int Map::numEdges() {
 	return this->v_edges.size();
 }
 
-std::vector<Edge*> Continent::edges() {
+std::vector<Edge*> Map::edges() {
 	return this->v_edges;
 }
 
-Edge* Continent::getEdge(Vertex* v1, Vertex* v2) {
+int Map::numContinents() {
+	return this->v_continents.size();
+}
+
+std::vector<Continent*> Map::continents() {
+	return this->v_continents;
+}
+
+Edge* Map::getEdge(Vertex* v1, Vertex* v2) {
 	for (Edge* e : this->v_edges) {
 		if (e->getEndpoints()[0]->compare(v1) && e->getEndpoints()[1]->compare(v2)
 			|| e->getEndpoints()[0]->compare(v2) && e->getEndpoints()[1]->compare(v1)) {
@@ -44,11 +48,11 @@ Edge* Continent::getEdge(Vertex* v1, Vertex* v2) {
 	return nullptr;
 }
 
-std::vector<Vertex*> Continent::endVertices(Edge* e) {
-	return e != nullptr ? e->getEndpoints() : std::vector<Vertex*>();
+std::vector<Vertex*> Map::endVertices(Edge* e) {
+	return e != nullptr ? e->getEndpoints() : std::vector<Vertex*>();	
 }
 
-Vertex* Continent::opposite(Vertex* v, Edge* e) {
+Vertex* Map::opposite(Vertex* v, Edge* e) {
 	if (e != nullptr) {
 		if (e->getEndpoints()[0]->compare(v)) {
 			return e->getEndpoints()[1];
@@ -63,7 +67,7 @@ Vertex* Continent::opposite(Vertex* v, Edge* e) {
 	return nullptr;
 }
 
-int Continent::degree(Vertex* v) {
+int Map::degree(Vertex* v) {
 	int degree = 0;
 	for (Edge* e : this->v_edges) {
 		if (e->getEndpoints()[0]->compare(v) || e->getEndpoints()[1]->compare(v)) {
@@ -73,7 +77,7 @@ int Continent::degree(Vertex* v) {
 	return degree;
 }
 
-std::vector<Edge*> Continent::edges(Vertex* v) {
+std::vector<Edge*> Map::edges(Vertex* v) {
 	std::vector<Edge*> incidents{};
 	for (Edge* e : this->v_edges) {
 		if (e->getEndpoints()[0]->compare(v) || e->getEndpoints()[1]->compare(v)) {
@@ -83,17 +87,31 @@ std::vector<Edge*> Continent::edges(Vertex* v) {
 	return incidents;
 }
 
-bool Continent::insertVertex(Vertex* v) {
-	for (Vertex* ver : this->v_vertices) {
-		if (ver->getId() == v->getId()) {
-			return false;
+std::vector<Vertex*> Map::vertices(Continent* c) {
+	std::vector<Vertex*> regions{};
+
+	for (Vertex* v : this->v_vertices) {
+		if (v->getTerritory()->getContinent() == c->name) {
+			regions.push_back(v);
 		}
 	}
-	this->v_vertices.push_back(v);
-	return true;
+	return regions;
 }
 
-bool Continent::insertEdge(Edge* e) {
+bool Map::insertVertex(Vertex* v) {
+	if (exists(v->getTerritory()->getContinent())) {
+		for (Vertex* ver : this->v_vertices) {
+			if (ver->getId() == v->getId()) {
+				return false;
+			}
+		}
+		this->v_vertices.push_back(v);
+		return true;
+	}	
+	return false;
+}
+
+bool Map::insertEdge(Edge* e) {
 	if (getEdge(e->getEndpoints()[0], e->getEndpoints()[1]) == nullptr) {
 		this->v_edges.push_back(e);
 		return true;
@@ -101,12 +119,12 @@ bool Continent::insertEdge(Edge* e) {
 	return false;
 }
 
-bool Continent::removeVertex(std::string id) {
+bool Map::removeVertex(std::string id) {
 	std::vector<Vertex*>::iterator it = this->v_vertices.begin();
 	for (Vertex* v : this->v_vertices) {
 		if (v->getId() == id) {
 			this->v_vertices.erase(it);
-			removeEdgeCatalyst(v->getId());
+			removeEdgeCatalyst(v->getId());					
 			return true;
 		}
 		it++;
@@ -114,21 +132,30 @@ bool Continent::removeVertex(std::string id) {
 	return false;
 }
 
-void Continent::removeEdgeCatalyst(std::string id) {
+void Map::removeEdgeCatalyst(std::string id) {
 	std::vector<Edge*>::iterator begin = this->v_edges.begin();
 	std::vector<Edge*>::iterator end = this->v_edges.end();
 
 	this->v_edges.erase(std::remove_if(begin, end, [id](Edge* const e) { return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); }), end);
 }
 
-bool Continent::removeEdge(std::string id) {
+bool Map::removeEdge(std::string id) {
 	std::vector<Edge*>::iterator it = this->v_edges.begin();
 	for (Edge* e : this->v_edges) {
 		if (e->getId() == id) {
-			this->v_edges.erase(it);
+			this->v_edges.erase(it);			
 			return true;
 		}
 		it++;
+	}
+	return false;
+}
+
+bool Map::exists(std::string c) {
+	for (Continent* con : this->v_continents) {
+		if (con->name == c) {
+			return true;
+		}
 	}
 	return false;
 }
@@ -145,7 +172,7 @@ std::string Vertex::getId() {
 	return this->id;
 }
 
-Territory Vertex::getTerritory() {
+Territory* Vertex::getTerritory() {
 	return this->t;
 }
 
@@ -169,20 +196,16 @@ std::vector<Vertex*> Edge::getEndpoints() {
 	return { this->v1, this->v2 };
 }
 
-bool Edge::crossContinent() {
-	return this->v1->getTerritory().getContinent()->getName() == this->v2->getTerritory().getContinent()->getName();
-}
-
 // Territory function/constructor definitions
 
-Territory::Territory(std::string name, Continent* c)
-	: name(name), owner(""), c(c), armies(0) { }
+Territory::Territory(std::string name, std::string c)
+	: name(name), owner(""), armies(0), c(c){ }
 
 Territory::Territory(Territory* t)
-	: name(t->getName()), owner(t->getOwner()), armies(t->getArmies()), c(t->c) { }
+	: name(t->getName()), owner(t->getOwner()), armies(t->getArmies()), c(t->getContinent()) { }
 
 Territory::Territory()
-	: name(""), owner(""), armies(0), c(nullptr) { }
+	: name(""), owner(""), armies(0), c("") { }
 
 void Territory::setName(std::string name) {
 	this->name = name;
@@ -204,14 +227,14 @@ std::string Territory::getOwner() {
 	return this->owner;
 }
 
-Continent* Territory::getContinent() {
-	return this->c;
-}
-
 int Territory::getArmies() {
 	return this->armies;
 }
 
+std::string Territory::getContinent() {
+	return this->c;
+}
+
 std::string Territory::toString() {
-	return "Name: " + this->name + "\nOwner: " + this->owner + "\nArmies: " + std::to_string(this->armies);
+	return "Name: " + this->name + "\nOwner: " + this->owner + "\nArmies: " + std::to_string(this->armies) + "\nContinent: " + this->c;
 }
