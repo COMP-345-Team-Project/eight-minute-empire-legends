@@ -52,6 +52,7 @@ std::vector<Vertex*> Map::endVertices(Edge* e) {
 	return e != nullptr ? e->getEndpoints() : std::vector<Vertex*>();	
 }
 
+// Dangling pointer warning. Should fix in the future.
 Vertex* Map::opposite(Vertex* v, Edge* e) {
 	if (e != nullptr) {
 		if (e->getEndpoints()[0]->compare(v)) {
@@ -60,10 +61,7 @@ Vertex* Map::opposite(Vertex* v, Edge* e) {
 		else if (e->getEndpoints()[1]->compare(v)) {
 			return e->getEndpoints()[0];
 		}
-		else {
-			return nullptr;
-		}
-	}
+	}	
 	return nullptr;
 }
 
@@ -132,6 +130,7 @@ bool Map::removeVertex(std::string id) {
 	return false;
 }
 
+// Removes all incident edges of a deleted vertex.
 void Map::removeEdgeCatalyst(std::string id) {
 	std::vector<Edge*>::iterator begin = this->v_edges.begin();
 	std::vector<Edge*>::iterator end = this->v_edges.end();
@@ -158,6 +157,10 @@ bool Map::exists(std::string c) {
 		}
 	}
 	return false;
+}
+
+bool Map::validate() {
+	return (this->v_edges.size() >= (this->v_vertices.size() - 1)) && this->v_continents.size() > 1;
 }
 
 // Vertex function/constructor definitions

@@ -5,87 +5,99 @@
 
 int main() {
 
-	/*
-	Vertex v1 = Vertex(t1, "V" + to_string((int)&v1));
-	Vertex v2 = Vertex(t2, "V" + to_string((int)&v2));
-	Vertex v3 = Vertex(t1, "V" + to_string((int)&v3));
-	Vertex v4 = Vertex(t2, "V" + to_string((int)&v4));
-	*/
-	
-	struct Continent c1, c2, c3, c4;
-	c1.name = "NA";
-	c2.name = "SA";
+	// Valid map example
+
+	Continent c1, c2, c3, c4;
+	c1.name = "Europe";
+	c2.name = "Asia";
 	c3.name = "Africa";
-	c4.name = "Europe";
+	c4.name = "Oceania";	
 
-	enum subgraph { Apple, Orange, Pear };
+	Territory* t1 = new Territory("France", c1.name);
+	Territory* t2 = new Territory("Germany", c1.name);
+	Territory* t3 = new Territory("Egypt", c3.name);
+	Territory* t4 = new Territory("Uganda", c3.name);
+	Territory* t5 = new Territory("China", c2.name);
+	Territory* t6 = new Territory("New Zealand", c4.name);
+	std::vector<Territory*> v_t{ t1, t2, t3, t4, t5, t6 };
 
-	std::vector<Continent*> c{ &c1, &c2, &c3, &c4 };
-	Map m1 = Map("Earth", c);
+	Vertex* v1 = new Vertex(t1, "u");
+	Vertex* v2 = new Vertex(t2, "v");
+	Vertex* v3 = new Vertex(t3, "w");
+	Vertex* v4 = new Vertex(t4, "x");
+	Vertex* v5 = new Vertex(t5, "y");
+	Vertex* v6 = new Vertex(t6, "z");
+	std::vector<Vertex*> v_v{ v1, v2, v3, v4, v5, v6 };
 
-	Territory t1 = Territory("Quebec", c1.name);
-	Territory t2 = Territory(t1);		
-	Territory t3 = Territory("BC", c3.name);
+	Edge* e1 = new Edge(v3, v4, "a");
+	Edge* e2 = new Edge(v3, v1, "b");
+	Edge* e3 = new Edge(v1, v2, "c");
+	Edge* e4 = new Edge(v2, v5, "d");
+	Edge* e5 = new Edge(v5, v6, "e");
+	std::vector<Edge*> v_e{ e1, e2, e3, e4, e5 };
 
-	Vertex v1 = Vertex(&t1, "u");
-	Vertex v2 = Vertex(&t2, "v");
-	Vertex v3 = Vertex(&t1, "w");
-	Vertex v4 = Vertex(&t2, "z");
-	Vertex v5 = Vertex(&t3, "a");
+	Map* m1 = new Map("Earth", { &c1, &c2, &c3, &c4 });
 
-	t2.setName("Ontario");
-	t2.setOwner("Thomas");
-	t2.setArmies(25);
-	t1.setOwner("Jacque");
-	t1.setArmies(50);	
+	m1->insertVertex(v1);
+	m1->insertVertex(v2);
+	m1->insertVertex(v3);
+	m1->insertVertex(v4);
+	m1->insertVertex(v5);
+	m1->insertVertex(v6);
 
-	Edge e1 = Edge(&v1, &v2, "e");
-	Edge e2 = Edge(&v1, &v3, "g");
-	Edge e3 = Edge(&v2, &v3, "f");
-	Edge e4 = Edge(&v3, &v4, "h");			
+	m1->insertEdge(e1);
+	m1->insertEdge(e2);
+	m1->insertEdge(e3);
+	m1->insertEdge(e4);
+	m1->insertEdge(e5);
 
-	std::cout << "ID of vertex 1 is " << v1.getId() << std::endl;
-	std::cout << "ID of vertex 2 is " << v2.getId() << std::endl;
-	std::cout << "Territory of vertex 1: \n" << v1.getTerritory()->toString() << std::endl;
-	std::cout << "Territory of vertex 2: \n" << v2.getTerritory()->toString() << std::endl;
+	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "invalid") << std::endl;	
+
+	// Invalid map example		
+
+	Map* m2 = new Map("Earth", { &c1, &c2, &c3, &c4 });
+
+	m2->insertVertex(v1);
+	m2->insertVertex(v2);
+	m2->insertVertex(v3);
+	m2->insertVertex(v4);
+	m2->insertVertex(v5);
+	m2->insertVertex(v6);
+
+	// Notice that we are not inserting edge e5 in our graph, which means vector v6 will be disconnected
+	m2->insertEdge(e1);
+	m2->insertEdge(e2);
+	m2->insertEdge(e3);
+	m2->insertEdge(e4);	
+
+	std::cout << "Validating Map 2 - " << (m2->validate() ? "Valid" : "Invalid") << std::endl << std::endl;
+
+	// Graph information on Map 1
+	std::cout << "Map 1 " << vertices_toString(m1->vertices()) << std::endl;
+	std::cout << "Map 1 " << edges_toString(m1->edges()) << std::endl;
+	std::cout << "Map 1 " << continents_toString(m1->continents()) << std::endl;
+	std::cout << "Map 1 " << territories_toString(m1->vertices()) << std::endl;
+	std::cout << "Map 1 " << continents_toString(m1) << std::endl << std::endl;
+
+	// Graph information on Map 2
+	std::cout << "Map 2 " << vertices_toString(m2->vertices()) << std::endl;
+	std::cout << "Map 2 " << edges_toString(m2->edges()) << std::endl;
+	std::cout << "Map 2 " << continents_toString(m2->continents()) << std::endl;
+	std::cout << "Map 2 " << territories_toString(m2->vertices()) << std::endl;
+	std::cout << "Map 2 " << continents_toString(m2) << std::endl;
+
+	// Deleting variables in heap
+	for (Territory* t : v_t) {
+		delete t;
+	}
+	for (Vertex* v : v_v) {
+		delete v;
+	}
+	for (Edge* e : v_e) {
+		delete e;
+	}
+	delete m1;
+	delete m2;
 	
-	std::cout << "ID of edge {u, v} is " << e1.getId() << std::endl;
-	std::cout << "Endpoints of edge e are " << e1.getEndpoints()[0]->getId() << ' ' << e1.getEndpoints()[1]->getId() << std::endl;			
-
-	std::cout << "Inserting vertices to graph: " << m1.insertVertex(&v1) << m1.insertVertex(&v2) << m1.insertVertex(&v3) << m1.insertVertex(&v4) << m1.insertVertex(&v5) << std::endl;
-	std::cout << "Inserting edges to graph: " << m1.insertEdge(&e1) << m1.insertEdge(&e2) << m1.insertEdge(&e3) << m1.insertEdge(&e4) << std::endl;
-	std::cout << "Number of vertices in graph is " << m1.numVertices() << std::endl;
-	std::cout << "List of vertices in graph: " << vertices_toString(m1.vertices()) << std::endl;
-	std::cout << "Number of edges in graph is " << m1.numEdges() << std::endl;
-	std::cout << "List of edges in graph: " << edges_toString(m1.edges()) << std::endl;
-	std::cout << "Number of continents in graph: " << m1.numContinents() << std::endl;
-	std::cout << "List of subgraphs in graphs: " << continents_toString(m1.continents()) << std::endl;
-	std::cout << "ID of edge connecting vertices {w, z} is " << m1.getEdge(&v3, &v4)->getId() << std::endl;	
-	std::cout << "Edge e connects vertices " << m1.endVertices(&e1)[0]->getId() << " and " << m1.endVertices(&e1)[1]->getId() << std::endl;
-	std::cout << "Vertex u is connected by edge e to vertex " << m1.opposite(&v1, &e1)->getId() << std::endl;
-	std::cout << "Degree of vertex u is " << m1.degree(&v1) << " and degree of vertex z is " << m1.degree(&v4) << std::endl;
-	
-	Edge e5 = Edge(&v1, &v4, "i");
-	std::cout << "New edge 'i' is created connecting vertices u and z: " << std:: endl;
-
-	std::cout << "Inserting edge i to graph: " << m1.insertEdge(&e5) << std::endl;
-	std::cout << "Now degree of vertex u is " << m1.degree(&v1) << " and degree of vertex z is " << m1.degree(&v4) << std::endl;
-	std::cout << "Updated list of edges in graph: " << edges_toString(m1.edges()) << std::endl;
-	std::cout << "Incident edges to vertex u are " << edges_toString(m1.edges(&v1)) << std::endl;
-	
-	std::cout << "Removing edge i from graph: " << m1.removeEdge("i") << std::endl;
-	std::cout << "Now degree of vertex u is " << m1.degree(&v1) << " and degree of vertex z is " << m1.degree(&v4) << std::endl;
-	std::cout << "Incident edges to vertex u are now " << edges_toString(m1.edges(&v1)) << std::endl;
-
-	std::cout << "Removing vertex w: " << m1.removeVertex("w") << std::endl;
-
-	std::cout << "Removing Vertex w from the graph, remaining edges will be " << edges_toString(m1.edges()) << std::endl;	
-	std::cout << "Updated list of vertices - " << vertices_toString(m1.vertices()) << std::endl;
-	
-	std::cout << "All vertices in continent NA - " << vertices_toString(m1.vertices(&c1)) << std::endl;
-	m1.removeVertex(v1.getId());
-	std::cout << "All vertices in continent NA - " << vertices_toString(m1.vertices(&c1)) << std::endl;
-	
-
 	return 0;
 }
