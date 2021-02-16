@@ -1,0 +1,26 @@
+{
+  "vertices": [
+    {
+      "id": 0,
+      "territoryName": "Region1",
+      "continentName": "Continent1"
+    },
+    {
+      "id": 1,
+      "territoryName": "Region2",
+      "continentName": "Continent1"
+    }
+  ],
+  "edges": [
+    {
+      "id": 0,
+      "v1": 0,
+      "v2": 1
+    }
+  ],
+  "continents": [
+    {
+      "name": "continent1"
+    }
+  ]
+}

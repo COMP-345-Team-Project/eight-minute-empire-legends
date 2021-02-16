@@ -8,7 +8,7 @@ int main() {
 
 	//The file is stored in \eight-minute-empire-legends\EightMinuteEmpireLegends\Debug, make sure you have the map1.json file there
 	bool valid = map.validateMap("map1.json");
-	std:cout << valid;
+	std::cout << valid;
 
 	map.parseMap("map1.json");
 

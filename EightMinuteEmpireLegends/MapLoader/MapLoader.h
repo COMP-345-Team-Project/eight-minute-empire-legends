@@ -1,6 +1,8 @@
 #pragma once
 #include "Map.h"
 
+using std::string;
+
 class MapLoader
 {
 public:
@@ -8,5 +10,8 @@ public:
 
 	//Map loadMap();
 	bool validateMap(string mapPath);
-	void parseMap(string mapPath);
+	Map parseMap(string mapPath);
+
+private:
+	Continent* getContinentByName(vector<Continent*> &continents, string &name);
 };
