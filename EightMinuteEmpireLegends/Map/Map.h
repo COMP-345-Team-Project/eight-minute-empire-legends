@@ -90,9 +90,9 @@ public:
 	
 	std::string getName();
 	int numVertices();
-	std::vector<Vertex*> vertices();
+	std::vector<Vertex*> vertices();		
 	int numEdges();
-	std::vector<Edge*> edges();
+	std::vector<Edge*> edges();	
 	int numContinents();
 	std::vector<Continent*> continents();
 	Edge* getEdge(Vertex* v1, Vertex* v2);
@@ -101,6 +101,7 @@ public:
 	int degree(Vertex* v);
 	std::vector<Edge*> edges(Vertex* v);
 	std::vector<Vertex*> vertices(Continent* c);
+	std::vector<Vertex*> adjacentVertices(Vertex* v);
 	bool insertVertex(Vertex* v);
 	bool insertEdge(Edge* e);
 	bool removeVertex(std::string id);
