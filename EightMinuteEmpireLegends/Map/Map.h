@@ -22,7 +22,7 @@ private:
 public:
 	Territory(std::string name, std::string c);
 	Territory(Territory* t);
-	Territory();
+	Territory();	
 
 	void setName(std::string name);
 	void setOwner(std::string owner);
@@ -81,7 +81,7 @@ private:
 	std::string name;
 	std::vector<Vertex*> v_vertices;
 	std::vector<Edge*> v_edges;
-	std::vector<Continent*> v_continents;
+	std::vector<Continent*> v_continents;	
 	void removeEdgeCatalyst(std::string id);
 	bool exists(std::string c);
 public:
