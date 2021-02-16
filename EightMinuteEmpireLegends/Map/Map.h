@@ -5,7 +5,7 @@
 // Class forward declarations
 
 class Map;
-class Continent;
+struct Continent;
 class Edges;
 class Vertex;
 class Territory;
@@ -16,11 +16,11 @@ class Territory
 {
 private:
 	std::string name;
-	std::string owner;
-	Continent* const c;
-	int armies;
+	std::string owner;	
+	int armies;		
+	std::string const c;
 public:
-	Territory(std::string name, Continent* c);
+	Territory(std::string name, std::string c);
 	Territory(Territory* t);
 	Territory();
 
@@ -28,9 +28,9 @@ public:
 	void setOwner(std::string owner);
 	void setArmies(int armies);
 	std::string getName();
-	std::string getOwner();
-	Continent* getContinent();
+	std::string getOwner();	
 	int getArmies();
+	std::string getContinent();
 	std::string toString();
 };
 
@@ -46,7 +46,7 @@ public:
 	Vertex();
 
 	std::string getId();
-	Territory getTerritory();
+	Territory* getTerritory();
 	bool compare(Vertex* v);
 };
 
@@ -63,38 +63,14 @@ public:
 	Edge();
 
 	std::string getId();
-	std::vector<Vertex*> getEndpoints();
-	bool crossContinent();
+	std::vector<Vertex*> getEndpoints();	
 };
 
-// Continent class declaration
+// Continent struct declaration
 
-class Continent
+struct Continent
 {
-private:
 	std::string name;
-	std::vector<Vertex*> v_vertices;
-	std::vector<Edge*> v_edges;
-	void removeEdgeCatalyst(std::string id);
-public:
-	Continent(std::string name);
-	Continent();
-
-	void setName(std::string name);
-	std::string getName();
-	int numVertices();
-	std::vector<Vertex*> vertices();
-	int numEdges();
-	std::vector<Edge*> edges();
-	Edge* getEdge(Vertex* v1, Vertex* v2);
-	std::vector<Vertex*> endVertices(Edge* e);
-	Vertex* opposite(Vertex* v, Edge* e);
-	int degree(Vertex* v);
-	std::vector<Edge*> edges(Vertex* v);
-	bool insertVertex(Vertex* v);
-	bool insertEdge(Edge* e);
-	bool removeVertex(std::string id);
-	bool removeEdge(std::string id);
 };
 
 // Map class declaration
@@ -102,11 +78,32 @@ public:
 class Map
 {
 private:
-	std::vector<Continent*> continents;
+	std::string name;
+	std::vector<Vertex*> v_vertices;
+	std::vector<Edge*> v_edges;
+	std::vector<Continent*> v_continents;
+	void removeEdgeCatalyst(std::string id);
+	bool exists(std::string c);
 public:
+	Map(std::string name, std::vector<Continent*> c);
 	Map();
-
-	bool addContinent(Continent* c);
-	bool removeContinent(Continent* c);
+	
+	std::string getName();
+	int numVertices();
+	std::vector<Vertex*> vertices();
+	int numEdges();
+	std::vector<Edge*> edges();
+	int numContinents();
+	std::vector<Continent*> continents();
+	Edge* getEdge(Vertex* v1, Vertex* v2);
+	std::vector<Vertex*> endVertices(Edge* e);
+	Vertex* opposite(Vertex* v, Edge* e);
+	int degree(Vertex* v);
+	std::vector<Edge*> edges(Vertex* v);
+	std::vector<Vertex*> vertices(Continent* c);
+	bool insertVertex(Vertex* v);
+	bool insertEdge(Edge* e);
+	bool removeVertex(std::string id);
+	bool removeEdge(std::string id);
 	bool validate();
 };

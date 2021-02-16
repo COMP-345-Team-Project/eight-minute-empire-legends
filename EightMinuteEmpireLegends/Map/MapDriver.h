@@ -20,3 +20,12 @@ std::string edges_toString(std::vector<Edge*> v) {
 	}
 	return str + "]";
 }
+
+std::string continents_toString(std::vector<Continent*> c) {
+	std::string str = "Continents: [ ";
+
+	for (Continent* con : c) {
+		str += con->name + " ";
+	}
+	return str + "]";
+}
