@@ -1,5 +1,5 @@
 {
-  "name":  "validMap",
+  "name": "invalidMap",
   "vertices": [
     {
       "id": "0",
@@ -93,11 +93,6 @@
     }
   ],
   "edges": [
-    {
-      "id": "0",
-      "v1": "0",
-      "v2": "1"
-    },
     {
       "id": "1",
       "v1": "0",

@@ -25,147 +25,129 @@ bool MapLoader::validateMap(std::string path) {
 	return isValid;
 }
 
-Map MapLoader::parseMap(string path) {
+Map* MapLoader::parseMap(string path) {
+	Map* mapPtr = NULL;
+
+	//Make sure that we have a json file
+	if (!validateMap(path)) {
+		return mapPtr;
+	}
 
 	std::ifstream fileContentStream(path);
 	json mapJson = json::parse(fileContentStream);
 	//std::cout << mapJson.dump() + "\n";
 
 	try {
-		/*json jsonContinents = mapJson["continentVertices"];
-		int numOfContinents = static_cast<int>(jsonContinents.size());
-
-		for (int i = 0; i < numOfContinents; i++) {
-			json jsonContinent = jsonContinents[i];
-			string continentName = jsonContinent["name"];
-			std::cout << "Continent name is " + continentName + "\n";
-
-			json jsonVertices = jsonContinent["vertices"];
-			int numOfVertices = static_cast<int>(jsonVertices.size());
-			//Need a dynamic array because the number of vertices are not known at compile time
-			vector<Vertex*> vertices;
-
-			for (int j = 0; j < numOfVertices; j++) {
-				auto jsonVertex = jsonVertices[j];
-				Territory territory(jsonVertex["territory"]); //Need another constructor
-				string vertexId = jsonVertex["id"].dump();
-				Vertex *vertex = new Vertex(&territory, vertexId);
-				vertices.push_back(vertex);
-				std::cout << vertexId + "\n";
-			}
-
-			json jsonEdges = jsonContinent["edges"];
-			int numOfEdges = static_cast<int>(jsonEdges.size());
-			//Need a dynamic array because the number of vertices are not known at compile time
-			vector<Edge*> edges;
-
-			for (int j = 0; j < numOfVertices; j++) {
-				auto jsonEdge = jsonEdges[j];
-				string vertexId1 = jsonEdge["v1"];
-				string vertexId2 = jsonEdge["v2"];
-				Vertex *vertex1 = NULL;
-				Vertex *vertex2 = NULL;
-
-				for (int k = 0; k < numOfVertices; k++)
-				{
-					Vertex* currentVertex = vertices.at(k);
-					if (currentVertex->getId().compare(vertexId1))
-						vertex1 = currentVertex;
-					else if (currentVertex->getId().compare(vertexId2))
-						vertex2 = currentVertex;
-				}
-
-				if (vertex1 != NULL && vertex2 != NULL) {
-					string edgeId = jsonEdge["id"];
-					Edge* edge = new Edge(vertex1, vertex2, edgeId);
-					edges.push_back(edge);
-				}
-			}
-		}*/
-
 		//Create the list of continents first
 		json jsonContinents = mapJson["continents"];
 		int numOfContinents = static_cast<int>(jsonContinents.size());
+
 		vector<Continent*> continents;
 
 		for (int i = 0; i < numOfContinents; i++) {
 			auto jsonContinent = jsonContinents[i];
-			string continentName = jsonContinent["name"].dump();
+			string continentName = jsonContinent["name"].get<std::string>();
+			//std::cout << "Continent name: " + continentName << std::endl;
 
-			Continent continent(continentName);
-			Continent* continentPtr = &continent;
+			Continent* continentPtr = new Continent();
+			continentPtr->name = continentName;
+
 			continents.push_back(continentPtr);
 		}
+
+		/*for (int i = 0; i < numOfContinents; i++) {
+			std::cout << continents.at(i)->name << std::endl;
+		}*/
+
+		//Create the map with the continents
+		string mapName = mapJson["name"];
+		Map map(mapName, continents);
 
 		//Create the list of vertices and their correspoding territories
 		json jsonVertices = mapJson["vertices"];
 		int numOfVertices = static_cast<int>(jsonVertices.size());
-		vector<Vertex*> vertices;
+		//vector<Vertex*> vertices;
 
 		for (int j = 0; j < numOfVertices; j++) {
 			auto jsonVertex = jsonVertices[j];
-			string id = jsonVertex["id"].dump();
-			string territoryName = jsonVertex["territoryName"].dump();
-			string continentName = jsonVertex["continentName"].dump();
+			string id = jsonVertex["id"].get<std::string>();
+			string territoryName = jsonVertex["territoryName"].get<std::string>();
+			string continentName = jsonVertex["continentName"].get<std::string>();
 
 			Continent* continentPtr = getContinentByName(continents, continentName);
 			if (continentPtr == NULL)
-				throw "The continent with the name <<" + continentName + "does not exist";
+				throw "The continent with the name <<" + continentName + ">> does not exist";
 
-			Territory territory(territoryName, continentPtr); 
-			Territory* territoryPtr = &territory;
-			Vertex vertex(territoryPtr, id);
+			Territory* territory = new Territory(territoryName, continentName);
+			Vertex* vertex = new Vertex(territory, id);
 
-			Vertex* vertexPtr = &vertex;
-			vertices.push_back(vertexPtr);
+			map.insertVertex(vertex);
 		}
 
 		//Parse the edges
 		json jsonEdges = mapJson["edges"];
 		int numOfEdges = static_cast<int>(jsonEdges.size());
 		//Need a dynamic array because the number of vertices are not known at compile time
-		vector<Edge*> edges;
+		//vector<Edge*> edges;
 
-		for (int j = 0; j < numOfVertices; j++) {
+		for (int j = 0; j < numOfEdges; j++) {
 			auto jsonEdge = jsonEdges[j];
-			string vertexId1 = jsonEdge["v1"];
-			string vertexId2 = jsonEdge["v2"];
+			string vertexId1 = jsonEdge["v1"].get<std::string>();
+			string vertexId2 = jsonEdge["v2"].get<std::string>();
 			Vertex* vertex1 = NULL;
 			Vertex* vertex2 = NULL;
 
+			Vertex* currentVertex = NULL;
 			for (int k = 0; k < numOfVertices; k++)
 			{
-				Vertex* currentVertex = vertices.at(k);
-				if (currentVertex->getId().compare(vertexId1))
+				currentVertex = map.vertices().at(k);
+				std::cout << "Vertex id: " + currentVertex->getId() << std::endl;
+				if (currentVertex->getId().compare(vertexId1) == 0)
 					vertex1 = currentVertex;
-				else if (currentVertex->getId().compare(vertexId2))
+				else if (currentVertex->getId().compare(vertexId2) == 0)
 					vertex2 = currentVertex;
 			}
 
 			if (vertex1 != NULL && vertex2 != NULL) {
-				string edgeId = jsonEdge["id"];
+				string edgeId = jsonEdge["id"].get<std::string>();
 				Edge* edge = new Edge(vertex1, vertex2, edgeId);
-				edges.push_back(edge);
+				//edges.push_back(edge);
+				map.insertEdge(edge);
 			}
 			else {
 				throw "The vertex with the id <<" + vertexId1 + ">> or <<" + vertexId2 + ">> does not exist";
 			} 
 		}
 
-		return NULL;
+		bool isValid = map.validate();
+		if (!isValid) {
+			throw "The map is not a valid graph";
+		}
+		else {
+			std::cout << "The map is a valid graph" << std::endl;
+		}
 
+		mapPtr = &map;
+		return mapPtr;
 	}
 	catch (string message) {
-		std::cout << message;
+		std::cout << message << std::endl;
 	}
+	catch (json::exception& e) {
+		std::cout << "A nlohmann json parser error occured. Make sure your json is valid and have the correct structure." << std::endl;
+	}
+
+	return mapPtr;
 }
 
 Continent* MapLoader::getContinentByName(vector<Continent*> &continents, string &name) {
 	Continent* continent = NULL;
-	for (int i = 0; i < continents.size() && continent == NULL; i++) {
-		Continent* currContinent = continents.at(i);
-		if (currContinent->getName().compare(name) == 0)
+	for (std::vector<Continent*>::iterator it = continents.begin(); it != continents.end(); ++it) {
+		Continent* currContinent = (*it);
+		if (currContinent->name.compare(name) == 0) {
 			continent = currContinent;
+			std::cout << "Continent found" << std::endl;
+		}
 	}
 
 	return continent;
