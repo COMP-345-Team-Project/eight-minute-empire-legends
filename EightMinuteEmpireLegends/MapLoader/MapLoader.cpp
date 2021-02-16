@@ -98,13 +98,12 @@ Map* MapLoader::parseMap(string path) {
 			Vertex* vertex2 = NULL;
 
 			Vertex* currentVertex = NULL;
-			for (int k = 0; k < numOfVertices; k++)
+			for (int k = 0; k < map.vertices().size(); k++)
 			{
 				currentVertex = map.vertices().at(k);
-				std::cout << "Vertex id: " + currentVertex->getId() << std::endl;
 				if (currentVertex->getId().compare(vertexId1) == 0)
 					vertex1 = currentVertex;
-				else if (currentVertex->getId().compare(vertexId2) == 0)
+				else if (currentVertex->getId().compare(vertexId2) == 0) 
 					vertex2 = currentVertex;
 			}
 
@@ -119,13 +118,13 @@ Map* MapLoader::parseMap(string path) {
 			} 
 		}
 
-		bool isValid = map.validate();
+		/*bool isValid = map.validate();
 		if (!isValid) {
 			throw "The map is not a valid graph";
 		}
 		else {
 			std::cout << "The map is a valid graph" << std::endl;
-		}
+		}*/
 
 		mapPtr = &map;
 		return mapPtr;
@@ -145,12 +144,9 @@ Continent* MapLoader::getContinentByName(vector<Continent*> &continents, string 
 	for (std::vector<Continent*>::iterator it = continents.begin(); it != continents.end(); ++it) {
 		Continent* currContinent = (*it);
 		if (currContinent->name.compare(name) == 0) {
-			continent = currContinent;
-			std::cout << "Continent found" << std::endl;
+			return currContinent;
 		}
 	}
-
-	return continent;
 }
 
 

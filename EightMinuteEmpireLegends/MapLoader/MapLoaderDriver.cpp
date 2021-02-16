@@ -3,25 +3,39 @@
 #include <iostream>
 #include <fstream>
 
+string validateMap(Map* map) {
+	if (!map->validate()) {
+		return "The map is not a valid graph";
+	}
+	else {
+		return "The map is a valid graph";
+	}
+}
+
 int main() {
-	MapLoader map;
+	MapLoader mapLoader;
 
 	//The file is stored in \eight-minute-empire-legends\EightMinuteEmpireLegends\Debug, make sure you have the map1.json file there
 	std::cout << "Load a valid map file..." << std::endl;
-	map.parseMap("map2.json");
-
+	Map* map1 = mapLoader.parseMap("test.json");
+	std::cout << validateMap(map1) << std::endl;
+	
 	std::cout << "\nLoad a incorrect file format (CSV)..." << std::endl;
-	map.parseMap("wrongFormatFile.csv");
+	mapLoader.parseMap("wrongFormatFile.csv");
 
-	std::cout << "\nLoad a json file, but with invalid data..." << std::endl;
-	map.parseMap("invalidJson_missingContinents.json");
+	std::cout << "\nLoad a json file, but with missing continents data..." << std::endl;
+	mapLoader.parseMap("invalidJson_missingContinents.json");
 
-	std::cout << "\nLoad a json file, but with no vertices data..." << std::endl;
-	map.parseMap("invalidJson_missingVertices.json");
+	std::cout << "\nLoad a json file, but with missing vertices..." << std::endl;
+	mapLoader.parseMap("invalidJson_missingVertices.json");
+
+	std::cout << "\nLoad a json file, but with wrong data type..." << std::endl;
+	mapLoader.parseMap("invalidJson_wrongDataType.json");
 
 	std::cout << "\nLoad a json file, but it is a disconnected graph..." << std::endl;
-	map.parseMap("validJson_invalidMap.json");
+	mapLoader.parseMap("validJson_invalidMap.json");
 
 	return 0;
 }
+
 
