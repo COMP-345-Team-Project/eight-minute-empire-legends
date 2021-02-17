@@ -1,9 +1,9 @@
 #pragma once
 #include "MapLoader.h"
-#include "Map.h"
+#include "../Map/Map.h"
 #include <fstream>
 #include <iostream>
-#include "json.hpp"
+#include "./External/json.hpp"
 
 using std::string;
 using std::vector;

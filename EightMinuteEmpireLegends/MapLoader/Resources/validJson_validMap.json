@@ -3,12 +3,12 @@
   "vertices": [
     {
       "id": "0",
-      "territoryName": "Region1",
+      "territoryName": "Region0",
       "continentName": "continent1"
     },
     {
       "id": "1",
-      "territoryName": "Region2",
+      "territoryName": "Region1",
       "continentName": "continent1"
     },
     {
