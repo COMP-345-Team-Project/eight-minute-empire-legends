@@ -19,15 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BidComputerLastNameTieBreak.h" />
     <ClInclude Include="BiddingFacility.h" />
     <ClInclude Include="BiddingTests.h" />
+    <ClInclude Include="BidSubmission.h" />
+    <ClInclude Include="BidTieBreaker.h" />
+    <ClInclude Include="BidTieBreakerByLastName.h" />
     <ClInclude Include="NameSorter.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BidComputerLastNameTieBreak.cpp" />
     <ClCompile Include="BiddingFacility.cpp" />
     <ClCompile Include="BiddingTests.cpp" />
+    <ClCompile Include="BidTieBreakerByLastName.cpp" />
     <ClCompile Include="NameSorter.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

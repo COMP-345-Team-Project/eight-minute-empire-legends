@@ -3,47 +3,25 @@
 #include <vector>
 #include <unordered_map>
 
-struct BidSubmission
-{
-	BidSubmission(
-		std::string& playerID,
-		std::string& playerLastName,
-		int& bid
-	):
-		playerID(playerID),
-		playerLastName(playerLastName),
-		bid(bid)
-	{}
-	std::string getPlayerID() const {
-		return playerID;
-	}
-	std::string getPlayerLastName() const {
-		return playerLastName;
-	}
-	int getBidAmount () const {
-		return bid;
-	}
-	private:
-	std::string playerID;
-	std::string playerLastName;
-	int bid;
-};
+#include "BidSubmission.h"
+#include "BidTieBreaker.h"
 
 class BiddingFacility
 {
 private:
-	std::unordered_map<std::string, BidSubmission&> * bids;
-	std::vector<const BidSubmission&> * finalizedBidList;
-	std::string * winningPlayerID;
-	bool * finalized;
-	const std::vector<const BidSubmission&>* finalize();
+	std::unordered_map<std::string, BidSubmission> * bids;
+	std::string * winningPlayerID = nullptr;
+	const BidTieBreaker * tieBreaker;
+	std::shared_ptr<std::vector <BidSubmission>> generateBidList();
+	void finalize();
 
 public:
-	BiddingFacility();
+	BiddingFacility(const BidTieBreaker& tieBreaker);
 	~BiddingFacility();
+	bool isFinalized();
 	void trySubmitBid(const BidSubmission& bid);
 	const BidSubmission& getWinningBid();
-	int getNumBids() const;
-	const std::vector <const BidSubmission&>* getAllBids();
-	const BidSubmission& getBid(std::string playerId);
+	unsigned long long getNumBids() const;
+	std::shared_ptr<std::vector <BidSubmission>> getAllBids();
+	BidSubmission getBid(const std::string& playerId);
 };

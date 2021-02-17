@@ -24,7 +24,13 @@
     <ClInclude Include="NameSorter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BidComputerLastNameTieBreak.h">
+    <ClInclude Include="BidTieBreakerByLastName.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BidTieBreaker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BidSubmission.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,7 +44,7 @@
     <ClCompile Include="NameSorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BidComputerLastNameTieBreak.cpp">
+    <ClCompile Include="BidTieBreakerByLastName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
