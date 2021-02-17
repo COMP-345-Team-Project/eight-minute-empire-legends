@@ -45,6 +45,7 @@ private:
 public:
 	Vertex(Territory* t, std::string id);
 	Vertex();
+	~Vertex();
 
 	std::string getId();
 	Territory* getTerritory();
@@ -90,6 +91,7 @@ private:
 public:
 	Map(std::string name, std::vector<Continent*> c);
 	Map();
+	~Map();
 	
 	std::string getName();
 	void setStartingRegion(Vertex* v);

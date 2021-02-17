@@ -105,8 +105,6 @@ Map* MapLoader::parseMap(string path) {
 				}
 			}
 
-			//mapPtr = &map;
-			std::cout << "Number of vertices: " + std::to_string(mapPtr->vertices().size()) << std::endl;
 			return mapPtr;
 		}
 		catch (string message) {
