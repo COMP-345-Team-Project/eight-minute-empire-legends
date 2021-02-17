@@ -63,7 +63,7 @@ void BiddingFacility::trySubmitBid(const BidSubmission& bid)
 std::shared_ptr<std::vector <BidSubmission>> BiddingFacility::getAllBids() {
 	if (!isFinalized()) 
 		this->finalize();
-	return generateBidList(); // TODO: Cache bidlist in member variable
+	return generateBidList();
 }
 
 unsigned long long BiddingFacility::getNumBids() const
