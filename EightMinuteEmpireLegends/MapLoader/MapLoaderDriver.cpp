@@ -29,7 +29,7 @@ int main() {
 	
 	std::cout << "\nLoad a incorrect file format (CSV)..." << std::endl;
 	Map* map3 = mapLoader.parseMap("./Resources/wrongFormatFile.csv");
-	std::cout << validateMap(map3) << std::endl;
+	//std::cout << validateMap(map3) << std::endl;
 	delete map3;
 
 	std::cout << "\nLoad a json file, but with missing continents data..." << std::endl;
