@@ -1,6 +1,4 @@
 #include "Map.h"
-#include <string>
-#include <vector>
 
 // Map function/constructor definitions
 
@@ -139,7 +137,7 @@ bool Map::removeVertex(std::string id) {
 	for (Vertex* v : this->v_vertices) {
 		if (v->getId() == id) {
 			this->v_vertices.erase(it);
-			removeEdgeCatalyst(v->getId());
+			cascadeRemoveEdge(v->getId());
 			return true;
 		}
 		it++;
@@ -148,7 +146,7 @@ bool Map::removeVertex(std::string id) {
 }
 
 // Removes all incident edges of a deleted vertex.
-void Map::removeEdgeCatalyst(std::string id) {
+void Map::cascadeRemoveEdge(std::string id) {
 	std::vector<Edge*>::iterator begin = this->v_edges.begin();
 	std::vector<Edge*>::iterator end = this->v_edges.end();
 
@@ -177,7 +175,19 @@ bool Map::exists(std::string c) {
 }
 
 bool Map::validate() {
-	return (this->v_edges.size() >= (this->v_vertices.size() - 1)) && this->v_continents.size() > 1;
+	std::vector<Vertex*> visited{};
+	Vertex* first = this->v_vertices.at(0);
+	dfs(first, &visited);
+	return (visited.size() == this->v_vertices.size() && this->v_continents.size() > 1);
+}
+
+void Map::dfs(Vertex* v, std::vector<Vertex*>* visited) {
+	if (!std::any_of(visited->begin(), visited->end(), [v](Vertex* const ver) { return ver->getId() == v->getId(); })) {
+		visited->push_back(v);
+		for (Vertex* ver : adjacentVertices(v)) {
+			dfs(ver, visited);
+		}
+	}
 }
 
 // Vertex function/constructor definitions

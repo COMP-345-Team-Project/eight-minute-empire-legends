@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <algorithm>
 
 // Class forward declarations
 
@@ -83,7 +84,8 @@ private:
 	std::vector<Edge*> v_edges;
 	std::vector<Continent*> v_continents;	
 	Vertex* startingRegion;
-	void removeEdgeCatalyst(std::string id);
+	void cascadeRemoveEdge(std::string id);
+	void dfs(Vertex* v, std::vector<Vertex*>* visited);
 	bool exists(std::string c);
 public:
 	Map(std::string name, std::vector<Continent*> c);
@@ -109,5 +111,5 @@ public:
 	bool insertEdge(Edge* e);
 	bool removeVertex(std::string id);
 	bool removeEdge(std::string id);
-	bool validate();
+	bool validate();	
 };
