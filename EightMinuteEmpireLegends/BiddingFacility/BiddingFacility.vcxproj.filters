@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BiddingTests.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BiddingFacility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NameSorter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BidTieBreakerByLastName.h">
@@ -39,9 +33,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BiddingFacility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NameSorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BidTieBreakerByLastName.cpp">

@@ -4,9 +4,9 @@
 struct BidSubmission
 {
 	BidSubmission(
-		std::string& playerID,
-		std::string& playerLastName,
-		int& bid
+		std::string playerID,
+		std::string playerLastName,
+		unsigned int bid
 	) :
 		playerID(playerID),
 		playerLastName(playerLastName),
@@ -24,5 +24,5 @@ struct BidSubmission
 private:
 	std::string playerID;
 	std::string playerLastName;
-	int bid;
+	unsigned int bid;
 };

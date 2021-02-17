@@ -1,11 +1,11 @@
 #include "BiddingFacility.h"
 
 std::shared_ptr<std::vector <BidSubmission>> BiddingFacility::generateBidList() {
-	
-	std::shared_ptr<std::vector<BidSubmission>> bidList(
+
+	std::shared_ptr<std::vector <BidSubmission>> bidList(
 		new std::vector<BidSubmission>());
 
-	bidList.get()->reserve(bids->size());
+	bidList->reserve(bids->size());
 	for (auto kv_bid : *bids)
 	{
 		bidList->push_back(kv_bid.second);
@@ -20,8 +20,10 @@ void BiddingFacility::finalize()
 		return;
 
 	// Determine winner, and set winningPlayerID
-	*winningPlayerID = tieBreaker->ComputeWinner(*generateBidList().get())
-		.get()->getPlayerID();
+	if (getNumBids() < 1)
+		throw "I dunno how to throw errors yet.";
+
+	winningPlayerID = tieBreaker->ComputeWinner(*generateBidList().get());
 	return;
 }
 
@@ -33,20 +35,18 @@ BiddingFacility::BiddingFacility(const BidTieBreaker& tieBreaker)
 BiddingFacility::~BiddingFacility()
 {
 	delete bids;
-	delete winningPlayerID;
-	delete tieBreaker;
 }
 
 bool BiddingFacility::isFinalized() {
-	return winningPlayerID == nullptr ? false : true;
+	return winningPlayerID.size() < 1 ? false : true;
 }
 
 
-const BidSubmission& BiddingFacility::getWinningBid()
+BidSubmission BiddingFacility::getWinningBid()
 {
 	if (!isFinalized())
-		throw "I don't know how to throw exceptions yet.";
-	return bids->at(*winningPlayerID);
+		finalize();
+	return bids->at(winningPlayerID);
 }
 
 

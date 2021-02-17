@@ -1,17 +1,40 @@
-#include "BiddingTests.h"
-#include "NameSorter.h"
-
 #include <iostream>
+#include <string>
+
+#include "BiddingFacility.h"
+#include "BidTieBreakerByLastName.h"
+
 
 
 int main(int argc, char** argv) {
 
-    NameSorter nameSorter;
+    BidTieBreakerByLastName tieBreaker;
+    BiddingFacility biddingFacility(tieBreaker);
 
-    nameSorter.addName("Bob");
-    nameSorter.addName("Carol");
-    nameSorter.addName("Alice");
+    BidSubmission bidPlayerA(
+        "plaserA",
+        "playerLastName",
+        22
+    );
+    BidSubmission bidPlayerB(
+        "paserB",
+        "klfredson",
+        21
+    );
+    BidSubmission bidPlayerC(
+        "paserB",
+        "balfredson",
+        200
+    );
 
-    std::cout << nameSorter.getLeader();
+    biddingFacility.trySubmitBid(bidPlayerA);
+    biddingFacility.trySubmitBid(bidPlayerB);
+    biddingFacility.trySubmitBid(bidPlayerC);
+
+    std::cout <<
+        biddingFacility.getWinningBid().getPlayerLastName()
+        << std::endl;
+
+
     return 0;
 }
