@@ -5,13 +5,21 @@
 // Map function/constructor definitions
 
 Map::Map(std::string name, std::vector<Continent*> c)
-	: name(name), v_vertices({}), v_edges({}), v_continents(c) { }
+	: name(name), v_vertices({}), v_edges({}), v_continents(c), startingRegion(nullptr) { }
 
 Map::Map()
-	: name(""), v_vertices({}), v_edges({}), v_continents({}) { }
+	: name(""), v_vertices({}), v_edges({}), v_continents({}), startingRegion(nullptr) { }
 
 std::string Map::getName() {
 	return this->name;
+}
+
+void Map::setStartingRegion(Vertex* v) {
+	this->startingRegion = v;
+}
+
+Vertex* Map::getStartingRegion() {
+	return this->startingRegion;
 }
 
 int Map::numVertices() {
@@ -49,7 +57,7 @@ Edge* Map::getEdge(Vertex* v1, Vertex* v2) {
 }
 
 std::vector<Vertex*> Map::endVertices(Edge* e) {
-	return e != nullptr ? e->getEndpoints() : std::vector<Vertex*>();	
+	return e != nullptr ? e->getEndpoints() : std::vector<Vertex*>();
 }
 
 // Dangling pointer warning. Should fix in the future.
@@ -61,7 +69,7 @@ Vertex* Map::opposite(Vertex* v, Edge* e) {
 		else if (e->getEndpoints()[1]->compare(v)) {
 			return e->getEndpoints()[0];
 		}
-	}	
+	}
 	return nullptr;
 }
 
@@ -96,6 +104,15 @@ std::vector<Vertex*> Map::vertices(Continent* c) {
 	return regions;
 }
 
+std::vector<Vertex*> Map::adjacentVertices(Vertex* v) {
+	std::vector<Vertex*> av{};
+
+	for (Edge* e : edges(v)) {
+		av.push_back(opposite(v, e));
+	}
+	return av;
+}
+
 bool Map::insertVertex(Vertex* v) {
 	if (exists(v->getTerritory()->getContinent())) {
 		for (Vertex* ver : this->v_vertices) {
@@ -105,7 +122,7 @@ bool Map::insertVertex(Vertex* v) {
 		}
 		this->v_vertices.push_back(v);
 		return true;
-	}	
+	}
 	return false;
 }
 
@@ -122,7 +139,7 @@ bool Map::removeVertex(std::string id) {
 	for (Vertex* v : this->v_vertices) {
 		if (v->getId() == id) {
 			this->v_vertices.erase(it);
-			removeEdgeCatalyst(v->getId());					
+			removeEdgeCatalyst(v->getId());
 			return true;
 		}
 		it++;
@@ -142,7 +159,7 @@ bool Map::removeEdge(std::string id) {
 	std::vector<Edge*>::iterator it = this->v_edges.begin();
 	for (Edge* e : this->v_edges) {
 		if (e->getId() == id) {
-			this->v_edges.erase(it);			
+			this->v_edges.erase(it);
 			return true;
 		}
 		it++;
@@ -202,7 +219,7 @@ std::vector<Vertex*> Edge::getEndpoints() {
 // Territory function/constructor definitions
 
 Territory::Territory(std::string name, std::string c)
-	: name(name), owner(""), armies(0), c(c){ }
+	: name(name), owner(""), armies(0), c(c) { }
 
 Territory::Territory(Territory* t)
 	: name(t->getName()), owner(t->getOwner()), armies(t->getArmies()), c(t->getContinent()) { }

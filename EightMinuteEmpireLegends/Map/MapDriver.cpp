@@ -84,7 +84,7 @@ int main() {
 	std::cout << "Map 2 " << edges_toString(m2->edges()) << std::endl;
 	std::cout << "Map 2 " << continents_toString(m2->continents()) << std::endl;
 	std::cout << "Map 2 " << territories_toString(m2->vertices()) << std::endl;
-	std::cout << "Map 2 " << continents_toString(m2) << std::endl;
+	std::cout << "Map 2 " << continents_toString(m2) << std::endl;	
 
 	// Deleting variables in heap
 	for (Territory* t : v_t) {
