@@ -18,7 +18,7 @@ int main() {
 	//The file is stored in \eight-minute-empire-legends\EightMinuteEmpireLegends\Debug, make sure you have the map1.json file there
 	std::cout << "Load a valid map file..." << std::endl;
 	Map* map1 = mapLoader.parseMap("test.json");
-
+	std::cout << "Number of vertices: " + std::to_string(map1->vertices().size()) << std::endl;
 	std::cout << validateMap(map1) << std::endl;
 	
 	std::cout << "\nLoad a incorrect file format (CSV)..." << std::endl;

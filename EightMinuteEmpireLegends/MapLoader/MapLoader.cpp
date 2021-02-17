@@ -52,7 +52,7 @@ Map* MapLoader::parseMap(string path) {
 
 			//Create the map with the continents
 			string mapName = mapJson["name"];
-			Map map(mapName, continents);
+			mapPtr = new Map(mapName, continents);
 
 			//Create the list of vertices and their correspoding territories
 			json jsonVertices = mapJson["vertices"];
@@ -71,7 +71,7 @@ Map* MapLoader::parseMap(string path) {
 				Territory* territory = new Territory(territoryName, continentName);
 				Vertex* vertex = new Vertex(territory, id);
 
-				map.insertVertex(vertex);
+				mapPtr->insertVertex(vertex);
 			}
 
 			//Parse the edges
@@ -86,9 +86,9 @@ Map* MapLoader::parseMap(string path) {
 				Vertex* vertex2 = NULL;
 
 				Vertex* currentVertex = NULL;
-				for (int k = 0; k < map.vertices().size(); k++)
+				for (int k = 0; k < mapPtr->vertices().size(); k++)
 				{
-					currentVertex = map.vertices().at(k);
+					currentVertex = mapPtr->vertices().at(k);
 					if (currentVertex->getId().compare(vertexId1) == 0)
 						vertex1 = currentVertex;
 					else if (currentVertex->getId().compare(vertexId2) == 0)
@@ -98,14 +98,16 @@ Map* MapLoader::parseMap(string path) {
 				if (vertex1 != NULL && vertex2 != NULL) {
 					string edgeId = jsonEdge["id"].get<std::string>();
 					Edge* edge = new Edge(vertex1, vertex2, edgeId);
-					map.insertEdge(edge);
+					mapPtr->insertEdge(edge);
 				}
 				else {
 					throw "The vertex with the id <<" + vertexId1 + ">> or <<" + vertexId2 + ">> does not exist";
 				}
 			}
 
-			mapPtr = &map;
+			//mapPtr = &map;
+			std::cout << "Number of vertices: " + std::to_string(mapPtr->vertices().size()) << std::endl;
+			return mapPtr;
 		}
 		catch (string message) {
 			std::cout << message << std::endl;
@@ -115,9 +117,7 @@ Map* MapLoader::parseMap(string path) {
 		}
 	}
 
-	if (mapPtr == NULL)
-		mapPtr = new Map();
-
+	mapPtr = new Map();
 	return mapPtr;
 }
 
