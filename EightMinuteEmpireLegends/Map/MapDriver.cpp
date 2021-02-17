@@ -58,7 +58,7 @@ int main() {
 	m1->insertEdge(e8);
 	m1->insertEdge(e9);
 
-	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "invalid") << std::endl;	
+	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "Invalid") << std::endl;	
 
 	// Invalid map example		
 

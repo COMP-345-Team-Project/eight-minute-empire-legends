@@ -114,7 +114,7 @@ std::vector<Vertex*> Map::adjacentVertices(Vertex* v) {
 bool Map::insertVertex(Vertex* v) {
 	if (exists(v->getTerritory()->getContinent())) {
 		for (Vertex* ver : this->v_vertices) {
-			if (ver->getId() == v->getId()) {
+			if (ver->getId() == v->getId() || ver->getTerritory()->getName() == v->getTerritory()->getName()) {
 				return false;
 			}
 		}
