@@ -1,10 +1,29 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <unordered_map>
-#include "bid.h"
 
 struct BidSubmission
 {
+	BidSubmission(
+		std::string& playerID,
+		std::string& playerLastName,
+		int& bid
+	):
+		playerID(playerID),
+		playerLastName(playerLastName),
+		bid(bid)
+	{}
+	std::string getPlayerID() const {
+		return playerID;
+	}
+	std::string getPlayerLastName() const {
+		return playerLastName;
+	}
+	int getBidAmount () const {
+		return bid;
+	}
+	private:
 	std::string playerID;
 	std::string playerLastName;
 	int bid;
@@ -13,15 +32,18 @@ struct BidSubmission
 class BiddingFacility
 {
 private:
-	std::unordered_map<std::string, Bid&> bids;
-	bool finalized;
+	std::unordered_map<std::string, BidSubmission&> * bids;
+	std::vector<const BidSubmission&> * finalizedBidList;
+	std::string * winningPlayerID;
+	bool * finalized;
+	const std::vector<const BidSubmission&>* finalize();
+
 public:
 	BiddingFacility();
-	void submitBid(BidSubmission& bid);
-	Bid getWinner();
-	int getNumBids();
-	int getPoolSize();
-	Bid* getAllBids();
-	Bid& getBid(std::string playerId);
-	
+	~BiddingFacility();
+	void trySubmitBid(const BidSubmission& bid);
+	const BidSubmission& getWinningBid();
+	int getNumBids() const;
+	const std::vector <const BidSubmission&>* getAllBids();
+	const BidSubmission& getBid(std::string playerId);
 };

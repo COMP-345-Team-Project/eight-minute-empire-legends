@@ -21,10 +21,10 @@
     <ClInclude Include="BiddingFacility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bid.h">
+    <ClInclude Include="NameSorter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NameSorter.h">
+    <ClInclude Include="BidComputerLastNameTieBreak.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClCompile Include="BiddingFacility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bid.cpp">
+    <ClCompile Include="NameSorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NameSorter.cpp">
+    <ClCompile Include="BidComputerLastNameTieBreak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
