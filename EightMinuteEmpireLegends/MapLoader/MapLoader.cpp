@@ -43,7 +43,6 @@ Map* MapLoader::parseMap(string path) {
 			for (int i = 0; i < numOfContinents; i++) {
 				auto jsonContinent = jsonContinents[i];
 				string continentName = jsonContinent["name"].get<std::string>();
-				//std::cout << "Continent name: " + continentName << std::endl;
 
 				Continent* continentPtr = new Continent();
 				continentPtr->name = continentName;
@@ -58,7 +57,6 @@ Map* MapLoader::parseMap(string path) {
 			//Create the list of vertices and their correspoding territories
 			json jsonVertices = mapJson["vertices"];
 			int numOfVertices = static_cast<int>(jsonVertices.size());
-			//vector<Vertex*> vertices;
 
 			for (int j = 0; j < numOfVertices; j++) {
 				auto jsonVertex = jsonVertices[j];
@@ -79,7 +77,6 @@ Map* MapLoader::parseMap(string path) {
 			//Parse the edges
 			json jsonEdges = mapJson["edges"];
 			int numOfEdges = static_cast<int>(jsonEdges.size());
-			//Need a dynamic array because the number of vertices are not known at compile time
 
 			for (int j = 0; j < numOfEdges; j++) {
 				auto jsonEdge = jsonEdges[j];
@@ -107,14 +104,6 @@ Map* MapLoader::parseMap(string path) {
 					throw "The vertex with the id <<" + vertexId1 + ">> or <<" + vertexId2 + ">> does not exist";
 				}
 			}
-
-			/*bool isValid = map.validate();
-			if (!isValid) {
-				throw "The map is not a valid graph";
-			}
-			else {
-				std::cout << "The map is a valid graph" << std::endl;
-			}*/
 
 			mapPtr = &map;
 		}
