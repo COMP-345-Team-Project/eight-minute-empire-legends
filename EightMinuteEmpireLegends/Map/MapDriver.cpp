@@ -1,7 +1,6 @@
 #include "MapDriver.h"
 #include "Map.h"
 #include <iostream>
-#include <vector>
 
 int main() {
 
@@ -29,12 +28,16 @@ int main() {
 	Vertex* v6 = new Vertex(t6, "z");
 	std::vector<Vertex*> v_v{ v1, v2, v3, v4, v5, v6 };
 
-	Edge* e1 = new Edge(v3, v4, "a");
-	Edge* e2 = new Edge(v3, v1, "b");
-	Edge* e3 = new Edge(v1, v2, "c");
-	Edge* e4 = new Edge(v2, v5, "d");
-	Edge* e5 = new Edge(v5, v6, "e");
-	std::vector<Edge*> v_e{ e1, e2, e3, e4, e5 };
+	Edge* e1 = new Edge(v1, v2, "a");
+	Edge* e2 = new Edge(v1, v3, "b");
+	Edge* e3 = new Edge(v3, v4, "c");
+	Edge* e4 = new Edge(v2, v4, "d");
+	Edge* e5 = new Edge(v1, v4, "e");
+	Edge* e6 = new Edge(v2, v3, "f");
+	Edge* e7 = new Edge(v2, v5, "g");
+	Edge* e8 = new Edge(v4, v5, "h");
+	Edge* e9 = new Edge(v5, v6, "i");
+	std::vector<Edge*> v_e{ e1, e2, e3, e4, e5, e6, e7, e8, e9 };
 
 	Map* m1 = new Map("Earth", { &c1, &c2, &c3, &c4 });
 
@@ -50,8 +53,12 @@ int main() {
 	m1->insertEdge(e3);
 	m1->insertEdge(e4);
 	m1->insertEdge(e5);
+	m1->insertEdge(e6);
+	m1->insertEdge(e7);
+	m1->insertEdge(e8);
+	m1->insertEdge(e9);
 
-	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "invalid") << std::endl;	
+	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "Invalid") << std::endl;	
 
 	// Invalid map example		
 
@@ -64,11 +71,14 @@ int main() {
 	m2->insertVertex(v5);
 	m2->insertVertex(v6);
 
-	// Notice that we are not inserting edge e5 in our graph, which means vector v6 will be disconnected
+	// Notice that we are not inserting edge e7 and e8 in our graph, which means vectors v5 and v6 will be disconnected
 	m2->insertEdge(e1);
 	m2->insertEdge(e2);
 	m2->insertEdge(e3);
-	m2->insertEdge(e4);	
+	m2->insertEdge(e4);
+	m2->insertEdge(e5);
+	m2->insertEdge(e6);
+	m2->insertEdge(e9);
 
 	std::cout << "Validating Map 2 - " << (m2->validate() ? "Valid" : "Invalid") << std::endl << std::endl;
 
@@ -98,6 +108,8 @@ int main() {
 	}
 	delete m1;
 	delete m2;
+
+	while (1) { }
 	
 	return 0;
 }

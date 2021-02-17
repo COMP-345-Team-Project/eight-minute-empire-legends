@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
 #include "Map.h"
 
 // Returns string list of a vertex vector
