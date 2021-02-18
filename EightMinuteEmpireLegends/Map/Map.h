@@ -23,7 +23,7 @@ private:
 public:
 	Territory(std::string name, std::string c);
 	Territory(Territory* t);
-	Territory();	
+	Territory();		
 
 	void setName(std::string name);
 	void setOwner(std::string owner);
@@ -45,6 +45,7 @@ private:
 public:
 	Vertex(Territory* t, std::string id);
 	Vertex();
+	~Vertex();
 
 	std::string getId();
 	Territory* getTerritory();
@@ -62,6 +63,7 @@ private:
 public:
 	Edge(Vertex* v1, Vertex* v2, std::string id);
 	Edge();
+	//~Edge();
 
 	std::string getId();
 	std::vector<Vertex*> getEndpoints();	
@@ -90,6 +92,7 @@ private:
 public:
 	Map(std::string name, std::vector<Continent*> c);
 	Map();
+	//~Map();
 	
 	std::string getName();
 	void setStartingRegion(Vertex* v);
