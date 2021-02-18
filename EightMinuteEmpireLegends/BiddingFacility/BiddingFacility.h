@@ -25,5 +25,4 @@ public:
 	BidSubmission getWinningBid();
 	unsigned long long getNumBids() const;
 	std::shared_ptr<std::vector <BidSubmission>> getAllBids();
-	BidSubmission getBid(const std::string& playerId);
 };
