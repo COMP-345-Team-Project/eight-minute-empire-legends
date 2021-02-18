@@ -8,6 +8,33 @@ Map::Map(std::string name, std::vector<Continent*> c)
 Map::Map()
 	: name(""), v_vertices({}), v_edges({}), v_continents({}), startingRegion(nullptr) { }
 
+/*
+Map::~Map() {
+	Edge* currentEdge = NULL;
+	int numOfEdges = this->edges().size();
+	for (int i = 0; i < numOfEdges; i++) {
+		currentEdge = this->edges().at(i);
+		delete currentEdge;
+		currentEdge = NULL;
+	}
+
+	Vertex* currVertex = NULL;
+	int numOfVertices = this->vertices().size();
+	for (int i = 0; i < numOfVertices; i++) {
+		currVertex = this->vertices().at(i);
+		delete currVertex;
+		currVertex = NULL;
+	}
+
+	Continent* currContinent = NULL;
+	int numOfContinents = this->continents().size();
+	for (int i = 0; i < numOfContinents; i++) {
+		currContinent = this->continents().at(i);
+		delete currContinent;
+		currContinent = NULL;
+	}
+}*/
+
 std::string Map::getName() {
 	return this->name;
 }
@@ -175,10 +202,13 @@ bool Map::exists(std::string c) {
 }
 
 bool Map::validate() {
-	std::vector<Vertex*> visited{};
-	Vertex* first = this->v_vertices.at(0);
-	dfs(first, &visited);
-	return (visited.size() == this->v_vertices.size() && this->v_continents.size() > 1);
+	if (this->v_vertices.size() > 0) {
+		std::vector<Vertex*> visited{};
+		Vertex* first = this->v_vertices.at(0);
+		dfs(first, &visited);
+		return (visited.size() == this->v_vertices.size() && this->v_continents.size() > 1);
+	}
+	return false;
 }
 
 void Map::dfs(Vertex* v, std::vector<Vertex*>* visited) {
@@ -197,6 +227,11 @@ Vertex::Vertex(Territory* t, std::string id)
 
 Vertex::Vertex()
 	: id(""), t(nullptr) { }
+
+
+Vertex::~Vertex() {
+	delete Vertex::t;
+}
 
 std::string Vertex::getId() {
 	return this->id;
@@ -217,6 +252,12 @@ Edge::Edge(Vertex* v1, Vertex* v2, std::string id)
 
 Edge::Edge()
 	: id(""), v1(nullptr), v2(nullptr) { }
+
+/*
+Edge::~Edge() {
+	delete this->v1;
+	delete this->v2;
+}*/
 
 std::string Edge::getId() {
 	return this->id;

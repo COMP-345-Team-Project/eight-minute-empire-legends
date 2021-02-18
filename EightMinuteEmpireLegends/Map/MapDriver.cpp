@@ -107,9 +107,7 @@ int main() {
 		delete e;
 	}
 	delete m1;
-	delete m2;
-
-	while (1) { }
+	delete m2;	
 	
 	return 0;
 }
