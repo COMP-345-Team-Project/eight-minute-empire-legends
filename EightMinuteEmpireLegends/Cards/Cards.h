@@ -119,5 +119,3 @@ public:
 private:
     vector<Card> hand;
 };
-
-

@@ -37,6 +37,3 @@ int main() {
     cout << "Hand has been depleted, game ends" << endl;
 
 }
-
-
-
