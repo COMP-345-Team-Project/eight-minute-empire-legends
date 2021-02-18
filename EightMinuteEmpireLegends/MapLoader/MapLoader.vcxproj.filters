@@ -21,9 +21,6 @@
     <None Include="Resources\invalidJson_missingVertices.json">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Resources\test.json">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Resources\validJson_invalidMap.json">
       <Filter>Resource Files</Filter>
     </None>
@@ -31,6 +28,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Resources\wrongFormatFile.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\validJson_validMap_simple.json">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -41,12 +41,24 @@
     <ClInclude Include="External\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapLoaderException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Map\Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapLoaderDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLoaderException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Map\Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

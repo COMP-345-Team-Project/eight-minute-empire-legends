@@ -15,7 +15,7 @@ MapLoader::MapLoader() {
 
 }
 
-bool MapLoader::validateMap(std::string path) {
+bool MapLoader::validateJson(std::string path) {
 	std::ifstream fileContentStream(path);
 	bool isValid = json::accept(fileContentStream);
 
@@ -27,12 +27,12 @@ Map* MapLoader::parseMap(string path) {
 
 	try {
 		//Validate the json
-		if (!validateMap(path)) {
+		if (!validateJson(path)) {
 			string message = "The file is not a valid json file.";
 			throw MapLoaderException(message);
 		}
-
 		std::ifstream fileContentStream(path);
+		//std::ifstream fileContentStream(path);
 		json mapJson = json::parse(fileContentStream);
 
 		//Create the list of continents first
@@ -112,6 +112,13 @@ Map* MapLoader::parseMap(string path) {
 			}
 		}
 
+		if (!mapPtr->validate()) {
+			throw MapLoaderException("The map is not a valid graph");
+		}
+		else {
+			std::cout << "The map is a valid graph" << std::endl;
+		}
+
 		return mapPtr;
 	}
 	catch (json::exception& e) {
@@ -121,7 +128,13 @@ Map* MapLoader::parseMap(string path) {
 		std::cout << e.what() << std::endl;
 	}
 
-	mapPtr = new Map();
+	//delete the map if there is an error
+	if (mapPtr != NULL) {
+		delete mapPtr;
+		mapPtr = NULL;
+	}
+	
+	//mapPtr = new Map();
 	return mapPtr;
 }
 
