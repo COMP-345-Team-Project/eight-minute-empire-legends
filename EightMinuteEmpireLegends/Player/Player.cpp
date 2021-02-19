@@ -5,23 +5,32 @@ Player::Player() : coin(14), name("") {} //we need to discuss the default constr
 Player::Player(Map map, Hand hand, BiddingFacility biddingFacility, std::string name) :
 	map(map), hand(hand), biddingFacility(biddingFacility), coin(14), name(name) {}
 
-int Player::PayCoin() {
-	return --coin;
+int Player::PayCoin(int n) {
+	coin -= n;
+	return coin;
 }
 
 //the following methods are assuming 1 player / territory, per current implementation of territory
-void Player::PlaceNewArmies(vector<Vertex*> vv) {
+bool Player::PlaceNewArmies(vector<Vertex*> vv) {
+	//check if all the given vertex are owned by the player or are unoccupied
+	for (Vertex* v : vv) {
+		std::string owner = v->getTerritory->getOwner();
+		if (owner.compare(name) != 0 && owner.compare("") != 0) {
+			return false;
+		}
+	}
 	for (Vertex* v : vv) {
 		Territory* t = v->getTerritory();
 		int army = t->getArmies();
 		t->setArmies(++army);
 		t->setOwner(name);
 	}
+	return true;
 }
 
 bool Player::DestroyArmy(Vertex* v) {
-	Territory* t = v->getTerritory();
-	int army = t->getArmies();
+	//check if v has army to destroy 
+	int army = v->getTerritory()->getArmies();
 	if (--army < 0) {
 		return false;
 	}
@@ -72,10 +81,11 @@ bool Player::BuildCity(Vertex* v) {
 		return false;
 	}
 	//check if city has already been built here by the player, if so it cannot be rebuilt
-	if (std::find(cities.begin(), cities.end(), v) != cities.end()) {
+	bool cityExists = v->getTerritory()->getCity();
+	if (cityExists) {
 		return false;
 	}
-	cities.push_back(v);
+	v->getTerritory()->setCity(1);
 	return true;
 }
 
