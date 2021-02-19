@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 #include "Cards.h"
 
 #include <iostream>
@@ -800,6 +799,3 @@ Card Hand::exchange(Deck& mainDeck) {
 int Hand::getSize() {
     return hand.size();
 }
-
-
->>>>>>> Stashed changes
