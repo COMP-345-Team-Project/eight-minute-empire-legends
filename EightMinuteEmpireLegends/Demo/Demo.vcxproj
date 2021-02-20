@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="..\BiddingFacility\BiddingFacility.cpp" />
     <ClCompile Include="..\BiddingFacility\BidTieBreakerByLastName.cpp" />
+    <ClCompile Include="..\Cards\Cards.cpp" />
     <ClCompile Include="..\MapLoader\MapLoader.cpp" />
     <ClCompile Include="..\MapLoader\MapLoaderException.cpp" />
     <ClCompile Include="..\Map\DriverUtils.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="..\BiddingFacility\BidSubmission.h" />
     <ClInclude Include="..\BiddingFacility\BidTieBreaker.h" />
     <ClInclude Include="..\BiddingFacility\BidTieBreakerByLastName.h" />
+    <ClInclude Include="..\Cards\Cards.h" />
     <ClInclude Include="..\MapLoader\MapLoader.h" />
     <ClInclude Include="..\MapLoader\MapLoaderException.h" />
     <ClInclude Include="..\Map\DriverUtils.h" />

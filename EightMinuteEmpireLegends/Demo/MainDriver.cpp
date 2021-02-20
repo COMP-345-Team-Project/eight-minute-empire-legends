@@ -1,9 +1,13 @@
 #include <iostream>
 #include <string>
+#include <algorithm>    // std::random_shuffle
+#include <ctime>        // std::time
+#include <cstdlib>      // std::rand, std::srand
 
 #include "../Map/DriverUtils.h"
 #include "../Map/Map.h"
 #include "../MapLoader/MapLoader.h"
+#include "../Cards/Cards.h"
 #include "../BiddingFacility/BiddingFacility.h"
 #include "../BiddingFacility/BidTieBreakerByLastName.h"
 
@@ -168,6 +172,31 @@ int runMapLoaderDriver() {
 	return 0;
 }
 
+int runCardsDriver() {
+	std::cout << "This is the cards driver!" << std::endl;
+
+	// Assuming there are 3 players
+	int numPlayer = 3;
+	std::cout << "Assuming a 3 players game" << std::endl;
+
+	//Deck reveal() is included to demo deck functionality, NOT included in actual game
+	//Demo deck
+	Deck testDeck(numPlayer);
+	testDeck.reveal();
+
+	//Demo hand
+	Hand testHand(testDeck);
+
+	//Demo exchange cards until both Deck and Hand are emptry
+	while (testHand.getSize() > 0) {
+		testHand.exchange(testDeck, true); //Invoked demo mode here to automate all user interaction
+		testDeck.reveal();
+	}
+	std::cout << "Hand has been depleted, demo ends" << std::endl;
+
+	return 0;
+}
+
 int runBiddingFacilityDriver() {
     BidTieBreakerByLastName tieBreaker;
 
@@ -270,8 +299,10 @@ int runBiddingFacilityDriver() {
 int main(int argc, char** argv) {
 	std::cout << "(1) Running the Map Driver..." << std::endl;
 	runMapDriver();
-	std::cout << "(2) Running the Map Loader Driver..." << std::endl;
+	std::cout << "\n(2) Running the Map Loader Driver..." << std::endl;
 	runMapLoaderDriver();
+	std::cout << "\n(4) Running the Card Driver..." << std::endl;
+	runCardsDriver();
 	std::cout << "\n(5) Running the Bidding Facility Driver (the driver uses assertions so there will be no output)..." << std::endl;
     runBiddingFacilityDriver();
 }

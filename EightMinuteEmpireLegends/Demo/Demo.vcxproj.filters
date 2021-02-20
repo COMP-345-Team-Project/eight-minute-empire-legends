@@ -36,6 +36,9 @@
     <ClCompile Include="..\MapLoader\MapLoaderException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Cards\Cards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BiddingFacility\BiddingFacility.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\MapLoader\MapLoaderException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cards\Cards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
