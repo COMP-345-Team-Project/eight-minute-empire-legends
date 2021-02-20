@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="..\BiddingFacility\BiddingFacility.cpp" />
     <ClCompile Include="..\BiddingFacility\BidTieBreakerByLastName.cpp" />
+    <ClCompile Include="..\Map\DriverUtils.cpp" />
+    <ClCompile Include="..\Map\Map.cpp" />
     <ClCompile Include="MainDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +150,8 @@
     <ClInclude Include="..\BiddingFacility\BidSubmission.h" />
     <ClInclude Include="..\BiddingFacility\BidTieBreaker.h" />
     <ClInclude Include="..\BiddingFacility\BidTieBreakerByLastName.h" />
+    <ClInclude Include="..\Map\DriverUtils.h" />
+    <ClInclude Include="..\Map\Map.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
