@@ -21,12 +21,18 @@
     <ClInclude Include="MapDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DriverUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DriverUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
