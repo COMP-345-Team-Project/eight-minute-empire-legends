@@ -62,8 +62,7 @@ private:
 	Vertex* v2;
 public:
 	Edge(Vertex* v1, Vertex* v2, std::string id);
-	Edge();
-	//~Edge();
+	Edge();		
 
 	std::string getId();
 	std::vector<Vertex*> getEndpoints();	
@@ -92,7 +91,7 @@ private:
 public:
 	Map(std::string name, std::vector<Continent*> c);
 	Map();
-	//~Map();
+	~Map();
 	
 	std::string getName();
 	void setStartingRegion(Vertex* v);

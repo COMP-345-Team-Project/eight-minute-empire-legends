@@ -8,32 +8,23 @@ Map::Map(std::string name, std::vector<Continent*> c)
 Map::Map()
 	: name(""), v_vertices({}), v_edges({}), v_continents({}), startingRegion(nullptr) { }
 
-/*
+
 Map::~Map() {
-	Edge* currentEdge = NULL;
-	int numOfEdges = this->edges().size();
-	for (int i = 0; i < numOfEdges; i++) {
-		currentEdge = this->edges().at(i);
-		delete currentEdge;
-		currentEdge = NULL;
+	for (Edge* ed : this->edges()) {			
+		delete ed;
+		ed = NULL;			
+	}
+	
+	for (Vertex* ver : this->vertices()) {				
+		delete ver;
+		ver = NULL;				
 	}
 
-	Vertex* currVertex = NULL;
-	int numOfVertices = this->vertices().size();
-	for (int i = 0; i < numOfVertices; i++) {
-		currVertex = this->vertices().at(i);
-		delete currVertex;
-		currVertex = NULL;
+	for (Continent* con : this->continents()) {		
+		delete con;
+		con = NULL;		
 	}
-
-	Continent* currContinent = NULL;
-	int numOfContinents = this->continents().size();
-	for (int i = 0; i < numOfContinents; i++) {
-		currContinent = this->continents().at(i);
-		delete currContinent;
-		currContinent = NULL;
-	}
-}*/
+}
 
 std::string Map::getName() {
 	return this->name;
@@ -177,7 +168,10 @@ void Map::cascadeRemoveEdge(std::string id) {
 	std::vector<Edge*>::iterator begin = this->v_edges.begin();
 	std::vector<Edge*>::iterator end = this->v_edges.end();
 
-	this->v_edges.erase(std::remove_if(begin, end, [id](Edge* const e) { return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); }), end);
+	this->v_edges.erase(std::remove_if(begin, end, 
+		[id](Edge* const e) { 
+			return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); 
+		}), end);
 }
 
 bool Map::removeEdge(std::string id) {
@@ -212,7 +206,10 @@ bool Map::validate() {
 }
 
 void Map::dfs(Vertex* v, std::vector<Vertex*>* visited) {
-	if (!std::any_of(visited->begin(), visited->end(), [v](Vertex* const ver) { return ver->getId() == v->getId(); })) {
+	if (!std::any_of(visited->begin(), visited->end(), 
+		[v](Vertex* const ver) { 
+			return ver->getId() == v->getId(); 
+		})) {
 		visited->push_back(v);
 		for (Vertex* ver : adjacentVertices(v)) {
 			dfs(ver, visited);
@@ -229,9 +226,9 @@ Vertex::Vertex()
 	: id(""), t(nullptr) { }
 
 
-Vertex::~Vertex() {
-	delete Vertex::t;
-}
+Vertex::~Vertex() {	
+	delete t;		
+} 
 
 std::string Vertex::getId() {
 	return this->id;
@@ -252,12 +249,6 @@ Edge::Edge(Vertex* v1, Vertex* v2, std::string id)
 
 Edge::Edge()
 	: id(""), v1(nullptr), v2(nullptr) { }
-
-/*
-Edge::~Edge() {
-	delete this->v1;
-	delete this->v2;
-}*/
 
 std::string Edge::getId() {
 	return this->id;
