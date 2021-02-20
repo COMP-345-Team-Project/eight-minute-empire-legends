@@ -349,7 +349,7 @@ Card Hand::exchange(Deck& mainDeck, bool demo = false) {
 		
 		
 		//Handle demo scenario where no user interaction is required
-		if demo == false{
+		if (demo == false) {
 			
 			cin >> cardInput;
 
