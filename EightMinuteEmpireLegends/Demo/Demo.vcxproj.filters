@@ -30,6 +30,12 @@
     <ClCompile Include="..\BiddingFacility\BidTieBreakerByLastName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\MapLoader\MapLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MapLoader\MapLoaderException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BiddingFacility\BiddingFacility.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Map\Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MapLoader\MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MapLoader\MapLoaderException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
