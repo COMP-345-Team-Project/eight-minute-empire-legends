@@ -11,10 +11,6 @@ using std::vector;
 using json = nlohmann::json;
 using std::cout;
 
-MapLoader::MapLoader() {
-
-}
-
 bool MapLoader::validateJson(std::string path) {
 	std::ifstream fileContentStream(path);
 	bool isValid = json::accept(fileContentStream);
@@ -27,7 +23,7 @@ Map* MapLoader::parseMap(string path) {
 
 	try {
 		//Validate the json
-		if (!validateJson(path)) {
+		if (!MapLoader::validateJson(path)) {
 			string message = "The file is not a valid json file.";
 			throw MapLoaderException(message);
 		}
@@ -65,7 +61,7 @@ Map* MapLoader::parseMap(string path) {
 			string territoryName = jsonVertex["territoryName"].get<std::string>();
 			string continentName = jsonVertex["continentName"].get<std::string>();
 
-			Continent* continentPtr = getContinentByName(continents, continentName);
+			Continent* continentPtr = MapLoader::getContinentByName(continents, continentName);
 			if (continentPtr == NULL) {
 				//const char* errorMessage = ("The continent with the name <<" + continentName + ">> does not exist").c_str();
 				string message = "The continent with the name <<" + continentName + ">> does not exist";
