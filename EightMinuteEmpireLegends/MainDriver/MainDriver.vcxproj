@@ -18,22 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BiddingFacility.h" />
-    <ClInclude Include="BidSubmission.h" />
-    <ClInclude Include="BidTieBreaker.h" />
-    <ClInclude Include="BidTieBreakerByLastName.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BiddingFacility.cpp" />
-    <ClCompile Include="BiddingTests.cpp" />
-    <ClCompile Include="BidTieBreakerByLastName.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5a1ac0fd-a6d5-41f3-a4c1-d6e0fcfb8407}</ProjectGuid>
-    <RootNamespace>BiddingFacility</RootNamespace>
+    <ProjectGuid>{8521f34d-a5a0-43fd-9155-f68ba4b4f4bd}</ProjectGuid>
+    <RootNamespace>MainDriver</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -51,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -149,6 +138,26 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BiddingFacility\BiddingFacility.vcxproj">
+      <Project>{5a1ac0fd-a6d5-41f3-a4c1-d6e0fcfb8407}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Cards\Cards.vcxproj">
+      <Project>{35d19b18-b888-4fdb-9737-0bcd31de32f5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\MapLoader\MapLoader.vcxproj">
+      <Project>{33e81ce9-6874-48ce-9c5c-93d1a07fa71f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Map\Map.vcxproj">
+      <Project>{adaa1c58-3a54-4789-949a-9b43a90e2e91}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Player\Player.vcxproj">
+      <Project>{f51d0a8d-1f36-4b97-b10b-d0ec8d79b339}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

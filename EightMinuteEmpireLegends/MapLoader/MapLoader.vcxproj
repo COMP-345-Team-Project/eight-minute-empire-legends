@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -147,16 +147,19 @@
     <None Include="Resources\wrongFormatFile.csv" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Map\Map.h" />
     <ClInclude Include="External\json.hpp" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="MapLoaderException.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Map\Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="MapLoaderException.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Map\Map.vcxproj">
+      <Project>{adaa1c58-3a54-4789-949a-9b43a90e2e91}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
