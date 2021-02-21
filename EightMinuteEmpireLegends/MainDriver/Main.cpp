@@ -16,9 +16,30 @@
 #include "../BiddingFacility/BidSubmission.h"
 #include "../BiddingFacility/BidTieBreakerByLastName.h"
 
+#include "../Player/Player.h"
+
 int main() {
+
     BidTieBreakerByLastName tieBreaker;
 
+    //----------------------------------------------------------------
+    //                        Player Driver 
+    //----------------------------------------------------------------
+
+    //assuming 2 player game 
+    Deck deck(2);
+    Player* p1 = new Player("player1", deck, tieBreaker);
+
+    p1->BuildCity();
+    p1->DestroyArmy();
+    p1->MoveArmies();
+    p1->MoveOverLand();
+    p1->payCoin();
+    p1->PlaceNewArmies();
+
+    //----------------------------------------------------------------
+    //                   BiddingFacility Driver 
+    //----------------------------------------------------------------
 
     /////////////////////////////////////////
     // Test player with most coins wins
