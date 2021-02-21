@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapLoader", "MapLoader\MapL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Player", "Player\Player.vcxproj", "{F51D0A8D-1F36-4B97-B10B-D0EC8D79B339}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MainDriver", "MainDriver\MainDriver.vcxproj", "{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{F51D0A8D-1F36-4B97-B10B-D0EC8D79B339}.Release|x64.Build.0 = Release|x64
 		{F51D0A8D-1F36-4B97-B10B-D0EC8D79B339}.Release|x86.ActiveCfg = Release|Win32
 		{F51D0A8D-1F36-4B97-B10B-D0EC8D79B339}.Release|x86.Build.0 = Release|Win32
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Debug|x64.ActiveCfg = Debug|x64
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Debug|x64.Build.0 = Debug|x64
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Debug|x86.ActiveCfg = Debug|Win32
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Debug|x86.Build.0 = Debug|Win32
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Release|x64.ActiveCfg = Release|x64
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Release|x64.Build.0 = Release|x64
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Release|x86.ActiveCfg = Release|Win32
+		{8521F34D-A5A0-43FD-9155-F68BA4B4F4BD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
