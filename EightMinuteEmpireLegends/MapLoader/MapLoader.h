@@ -7,10 +7,9 @@ using std::vector;
 class MapLoader
 {
 public:
-	MapLoader();
-	Map* parseMap(string mapPath);
-	bool validateJson(string mapPath);
+	static Map* parseMap(string mapPath);
+	static bool validateJson(string mapPath);
 
 private:
-	Continent* getContinentByName(vector<Continent*> &continents, string &name);
+	static Continent* getContinentByName(vector<Continent*> &continents, string &name);
 };
