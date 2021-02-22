@@ -18,17 +18,10 @@
 
 #include "../Player/Player.h"
 
-int main() {
-
-    BidTieBreakerByLastName tieBreaker;
-
-    //----------------------------------------------------------------
-    //                        Player Driver 
-    //----------------------------------------------------------------
-
-    //assuming 2 player game 
+void runPlayerDriver() {
     Deck deck(2);
-    Player* p1 = new Player("player1", deck, tieBreaker);
+    BidTieBreakerByLastName bidTieBreakerByLastName;
+    Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
 
     p1->BuildCity();
     p1->DestroyArmy();
@@ -36,6 +29,18 @@ int main() {
     p1->MoveOverLand();
     p1->payCoin();
     p1->PlaceNewArmies();
+
+    delete p1;
+}
+
+int main() {
+
+    BidTieBreakerByLastName tieBreaker;
+
+    //----------------------------------------------------------------
+    //                        Player Driver 
+    //----------------------------------------------------------------
+    runPlayerDriver();
 
     //----------------------------------------------------------------
     //                   BiddingFacility Driver 
