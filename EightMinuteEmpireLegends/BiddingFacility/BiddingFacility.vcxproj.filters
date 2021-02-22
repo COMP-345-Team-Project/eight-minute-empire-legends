@@ -29,13 +29,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BiddingTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BiddingFacility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BidTieBreakerByLastName.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BiddingFacilityDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
