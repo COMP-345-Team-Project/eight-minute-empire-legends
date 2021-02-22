@@ -196,6 +196,23 @@ int runCardsDriver() {
 	return 0;
 }
 
+int runPlayerDriver() {
+	Deck deck(2);
+	BidTieBreakerByLastName bidTieBreakerByLastName;
+	Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
+
+	p1->BuildCity();
+	p1->DestroyArmy();
+	p1->MoveArmies();
+	p1->MoveOverLand();
+	p1->payCoin();
+	p1->PlaceNewArmies();
+
+	delete p1;
+
+	return 0;
+}
+
 int runBiddingFacilityDriver() {
 	BidTieBreakerByLastName tieBreaker;
 
@@ -300,6 +317,8 @@ int main(int argc, char** argv) {
 	runMapDriver();
 	std::cout << "\n(2) Running the Map Loader Driver..." << std::endl;
 	runMapLoaderDriver();
+	std::cout << "\n(3) Running the Player Driver..." << std::endl;
+	runPlayerDriver();
 	std::cout << "\n(4) Running the Card Driver..." << std::endl;
 	runCardsDriver();
 	std::cout << "\n(5) Running the Bidding Facility Driver (the driver uses assertions so there will be no output)..." << std::endl;
@@ -308,54 +327,3 @@ int main(int argc, char** argv) {
 
 
 
-void runPlayerDriver() {
-    Deck deck(2);
-    BidTieBreakerByLastName bidTieBreakerByLastName;
-    Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
-
-    p1->BuildCity();
-    p1->DestroyArmy();
-    p1->MoveArmies();
-    p1->MoveOverLand();
-    p1->payCoin();
-    p1->PlaceNewArmies();
-
-    delete p1;
-}
-
-int main() {
-    BidTieBreakerByLastName tieBreaker;
-
-    runPlayerDriver();
-    /////////////////////////////////////////
-    // Test player with most coins wins
-
-    BiddingFacility t1_biddingFacility(tieBreaker);
-
-    BidSubmission t1_bidPlayerA(
-        "playerA",
-        "aalfredson",
-        0
-    );
-    BidSubmission t1_bidPlayerB(
-        "playerB",
-        "balfredson",
-        3
-    );
-    BidSubmission t1_bidPlayerC(
-        "playerC",
-        "calfredson",
-        2
-    );
-
-    t1_biddingFacility.trySubmitBid(t1_bidPlayerA);
-    t1_biddingFacility.trySubmitBid(t1_bidPlayerB);
-    t1_biddingFacility.trySubmitBid(t1_bidPlayerC);
-
-    // Assert
-    if (t1_biddingFacility.getWinningBid().getPlayerID() != t1_bidPlayerB.getPlayerID())
-        return 1;
-
-    std::cout << "Hello World!";
-    return 0;
-}
