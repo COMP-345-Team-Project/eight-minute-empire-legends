@@ -7,7 +7,6 @@
 #include "../Map/DriverUtils.h"
 #include "../Map/Map.h"
 #include "../MapLoader/MapLoader.h"
-#include "../Player/Player.h"
 #include "../Cards/Cards.h"
 #include "../BiddingFacility/BiddingFacility.h"
 #include "../BiddingFacility/BidTieBreakerByLastName.h"
@@ -144,29 +143,31 @@ int runMapDriver() {
 }
 
 int runMapLoaderDriver() {
+	MapLoader mapLoader;
+
 	//The file is stored in \eight-minute-empire-legends\EightMinuteEmpireLegends\Debug, make sure you have the map1.json file there
 	std::cout << "Load a valid map file..." << std::endl;
-	Map* map1 = MapLoader::parseMap("./Resources/validJson_validMap_simple.json");
+	Map* map1 = mapLoader.parseMap("../MapLoader/Resources/validJson_validMap_simple.json");
 	delete map1;
 
 	std::cout << "\nLoad a valid map file..." << std::endl;
-	Map* map2 = MapLoader::parseMap("./Resources/validJson_validMap.json");
+	Map* map2 = mapLoader.parseMap("../MapLoader/Resources/validJson_validMap.json");
 	delete map2;
 
 	std::cout << "\nLoad a incorrect file format (CSV)..." << std::endl;
-	Map* map3 = MapLoader::parseMap("./Resources/wrongFormatFile.csv"); //Pointer will be null
+	Map* map3 = mapLoader.parseMap("../MapLoader/Resources/wrongFormatFile.csv"); //Pointer will be null
 
 	std::cout << "\nLoad a json file, but with missing continents data..." << std::endl;
-	Map* map4 = MapLoader::parseMap("./Resources/invalidJson_missingContinents.json");
+	Map* map4 = mapLoader.parseMap("../MapLoader/Resources/invalidJson_missingContinents.json");
 
 	std::cout << "\nLoad a json file, but with missing vertices..." << std::endl;
-	Map* map5 = MapLoader::parseMap("./Resources/invalidJson_missingVertices.json");
+	Map* map5 = mapLoader.parseMap("../MapLoader/Resources/invalidJson_missingVertices.json");
 
 	std::cout << "\nLoad a json file, but with wrong data type..." << std::endl;
-	Map* map6 = MapLoader::parseMap("./Resources/invalidJson_wrongDataType.json");
+	Map* map6 = mapLoader.parseMap("../MapLoader/Resources/invalidJson_wrongDataType.json");
 
 	std::cout << "\nLoad a json file, but it is a disconnected graph..." << std::endl;
-	Map* map7 = MapLoader::parseMap("./Resources/validJson_invalidMap.json");
+	Map* map7 = mapLoader.parseMap("../MapLoader/Resources/validJson_invalidMap.json");
 
 	return 0;
 }
@@ -196,120 +197,103 @@ int runCardsDriver() {
 	return 0;
 }
 
-int runPlayerDriver() {
-	Deck deck(2);
-	BidTieBreakerByLastName bidTieBreakerByLastName;
-	Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
-
-	p1->BuildCity();
-	p1->DestroyArmy();
-	p1->MoveArmies();
-	p1->MoveOverLand();
-	p1->payCoin();
-	p1->PlaceNewArmies();
-
-	delete p1;
-
-	return 0;
-}
-
 int runBiddingFacilityDriver() {
-	BidTieBreakerByLastName tieBreaker;
+    BidTieBreakerByLastName tieBreaker;
 
-	/////////////////////////////////////////
-	// Test player with most coins wins
+    /////////////////////////////////////////
+    // Test player with most coins wins
 
-	BiddingFacility t1_biddingFacility(tieBreaker);
+    BiddingFacility t1_biddingFacility(tieBreaker);
 
-	BidSubmission t1_bidPlayerA(
-		"playerA",
-		"aalfredson",
-		0
-	);
-	BidSubmission t1_bidPlayerB(
-		"playerB",
-		"balfredson",
-		3
-	);
-	BidSubmission t1_bidPlayerC(
-		"playerC",
-		"calfredson",
-		2
-	);
+    BidSubmission t1_bidPlayerA(
+        "playerA",
+        "aalfredson",
+        0
+    );
+    BidSubmission t1_bidPlayerB(
+        "playerB",
+        "balfredson",
+        3
+    );
+    BidSubmission t1_bidPlayerC(
+        "playerC",
+        "calfredson",
+        2
+    );
 
-	t1_biddingFacility.trySubmitBid(t1_bidPlayerA);
-	t1_biddingFacility.trySubmitBid(t1_bidPlayerB);
-	t1_biddingFacility.trySubmitBid(t1_bidPlayerC);
+    t1_biddingFacility.trySubmitBid(t1_bidPlayerA);
+    t1_biddingFacility.trySubmitBid(t1_bidPlayerB);
+    t1_biddingFacility.trySubmitBid(t1_bidPlayerC);
 
-	// Assert
-	if (t1_biddingFacility.getWinningBid().getPlayerID() != t1_bidPlayerB.getPlayerID())
-		return 1;
-
-
-	/////////////////////////////////////////
-	// Test player alphabetically first last 
-	// name wins when bids are tied
-
-	BiddingFacility t2_biddingFacility(tieBreaker);
-
-	BidSubmission t2_bidPlayerA(
-		"playerA",
-		"aalfredson",
-		0
-	);
-	BidSubmission t2_bidPlayerB(
-		"playerB",
-		"balfredson",
-		3
-	);
-	BidSubmission t2_bidPlayerC(
-		"playerC",
-		"calfredson",
-		3
-	);
-
-	t2_biddingFacility.trySubmitBid(t2_bidPlayerA);
-	t2_biddingFacility.trySubmitBid(t2_bidPlayerB);
-	t2_biddingFacility.trySubmitBid(t2_bidPlayerC);
-
-	// Assert
-	if (t2_biddingFacility.getWinningBid().getPlayerID() != t2_bidPlayerB.getPlayerID())
-		return 1;
+    // Assert
+    if (t1_biddingFacility.getWinningBid().getPlayerID() != t1_bidPlayerB.getPlayerID())
+        return 1;
 
 
+    /////////////////////////////////////////
+    // Test player alphabetically first last 
+    // name wins when bids are tied
 
-	/////////////////////////////////////////
-	// Test player alphabetically first last 
-	// name wins when bids are zero
+    BiddingFacility t2_biddingFacility(tieBreaker);
 
-	BiddingFacility t3_biddingFacility(tieBreaker);
+    BidSubmission t2_bidPlayerA(
+        "playerA",
+        "aalfredson",
+        0
+    );
+    BidSubmission t2_bidPlayerB(
+        "playerB",
+        "balfredson",
+        3
+    );
+    BidSubmission t2_bidPlayerC(
+        "playerC",
+        "calfredson",
+        3
+    );
 
-	BidSubmission t3_bidPlayerA(
-		"playerA",
-		"aalfredson",
-		0
-	);
-	BidSubmission t3_bidPlayerB(
-		"playerB",
-		"balfredson",
-		0
-	);
-	BidSubmission t3_bidPlayerC(
-		"playerC",
-		"calfredson",
-		0
-	);
+    t2_biddingFacility.trySubmitBid(t2_bidPlayerA);
+    t2_biddingFacility.trySubmitBid(t2_bidPlayerB);
+    t2_biddingFacility.trySubmitBid(t2_bidPlayerC);
 
-	t3_biddingFacility.trySubmitBid(t3_bidPlayerA);
-	t3_biddingFacility.trySubmitBid(t3_bidPlayerB);
-	t3_biddingFacility.trySubmitBid(t3_bidPlayerC);
-
-	// Assert
-	if (t3_biddingFacility.getWinningBid().getPlayerID() != t3_bidPlayerA.getPlayerID())
-		return 1;
+    // Assert
+    if (t2_biddingFacility.getWinningBid().getPlayerID() != t2_bidPlayerB.getPlayerID())
+        return 1;
 
 
-	return 0;
+
+    /////////////////////////////////////////
+    // Test player alphabetically first last 
+    // name wins when bids are zero
+
+    BiddingFacility t3_biddingFacility(tieBreaker);
+
+    BidSubmission t3_bidPlayerA(
+        "playerA",
+        "aalfredson",
+        0
+    );
+    BidSubmission t3_bidPlayerB(
+        "playerB",
+        "balfredson",
+        0
+    );
+    BidSubmission t3_bidPlayerC(
+        "playerC",
+        "calfredson",
+        0
+    );
+
+    t3_biddingFacility.trySubmitBid(t3_bidPlayerA);
+    t3_biddingFacility.trySubmitBid(t3_bidPlayerB);
+    t3_biddingFacility.trySubmitBid(t3_bidPlayerC);
+
+    // Assert
+    if (t3_biddingFacility.getWinningBid().getPlayerID() != t3_bidPlayerA.getPlayerID())
+        return 1;
+
+
+    return 0;
 }
 
 int main(int argc, char** argv) {
@@ -317,13 +301,9 @@ int main(int argc, char** argv) {
 	runMapDriver();
 	std::cout << "\n(2) Running the Map Loader Driver..." << std::endl;
 	runMapLoaderDriver();
-	std::cout << "\n(3) Running the Player Driver..." << std::endl;
-	runPlayerDriver();
 	std::cout << "\n(4) Running the Card Driver..." << std::endl;
 	runCardsDriver();
 	std::cout << "\n(5) Running the Bidding Facility Driver (the driver uses assertions so there will be no output)..." << std::endl;
-	runBiddingFacilityDriver();
+    runBiddingFacilityDriver();
 }
-
-
 
