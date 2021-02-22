@@ -3,6 +3,8 @@
 
 Player::Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker) : playerName(name), coin(14), hand(deck), biddingFacility(bidTieBreaker) {}
 
+Player::~Player() {}
+
 void Player::payCoin() {
 	std::cout << "Entered payCoin method" << std::endl;
 }
