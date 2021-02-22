@@ -26,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BiddingFacility.cpp" />
-    <ClCompile Include="BiddingTests.cpp" />
+    <ClCompile Include="BiddingFacilityDriver.cpp" />
     <ClCompile Include="BidTieBreakerByLastName.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
