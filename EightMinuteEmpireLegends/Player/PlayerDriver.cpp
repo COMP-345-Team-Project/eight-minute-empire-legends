@@ -12,4 +12,6 @@ int main() {
 	p1->MoveOverLand();
 	p1->payCoin();
 	p1->PlaceNewArmies();
+	
+	delete p1;
 }
