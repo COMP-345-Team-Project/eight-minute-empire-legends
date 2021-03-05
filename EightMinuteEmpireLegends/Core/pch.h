@@ -19,5 +19,14 @@
 #include <ctime>
 #include <cstdlib>
 #include <exception>
+#include <fstream>
+
+// JSON parsing for map loader
+#include "../Vendor/nlohmann/json.hpp"
+
+// Argument parsing for Driver
+// http://tclap.sourceforge.net/
+#include "../Vendor/tclap/Arg.h"
+#include "../Vendor/tclap/CmdLine.h"
 
 #endif //PCH_H

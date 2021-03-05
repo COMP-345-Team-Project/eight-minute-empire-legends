@@ -1,7 +1,7 @@
-#include "Player.h"
-#include "../BiddingFacility/BidTieBreakerByLastName.h"
+#include "PlayerTests.h"
 
-int main() {
+int PlayerTests::Test_PlayerFunctionsExecute()
+{
 	Deck deck(2);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
 	Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
@@ -14,4 +14,5 @@ int main() {
 	p1->PlaceNewArmies();
 
 	delete p1;
+	return 0;
 }

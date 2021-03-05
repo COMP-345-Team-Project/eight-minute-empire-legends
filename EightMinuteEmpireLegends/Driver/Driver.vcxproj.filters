@@ -18,12 +18,18 @@
     <ClCompile Include="AssignmentOneDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssignmentOneDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

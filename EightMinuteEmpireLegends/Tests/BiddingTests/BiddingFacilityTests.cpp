@@ -1,18 +1,8 @@
-#include <iostream>
-#include <string>
+#include "BiddingFacilityTests.h"
 
-#include "BiddingFacility.h"
-#include "BidTieBreakerByLastName.h"
-
-
-
-int main(int argc, char** argv) {
-
+int BiddingFacilityTests::Test_PlayerWithMostCoinsWins()
+{
     BidTieBreakerByLastName tieBreaker;
-
-
-    /////////////////////////////////////////
-    // Test player with most coins wins
 
     BiddingFacility t1_biddingFacility(tieBreaker);
 
@@ -40,6 +30,12 @@ int main(int argc, char** argv) {
     if (t1_biddingFacility.getWinningBid().getPlayerID() != t1_bidPlayerB.getPlayerID())
         return 1;
 
+    return 0;
+}
+
+int BiddingFacilityTests::Test_PlayerWithAlphabeticallyFirstLastNameWins_WhenBidsAreTied()
+{
+    BidTieBreakerByLastName tieBreaker;
 
     /////////////////////////////////////////
     // Test player alphabetically first last 
@@ -70,8 +66,12 @@ int main(int argc, char** argv) {
     // Assert
     if (t2_biddingFacility.getWinningBid().getPlayerID() != t2_bidPlayerB.getPlayerID())
         return 1;
+    return 0;
+}
 
-
+int BiddingFacilityTests::Test_PlayerWithAlphabeticallyFirstLastNameWins_WhenBidsAreZero()
+{
+    BidTieBreakerByLastName tieBreaker;
 
     /////////////////////////////////////////
     // Test player alphabetically first last 
@@ -102,7 +102,6 @@ int main(int argc, char** argv) {
     // Assert
     if (t3_biddingFacility.getWinningBid().getPlayerID() != t3_bidPlayerA.getPlayerID())
         return 1;
-
 
     return 0;
 }

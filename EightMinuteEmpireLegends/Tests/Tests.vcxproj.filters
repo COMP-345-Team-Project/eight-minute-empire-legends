@@ -23,33 +23,42 @@
     <None Include="MapLoaderTests\Resources\wrongFormatFile.csv" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BiddingTests\BiddingFacilityDriver.cpp">
+    <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CardsTests\CardsDriver.cpp">
+    <ClCompile Include="PlayerTests\PlayerTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapLoaderTests\MapLoaderDriver.cpp">
+    <ClCompile Include="CardsTests\CardsTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapTests\DriverUtils.cpp">
+    <ClCompile Include="MapLoaderTests\MapLoaderTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapTests\MapDriver.cpp">
+    <ClCompile Include="MapTests\MapTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerTests\PlayerDriver.cpp">
+    <ClCompile Include="MapTests\MapTestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MapLoaderTests\MapLoaderDriver.h">
+    <ClInclude Include="BiddingTests\BiddingFacilityTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapTests\DriverUtils.h">
+    <ClInclude Include="PlayerTests\PlayerTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapTests\MapDriver.h">
+    <ClInclude Include="CardsTests\CardsTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLoaderTests\MapLoaderTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTests\MapTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTests\MapTestUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
