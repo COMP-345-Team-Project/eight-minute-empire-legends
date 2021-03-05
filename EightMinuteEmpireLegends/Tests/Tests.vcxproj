@@ -154,6 +154,19 @@
     <None Include="MapLoaderTests\Resources\validJson_validMap_simple.json" />
     <None Include="MapLoaderTests\Resources\wrongFormatFile.csv" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BiddingTests\BiddingFacilityDriver.cpp" />
+    <ClCompile Include="CardsTests\CardsDriver.cpp" />
+    <ClCompile Include="MapLoaderTests\MapLoaderDriver.cpp" />
+    <ClCompile Include="MapTests\DriverUtils.cpp" />
+    <ClCompile Include="MapTests\MapDriver.cpp" />
+    <ClCompile Include="PlayerTests\PlayerDriver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MapLoaderTests\MapLoaderDriver.h" />
+    <ClInclude Include="MapTests\DriverUtils.h" />
+    <ClInclude Include="MapTests\MapDriver.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
