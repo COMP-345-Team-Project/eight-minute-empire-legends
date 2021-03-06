@@ -1,4 +1,9 @@
+#pragma once
+
 #include "PlayerTests.h"
+
+#include "../../Core/Player/Player.h"
+#include "../../Core/Bidding/BidTieBreakerByLastName.h"
 
 int PlayerTests::Test_PlayerFunctionsExecute()
 {

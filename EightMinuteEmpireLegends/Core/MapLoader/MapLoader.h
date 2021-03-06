@@ -1,4 +1,6 @@
 #pragma once
+#include "../pch.h"
+
 #include "../Map/Map.h"
 
 using std::string;

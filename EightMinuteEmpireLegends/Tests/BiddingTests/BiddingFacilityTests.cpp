@@ -1,4 +1,8 @@
+#pragma once
+
 #include "BiddingFacilityTests.h"
+#include "../../Core/Bidding/BiddingFacility.h"
+#include "../../Core/Bidding/BidTieBreakerByLastName.h"
 
 int BiddingFacilityTests::Test_PlayerWithMostCoinsWins()
 {

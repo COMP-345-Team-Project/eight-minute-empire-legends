@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../../Core/Map/Map.h"
 
 std::string vertices_toString(std::vector<Vertex*> v);

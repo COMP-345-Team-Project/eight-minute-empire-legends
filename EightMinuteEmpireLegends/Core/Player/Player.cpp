@@ -1,4 +1,6 @@
-#include <iostream>
+#pragma once
+#include "../pch.h"
+
 #include "Player.h"
 
 Player::Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker) : playerName(name), coin(14), hand(deck), biddingFacility(bidTieBreaker) {}

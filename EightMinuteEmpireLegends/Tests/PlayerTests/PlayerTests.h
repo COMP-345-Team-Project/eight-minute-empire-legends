@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../../Core/Player/Player.h"
 #include "../../Core/Bidding/BidTieBreakerByLastName.h"
 

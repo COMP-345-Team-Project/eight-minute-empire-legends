@@ -1,5 +1,7 @@
 #pragma once
+
 #include "MapTestUtils.h"
+#include "../../Core/Map/Map.h"
 
 // Returns string list of a vertex vector
 std::string vertices_toString(std::vector<Vertex*> v) {

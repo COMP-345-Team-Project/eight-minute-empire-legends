@@ -1,12 +1,7 @@
+#pragma once
+#include "../pch.h"
+
 #include "Cards.h"
-
-#include <iostream>
-#include <vector>
-
-#include <algorithm>    // std::random_shuffle
-#include <ctime>        // std::time
-#include <cstdlib>      // std::rand, std::srand
-using namespace std;
 
 Card::Card(string nameValue, int newArmyValue, int moveArmyValue, int buildCityValue, int destroyArmyValue,
     string firstActionValue, string secondActionValue, bool andActionValue, int extraMoveValue,
@@ -253,11 +248,9 @@ void Deck::addCard(Card newCard) {
 
 //Changing the index position of the cards in the deck using random number
 void Deck::shuffle() {
-
-    //http://www.cplusplus.com/reference/algorithm/random_shuffle/
-    srand(unsigned(std::time(0)));
-    random_shuffle(deck.begin(), deck.end());
-    //random_shuffle(deck.begin(), deck.end(), int(time(0)));
+    auto rd = std::random_device{};
+    auto rng = std::default_random_engine{ rd() };
+    std::shuffle(deck.begin(), deck.end(), rng);
 }
 
 //Debug function to reveals all cards in deck

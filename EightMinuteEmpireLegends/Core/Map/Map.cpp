@@ -1,3 +1,6 @@
+#pragma once
+#include "../pch.h"
+
 #include "Map.h"
 
 // Map function/constructor definitions

@@ -1,3 +1,6 @@
+#pragma once
+#include "../pch.h"
+
 #include "BidTieBreakerByLastName.h"
 
 std::string BidTieBreakerByLastName::ComputeWinner(const std::vector<BidSubmission>& bidList) const

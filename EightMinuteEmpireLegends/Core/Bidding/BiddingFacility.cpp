@@ -1,3 +1,6 @@
+#pragma once
+#include "../pch.h"
+
 #include "BiddingFacility.h"
 
 std::shared_ptr<std::vector <BidSubmission>> BiddingFacility::generateBidList() {
@@ -70,4 +73,3 @@ unsigned long long BiddingFacility::getNumBids() const
 {
 	return bids->size();
 }
-

@@ -1,6 +1,7 @@
 #pragma once
+#include "../pch.h"
+
 #include "MapLoaderException.h"
-#include <iostream>
 
 MapLoaderException::MapLoaderException(const std::string& msg) : errorMessage(msg){}
 

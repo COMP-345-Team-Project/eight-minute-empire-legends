@@ -1,4 +1,6 @@
 #pragma once
+#include "../pch.h"
+
 #include "../Cards/Cards.h"
 #include "../Map/Map.h"
 #include "../Bidding/BiddingFacility.h"

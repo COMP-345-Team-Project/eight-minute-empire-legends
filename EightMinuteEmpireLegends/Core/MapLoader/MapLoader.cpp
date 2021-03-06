@@ -1,10 +1,9 @@
 #pragma once
+#include "../pch.h"
+
 #include "MapLoader.h"
 #include "MapLoaderException.h"
 #include "../Map/Map.h"
-#include <fstream>
-#include <iostream>
-#include "./External/json.hpp"
 
 using std::string;
 using std::vector;
@@ -144,7 +143,3 @@ Continent* MapLoader::getContinentByName(vector<Continent*> &continents, string 
 	}
 	return NULL;
 }
-
-
-
-

@@ -1,5 +1,8 @@
 #pragma once
+
 #include "CardsTests.h"
+
+#include "../../Core/Cards/Cards.h"
 
 int CardsTests::Test_CanBuildDeckAndHand_Demo()
 {

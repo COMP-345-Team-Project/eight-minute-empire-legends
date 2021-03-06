@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
 
 class Driver
 {
+public:
 	int RunAssignmentOneDriver();
 };
 

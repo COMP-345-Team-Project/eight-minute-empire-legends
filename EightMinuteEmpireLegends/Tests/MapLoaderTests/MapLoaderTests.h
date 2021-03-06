@@ -1,6 +1,4 @@
 #pragma once
-#include "../../Core/Map/Map.h"
-#include "../../Core/MapLoader/MapLoader.h"
 
 class MapLoaderTests
 {

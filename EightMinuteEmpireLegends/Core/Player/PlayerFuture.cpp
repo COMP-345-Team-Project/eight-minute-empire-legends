@@ -1,3 +1,6 @@
+#pragma once
+#include "../pch.h"
+
 //int Player::PayCoin(int n) {
 //	coin -= n;
 //	return coin;

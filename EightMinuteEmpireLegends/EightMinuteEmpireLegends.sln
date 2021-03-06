@@ -14,6 +14,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxpro
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Driver", "Driver\Driver.vcxproj", "{AA4A02F5-7E6A-4EAE-8DFA-B17DEADFEE37}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0868C134-E389-4EE2-9A47-77B550560F45} = {0868C134-E389-4EE2-9A47-77B550560F45}
+		{01B2365F-0A89-4783-8C9B-2D572772CB48} = {01B2365F-0A89-4783-8C9B-2D572772CB48}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vendor", "Vendor\Vendor.vcxproj", "{E3E904F8-67C4-42C2-9FB8-D8B306CD3A16}"
 EndProject

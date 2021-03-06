@@ -1,14 +1,6 @@
 #pragma once
-#include "../Core/pch.h"
 
-#include "../Core/Map/Map.h"
-#include "../Core/MapLoader/MapLoader.h"
-#include "../Core/Player/Player.h"
-#include "../Core/Cards/Cards.h"
-#include "../Core/Bidding/BiddingFacility.h"
-#include "../Core/Bidding/BidTieBreakerByLastName.h"
-
-
+#include "AssignmentOneDriver.h"
 
 #include "../Tests/PlayerTests/PlayerTests.h"
 #include "../Tests/BiddingTests/BiddingFacilityTests.h"
@@ -17,13 +9,12 @@
 #include "../Tests/MapTests/MapTests.h"
 #include "../Tests/MapTests/MapTestUtils.h"
 
-#include "AssignmentOneDriver.h"
-
 int AssignmentOneDriver::RunMapDriver()
 {
 	MapTests mapTests;
 	mapTests.Test_ValidatingInvalidMapConstruction_ReturnsFalse();
 	mapTests.Test_ValidatingValidMapConstruction_ReturnsTrue();
+	return 0;
 }
 
 int AssignmentOneDriver::RunMapLoaderDriver()
