@@ -48,6 +48,9 @@
     <ClInclude Include="Player\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameInit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player\PlayerFuture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
