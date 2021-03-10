@@ -24,14 +24,14 @@ int MapTests::Test_ValidatingValidMapConstruction_ReturnsTrue()
 	Territory* t3 = new Territory("Egypt", c3->name);
 	Territory* t4 = new Territory("Uganda", c3->name);
 	Territory* t5 = new Territory("China", c2->name);
-	Territory* t6 = new Territory("New Zealand", c4->name);
+	Territory* t6 = new Territory("New Zealand", c4->name);	
 
 	Vertex* v1 = new Vertex(t1, "u");
 	Vertex* v2 = new Vertex(t2, "v");
 	Vertex* v3 = new Vertex(t3, "w");
 	Vertex* v4 = new Vertex(t4, "x");
 	Vertex* v5 = new Vertex(t5, "y");
-	Vertex* v6 = new Vertex(t6, "z");
+	Vertex* v6 = new Vertex(t6, "z");	
 
 	Edge* e1 = new Edge(v1, v2, "a");
 	Edge* e2 = new Edge(v1, v3, "b");
@@ -41,7 +41,7 @@ int MapTests::Test_ValidatingValidMapConstruction_ReturnsTrue()
 	Edge* e6 = new Edge(v2, v3, "f");
 	Edge* e7 = new Edge(v2, v5, "g");
 	Edge* e8 = new Edge(v4, v5, "h");
-	Edge* e9 = new Edge(v5, v6, "i");
+	Edge* e9 = new Edge(v5, v6, "i");	
 
 	Map* m1 = new Map("Earth", { c1, c2, c3, c4 });
 
@@ -61,17 +61,17 @@ int MapTests::Test_ValidatingValidMapConstruction_ReturnsTrue()
 	m1->insertEdge(e7);
 	m1->insertEdge(e8);
 	m1->insertEdge(e9);
-
+	
 	std::cout << "Validating Map 1 - " << (m1->validate() ? "Valid" : "Invalid") << std::endl;
 	// Graph information on Map 1
 	std::cout << "Map 1 " << vertices_toString(m1->vertices()) << std::endl;
 	std::cout << "Map 1 " << edges_toString(m1->edges()) << std::endl;
 	std::cout << "Map 1 " << continents_toString(m1->continents()) << std::endl;
 	std::cout << "Map 1 " << territories_toString(m1->vertices()) << std::endl;
-	std::cout << "Map 1 " << continents_toString(m1) << std::endl << std::endl;
+	std::cout << "Map 1 " << continents_toString(m1) << std::endl << std::endl;	
 
 	int isValid = m1->validate() ? 0 : 1;
-	delete m1;
+	delete m1;	
 	return isValid;
 }
 
@@ -129,16 +129,16 @@ int MapTests::Test_ValidatingInvalidMapConstruction_ReturnsFalse()
 	m2->insertEdge(ee6);
 	m2->insertEdge(ee9);
 
-	std::cout << "Validating Map 2 - " << (m2->validate() ? "Valid" : "Invalid") << std::endl << std::endl;
+	std::cout << "Validating Map 2 - " << (m2->validate() ? "Valid" : "Invalid") << std::endl;
 
 	// Graph information on Map 2
 	std::cout << "Map 2 " << vertices_toString(m2->vertices()) << std::endl;
 	std::cout << "Map 2 " << edges_toString(m2->edges()) << std::endl;
 	std::cout << "Map 2 " << continents_toString(m2->continents()) << std::endl;
 	std::cout << "Map 2 " << territories_toString(m2->vertices()) << std::endl;
-	std::cout << "Map 2 " << continents_toString(m2) << std::endl;
+	std::cout << "Map 2 " << continents_toString(m2) << std::endl << std::endl;
 
 	int isValid = m2->validate() ? 0 : 1;
-	delete m2;
+	delete m2;	
 	return isValid;
 }
