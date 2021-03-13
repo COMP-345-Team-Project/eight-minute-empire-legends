@@ -20,7 +20,7 @@ private:
 	std::string const c;
 public:
 	Territory(std::string name, std::string c);
-	Territory(Territory* t);
+	Territory(const Territory* t);
 	Territory();		
 
 	void setName(std::string name);
@@ -43,7 +43,7 @@ private:
 	Territory* const t;
 public:
 	Vertex(Territory* t, std::string id);
-	Vertex(Vertex* v);
+	Vertex(const Vertex* v);
 	Vertex();
 	~Vertex();
 
@@ -64,7 +64,7 @@ private:
 	Vertex* v2;
 public:
 	Edge(Vertex* v1, Vertex* v2, std::string id);
-	Edge(Edge* e);
+	Edge(const Edge* e);
 	Edge();		
 
 	std::string getId();
@@ -96,7 +96,7 @@ private:
 	bool exists(std::string c);
 public:
 	Map(std::string name, std::vector<Continent*> c);
-	Map(Map* m);
+	Map(const Map* m);
 	Map();
 	~Map();
 	
