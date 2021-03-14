@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BiddingFacility" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAiAAAAAAAAACCEAAAAAAAACAAAEIAAAAIAAgAACABA=</HashCode>
+      <FileName>Bidding\BiddingFacility.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BidTieBreaker" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidding\BidTieBreaker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BidTieBreakerByLastName" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidding\BidTieBreakerByLastName.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Card" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wDRgAAAAABBAAAAGAAwIQAQgEAAEAIAIAAA2AECAAAg=</HashCode>
+      <FileName>Cards\Cards.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Deck" Collapsed="true">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAIAAAAAAAAIAAAAAAAAAAkAAAABAAAAAACA=</HashCode>
+      <FileName>Cards\Cards.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Hand" Collapsed="true">
+    <Position X="6.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAKAAAAAgAAAAAAAAAAAAAAEAAAAAAAAAECA=</HashCode>
+      <FileName>Cards\Cards.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapLoader" Collapsed="true">
+    <Position X="10.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAgAAAABA=</HashCode>
+      <FileName>MapLoader\MapLoader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapLoaderException" Collapsed="true">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MapLoader\MapLoaderException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Territory" Collapsed="true">
+    <Position X="8.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAgAAAAAAAgQAgAAACAAAgAAAEAADAAAAkAAAAAAI=</HashCode>
+      <FileName>Map\Map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vertex" Collapsed="true">
+    <Position X="10.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAIAAAABAAAAAAAAAAAQAAAAAAAAAAQgAAAAQgA=</HashCode>
+      <FileName>Map\Map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Edge" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAQAAAAAAAAAAAAAAAAAAAAAQABAAAAAIgAAAAAgA=</HashCode>
+      <FileName>Map\Map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map" Collapsed="true">
+    <Position X="8.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAIAgAJECQAEEAAKkCAAAAAAUEAACAQAsIAADQAA=</HashCode>
+      <FileName>Map\Map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="6.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAEAAAAAAIAABgAAEAAACAAAQAIAAAAAAAAQAAADA=</HashCode>
+      <FileName>Player\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="BidSubmission" Collapsed="true">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgACAIAAAAAgCABAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidding\BidSubmission.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Continent" Collapsed="true">
+    <Position X="6.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Map\Map.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
