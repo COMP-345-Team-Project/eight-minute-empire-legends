@@ -8,24 +8,30 @@
 Map::Map(std::string name, std::vector<Continent*> c)
 	: name(name), v_vertices({}), v_edges({}), v_continents(c), startingRegion(nullptr) { }
 
+Map::Map(const Map& m)
+	: name(m.name), v_vertices(m.v_vertices), v_edges(m.v_edges), v_continents(m.v_continents) {
+	if (m.startingRegion != nullptr) {
+		this->startingRegion = new Vertex(*m.startingRegion);
+	}	
+}
+
 Map::Map()
 	: name(""), v_vertices({}), v_edges({}), v_continents({}), startingRegion(nullptr) { }
 
-
 Map::~Map() {
-	for (Edge* ed : this->edges()) {			
+	for (Edge* ed : this->edges()) {
 		delete ed;
-		ed = NULL;			
-	}
-	
-	for (Vertex* ver : this->vertices()) {				
-		delete ver;
-		ver = NULL;				
+		ed = NULL;
 	}
 
-	for (Continent* con : this->continents()) {		
+	for (Vertex* ver : this->vertices()) {
+		delete ver;
+		ver = NULL;
+	}
+
+	for (Continent* con : this->continents()) {
 		delete con;
-		con = NULL;		
+		con = NULL;
 	}
 }
 
@@ -171,9 +177,9 @@ void Map::cascadeRemoveEdge(std::string id) {
 	std::vector<Edge*>::iterator begin = this->v_edges.begin();
 	std::vector<Edge*>::iterator end = this->v_edges.end();
 
-	this->v_edges.erase(std::remove_if(begin, end, 
-		[id](Edge* const e) { 
-			return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id); 
+	this->v_edges.erase(std::remove_if(begin, end,
+		[id](Edge* const e) {
+			return (e->getEndpoints()[0]->getId() == id || e->getEndpoints()[1]->getId() == id);
 		}), end);
 }
 
@@ -209,9 +215,9 @@ bool Map::validate() {
 }
 
 void Map::dfs(Vertex* v, std::vector<Vertex*>* visited) {
-	if (!std::any_of(visited->begin(), visited->end(), 
-		[v](Vertex* const ver) { 
-			return ver->getId() == v->getId(); 
+	if (!std::any_of(visited->begin(), visited->end(),
+		[v](Vertex* const ver) {
+			return ver->getId() == v->getId();
 		})) {
 		visited->push_back(v);
 		for (Vertex* ver : adjacentVertices(v)) {
@@ -220,18 +226,59 @@ void Map::dfs(Vertex* v, std::vector<Vertex*>* visited) {
 	}
 }
 
+Map& Map::operator =(const Map& m) {
+	this->name = m.name;
+	this->v_vertices = m.v_vertices;
+	this->v_edges = m.v_edges;
+	this->v_continents = m.v_continents;
+	this->startingRegion = new Vertex(*m.startingRegion);
+
+	return *this;
+}
+
+std::ostream& operator <<(std::ostream& os, const Map* m) {	
+	os << "Map : " << m->name << std::endl;
+	os << "Vertices: [" << std::endl;
+	for (Vertex* v : const_cast<Map*>(m)->vertices()) {		
+		os << v << std::endl;
+	}
+	os << "]\n" << "Edges : [" << std::endl;
+	for (Edge* e : const_cast<Map*>(m)->edges()) {
+		os << e << std::endl;
+	}
+	os << "]\n" << "Continents : [" << std::endl;
+	for (Continent* c : const_cast<Map*>(m)->continents()) {
+		os << c << std::endl;
+	}
+	os << "]\n" << "Starting Region : ";
+	m->startingRegion != nullptr ? os << m->startingRegion : os << "None";
+	
+	return os;
+}
+
+// Continent assignment operator definition
+
+std::ostream& operator <<(std::ostream& os, const Continent* c) {
+	os << c->name;
+
+	return os;
+}
+
 // Vertex function/constructor definitions
 
 Vertex::Vertex(Territory* t, std::string id)
 	: t(t), id(id) { }
 
+Vertex::Vertex(const Vertex& v)
+	: t(new Territory(*v.t)), id(v.id) { }
+
 Vertex::Vertex()
 	: id(""), t(nullptr) { }
 
 
-Vertex::~Vertex() {	
-	delete t;		
-} 
+Vertex::~Vertex() {
+	delete t;
+}
 
 std::string Vertex::getId() {
 	return this->id;
@@ -245,10 +292,24 @@ bool Vertex::compare(Vertex* v) {
 	return this->id == v->getId();
 }
 
+Vertex& Vertex::operator =(const Vertex& v) {
+	this->id = v.id;
+
+	return *this;
+}
+
+std::ostream& operator <<(std::ostream& os, const Vertex* v) {
+	os << "Vertex ID: " + v->id << "\nTerritory {\n" << v->t << "\n}";
+	return os;
+}
+
 // Edge function/constructor definitions
 
 Edge::Edge(Vertex* v1, Vertex* v2, std::string id)
 	: v1(v1), v2(v2), id(id) { }
+
+Edge::Edge(const Edge& e)
+	: id(e.id), v1(new Vertex(*e.v1)), v2(new Vertex(*e.v2)) { }
 
 Edge::Edge()
 	: id(""), v1(nullptr), v2(nullptr) { }
@@ -261,13 +322,26 @@ std::vector<Vertex*> Edge::getEndpoints() {
 	return { this->v1, this->v2 };
 }
 
+Edge& Edge::operator =(const Edge& e) {
+	this->id = e.id;
+	this->v1 = new Vertex(*e.v1);
+	this->v2 = new Vertex(*e.v2);
+
+	return *this;
+}
+
+std::ostream& operator <<(std::ostream& os, const Edge* e) {
+	os << "Edge ID: " + e->id << "\nVertex 1 {\n" << e->v1 << "\n}" << "\nVertex 2 {\n" << e->v2;
+	return os;
+}
+
 // Territory function/constructor definitions
 
 Territory::Territory(std::string name, std::string c)
 	: name(name), owner(""), armies(0), c(c) { }
 
-Territory::Territory(Territory* t)
-	: name(t->getName()), owner(t->getOwner()), armies(t->getArmies()), c(t->getContinent()) { }
+Territory::Territory(const Territory& t)
+	: name(t.name), owner(t.owner), armies(t.armies), c(t.c) { }
 
 Territory::Territory()
 	: name(""), owner(""), armies(0), c("") { }
@@ -300,6 +374,15 @@ std::string Territory::getContinent() {
 	return this->c;
 }
 
-std::string Territory::toString() {
-	return "Name: " + this->name + "\nOwner: " + this->owner + "\nArmies: " + std::to_string(this->armies) + "\nContinent: " + this->c;
+Territory& Territory::operator =(const Territory& t) {
+	this->name = t.name;
+	this->owner = t.owner;
+	this->armies = t.armies;
+
+	return *this;
+}
+
+std::ostream& operator <<(std::ostream& os, const Territory* t) {
+	os << "Name: " << t->name << "\nOwner: " << t->owner << "\nArmies: " << std::to_string(t->armies) << "\nContinent: " << t->c;
+	return os;
 }

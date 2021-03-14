@@ -20,7 +20,7 @@ private:
 	std::string const c;
 public:
 	Territory(std::string name, std::string c);
-	Territory(Territory* t);
+	Territory(const Territory& t);
 	Territory();		
 
 	void setName(std::string name);
@@ -30,7 +30,8 @@ public:
 	std::string getOwner();	
 	int getArmies();
 	std::string getContinent();
-	std::string toString();
+	Territory& operator =(const Territory& t);
+	friend std::ostream& operator <<(std::ostream& os, const Territory* t);
 };
 
 // Vertex class declaration
@@ -42,12 +43,15 @@ private:
 	Territory* const t;
 public:
 	Vertex(Territory* t, std::string id);
+	Vertex(const Vertex& v);
 	Vertex();
 	~Vertex();
 
 	std::string getId();
 	Territory* getTerritory();
 	bool compare(Vertex* v);
+	Vertex& operator =(const Vertex& v);
+	friend std::ostream& operator <<(std::ostream& os, const Vertex* v);
 };
 
 // Edge class declaration
@@ -60,10 +64,13 @@ private:
 	Vertex* v2;
 public:
 	Edge(Vertex* v1, Vertex* v2, std::string id);
+	Edge(const Edge& e);
 	Edge();		
 
 	std::string getId();
 	std::vector<Vertex*> getEndpoints();	
+	Edge& operator =(const Edge& e);
+	friend std::ostream& operator <<(std::ostream& os, const Edge* e);
 };
 
 // Continent struct declaration
@@ -71,6 +78,7 @@ public:
 struct Continent
 {
 	std::string name;
+	friend std::ostream& operator <<(std::ostream& os, const Continent* c);
 };
 
 // Map class declaration
@@ -88,6 +96,7 @@ private:
 	bool exists(std::string c);
 public:
 	Map(std::string name, std::vector<Continent*> c);
+	Map(const Map& m);
 	Map();
 	~Map();
 	
@@ -112,4 +121,6 @@ public:
 	bool removeVertex(std::string id);
 	bool removeEdge(std::string id);
 	bool validate();	
+	Map& operator =(const Map& m);
+	friend std::ostream& operator <<(std::ostream& os, const Map* m);
 };
