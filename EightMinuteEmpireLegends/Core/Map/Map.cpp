@@ -8,10 +8,10 @@
 Map::Map(std::string name, std::vector<Continent*> c)
 	: name(name), v_vertices({}), v_edges({}), v_continents(c), startingRegion(nullptr) { }
 
-Map::Map(const Map* m)
-	: name(m->name), v_vertices(m->v_vertices), v_edges(m->v_edges), v_continents(m->v_continents) {
-	if (m->startingRegion != nullptr) {
-		this->startingRegion = new Vertex(m->startingRegion);
+Map::Map(const Map& m)
+	: name(m.name), v_vertices(m.v_vertices), v_edges(m.v_edges), v_continents(m.v_continents) {
+	if (m.startingRegion != nullptr) {
+		this->startingRegion = new Vertex(*m.startingRegion);
 	}	
 }
 
@@ -231,7 +231,7 @@ Map& Map::operator =(const Map& m) {
 	this->v_vertices = m.v_vertices;
 	this->v_edges = m.v_edges;
 	this->v_continents = m.v_continents;
-	this->startingRegion = new Vertex(m.startingRegion);
+	this->startingRegion = new Vertex(*m.startingRegion);
 
 	return *this;
 }
@@ -269,8 +269,8 @@ std::ostream& operator <<(std::ostream& os, const Continent* c) {
 Vertex::Vertex(Territory* t, std::string id)
 	: t(t), id(id) { }
 
-Vertex::Vertex(const Vertex* v)
-	: t(new Territory(v->t)), id(v->id) { }
+Vertex::Vertex(const Vertex& v)
+	: t(new Territory(*v.t)), id(v.id) { }
 
 Vertex::Vertex()
 	: id(""), t(nullptr) { }
@@ -308,8 +308,8 @@ std::ostream& operator <<(std::ostream& os, const Vertex* v) {
 Edge::Edge(Vertex* v1, Vertex* v2, std::string id)
 	: v1(v1), v2(v2), id(id) { }
 
-Edge::Edge(const Edge* e)
-	: id(e->id), v1(new Vertex(e->v1)), v2(new Vertex(e->v2)) { }
+Edge::Edge(const Edge& e)
+	: id(e.id), v1(new Vertex(*e.v1)), v2(new Vertex(*e.v2)) { }
 
 Edge::Edge()
 	: id(""), v1(nullptr), v2(nullptr) { }
@@ -324,8 +324,8 @@ std::vector<Vertex*> Edge::getEndpoints() {
 
 Edge& Edge::operator =(const Edge& e) {
 	this->id = e.id;
-	this->v1 = new Vertex(e.v1);
-	this->v2 = new Vertex(e.v2);
+	this->v1 = new Vertex(*e.v1);
+	this->v2 = new Vertex(*e.v2);
 
 	return *this;
 }
@@ -340,8 +340,8 @@ std::ostream& operator <<(std::ostream& os, const Edge* e) {
 Territory::Territory(std::string name, std::string c)
 	: name(name), owner(""), armies(0), c(c) { }
 
-Territory::Territory(const Territory* t)
-	: name(t->name), owner(t->owner), armies(t->armies), c(t->c) { }
+Territory::Territory(const Territory& t)
+	: name(t.name), owner(t.owner), armies(t.armies), c(t.c) { }
 
 Territory::Territory()
 	: name(""), owner(""), armies(0), c("") { }
