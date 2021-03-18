@@ -21,6 +21,10 @@
     <None Include="MapLoaderTests\Resources\validJson_validMap.json" />
     <None Include="MapLoaderTests\Resources\validJson_validMap_simple.json" />
     <None Include="MapLoaderTests\Resources\wrongFormatFile.csv" />
+    <None Include="GameStartTests\Resources\bloodgulch.json" />
+    <None Include="GameStartTests\Resources\guardian.json" />
+    <None Include="GameStartTests\Resources\highground.json" />
+    <None Include="GameStartTests\Resources\narrows.json" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp">
@@ -41,6 +45,9 @@
     <ClCompile Include="MapTests\MapTestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameStartTests\GameStartTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h">
@@ -59,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapTests\MapTestUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStartTests\GameStartTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
