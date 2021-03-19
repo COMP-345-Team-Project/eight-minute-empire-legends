@@ -33,15 +33,15 @@ bool Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	return true;
 }
 
-void Player::MoveArmies(Vertex from, Vertex to, int numOfArmies) {
+void Player::MoveArmies(Vertex* from, Vertex* to, int numOfArmies) {
 	std::cout << "Entered MoveArmies method" << std::endl;
 }
 
-void Player::DestroyArmy(Vertex v, int numOfArmies) {
+void Player::DestroyArmy(Vertex* v, int numOfArmies) {
 	std::cout << "Entered BuildCity method" << std::endl;
 }
 
-void Player::BuildCity(Vertex v, int numOfArmies) {
+void Player::BuildCity(Vertex* v, int numOfArmies) {
 	std::cout << "Entered BuildCity method" << std::endl;
 }
 

@@ -12,12 +12,12 @@ public:
 	Player(const Player& player);
 	~Player();
 	void PayCoin(int coins);
-	void PlaceNewArmies(Map* map, Vertex v, int numOfArmies); //We need to map to check for the starting region
+	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region
 	//To make things simple, we move armies 1 region at a time, and we ask the player the details for each move
 	//We need to check if the edge is water/land in this method
-	void MoveArmies(Vertex from, Vertex to, int numOfArmies);
-	void BuildCity(Vertex v, int numOfArmies);
-	void DestroyArmy(Vertex v, int numOfArmies);
+	void MoveArmies(Vertex* from, Vertex* to, int numOfArmies);
+	void BuildCity(Vertex* v, int numOfArmies);
+	void DestroyArmy(Vertex* v, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
 	vector<Card> getCards();
 
