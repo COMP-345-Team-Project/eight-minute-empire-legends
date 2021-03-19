@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker) : playerName(name), coin(14), hand(deck), biddingFacility(bidTieBreaker) {}
+Player::Player(std::string name, Deck deck, BiddingFacility& biddingFacility) : playerName(name), coin(14), hand(deck), biddingFacility(biddingFacility) {}
 
 Player::~Player() {}
 
@@ -33,7 +33,7 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	std::cout << "Entered PlaceNewArmies method" << std::endl;
 }
 
-void Player::MoveArmies(Vertex* from, Vertex* to, int numOfArmies) {
+void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
 	std::cout << "Entered MoveArmies method" << std::endl;
 }
 
