@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch.h"
 
-#include "Map.h"
+#include "./Map.h"
 
 // Map function/constructor definitions
 
@@ -361,18 +361,18 @@ void Territory::setArmiesByPlayer(int armies, std::string playerName) {
 
 	if (it == this->armies.end())
 		this->armies.insert(std::pair<std::string, int>(playerName, armies));
-
-	this->armies[playerName] += armies;
+	else
+		this->armies[playerName] = armies;
 }
 
-void Territory::setArmiesByPlayer(int cities, std::string playerName) {
+void Territory::setCitiesByPlayer(int cities, std::string playerName) {
 	std::map<std::string, int>::iterator it;
 	it = this->cities.find(playerName);
 
 	if (it == this->cities.end())
 		this->cities.insert(std::pair<std::string, int>(playerName, cities));
-
-	this->cities[playerName] += cities;
+	else
+		this->cities[playerName] = cities;
 }
 
 std::string Territory::getName() {
@@ -401,6 +401,21 @@ int Territory::getCitiesByPlayer(std::string playerName) {
 		return 0;
 	else
 		return this->cities[playerName];
+}
+
+void Territory::addArmiesByPlayer(int armies, std::string playerName) {
+	int newNumOfArmies = getArmiesByPlayer(playerName) + armies;
+	setArmiesByPlayer(newNumOfArmies, playerName);
+}
+
+void Territory::destroyArmiesByPlayer(int armies, std::string playerName) {
+	int newNumOfArmies = getArmiesByPlayer(playerName) - armies;
+	setArmiesByPlayer(newNumOfArmies, playerName);
+}
+
+void Territory::addCitiesByPlayer(int cities, std::string playerName) {
+	int newNumOfCities = getCitiesByPlayer(playerName) + cities;
+	setCitiesByPlayer(newNumOfCities, playerName);
 }
 
 std::string Territory::getContinent() {
