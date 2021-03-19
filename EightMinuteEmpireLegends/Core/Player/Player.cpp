@@ -11,30 +11,68 @@ void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;
 }
 
-bool Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
+void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	//The number of Armies must be more than 0
 	if (numOfArmies < 0) {
 		std::cout << "Number of armies must be larger than 0" << std::endl;
-		return false;
+		return;
 	}
 
 	Territory* t = v->getTerritory();
 	//You can only place new armies in the starting region or a region you owned with at least 1 city
-	if (v != map->getStartingRegion() || !(t->getOwner().compare(this->playerName) && t->getCities() > 0)) { 
+	if (v != map->getStartingRegion() || !(t->getCitiesByPlayer(playerName) > 0)) { 
 		std::cout << "Armies must be built on a starting region, or a region owned by a player wit at least 1 city built" << std::endl;
-		return false;
+		return;
 	}
 
 	//Update the number of armies and owner
-	int newNumOfArmies = t->getArmies() + numOfArmies;
-	t->setArmies(newNumOfArmies);
-	t->setOwner(this->playerName);
-
-	return true;
+	int newNumOfArmies = t->getArmiesByPlayer(playerName) + numOfArmies;
+	t->setArmiesByPlayer(numOfArmies, playerName);
 }
 
-void Player::MoveArmies(Vertex* from, Vertex* to, int numOfArmies) {
-	std::cout << "Entered MoveArmies method" << std::endl;
+void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
+	//We perform some validation before actually moving the armies
+	if (from == to) {
+		std::cout << "The from and to destination is the same territory." << std::endl;
+		return;
+	}
+
+	int fromNumOfArmies = from->getTerritory()->getArmiesByPlayer(playerName);
+	if (numOfArmies > fromNumOfArmies) {
+		std::cout << "The amount of armies moved exceed the number of available armies. Need to move " << numOfArmies << " but only have " << fromNumOfArmies << std::endl;
+		return;
+	}
+
+	//Make sure that the vertices are adjacent
+	vector<Vertex*>::iterator vertexIter;
+	vector<Vertex*> adjacentVertices = map->adjacentVertices(from);
+
+	for (vertexIter = adjacentVertices.begin(); vertexIter != adjacentVertices.end(); vertexIter++) {
+		//if the 2 vertices are actually adjacent, then we move the armies
+		if (*vertexIter == to) {
+			//First we calculate the movement cost
+			int movementCost = 0;
+			if (from->getTerritory()->getContinent().compare(to->getTerritory()->getContinent()) == 0) {
+				std::cout << "Moving across land..." << std::endl;
+				movementCost = numOfArmies;
+			}
+			else {
+				std::cout << "Moving across water..." << std::endl;
+				movementCost = numOfArmies*3;
+			}
+			
+			//If we dont have enough remaining moves
+			if (movementCost > remainingMoves) {
+				std::cout << "Not enough remaining moves to move the armies, required " << movementCost << " but only have" << remainingMoves << std::endl;
+				return;
+			}
+
+			//Decrease the cost and move the armies
+			remainingMoves -= movementCost;
+			from->getTerritory()->destroyArmiesByPlayer(numOfArmies);
+			to->getTerritory()->addArmiesByPlayer(numOfArmies);
+		}
+	}
 }
 
 void Player::DestroyArmy(Vertex* v, int numOfArmies) {

@@ -7,4 +7,5 @@ class PlayerTests
 {
 public:
 	int Test_PlayerFunctionsExecute();
+	int Test_PlayerComputeScoreFunctionsExecute();
 };

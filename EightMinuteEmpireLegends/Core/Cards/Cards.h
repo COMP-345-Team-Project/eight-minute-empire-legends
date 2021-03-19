@@ -117,6 +117,7 @@ public:
     vector<Card> getCards();
 
 
+    vector<Card> getCards();
 private:
     vector<Card> hand;
 };
