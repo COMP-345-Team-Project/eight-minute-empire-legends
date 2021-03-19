@@ -11,19 +11,19 @@ void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;
 }
 
-void Player::PlaceNewArmies(Map* map, Vertex v, int numOfArmies) {
+void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	std::cout << "Entered PlaceNewArmies method" << std::endl;
 }
 
-void Player::MoveArmies(Vertex from, Vertex to, int numOfArmies) {
+void Player::MoveArmies(Vertex* from, Vertex* to, int numOfArmies) {
 	std::cout << "Entered MoveArmies method" << std::endl;
 }
 
-void Player::DestroyArmy(Vertex v, int numOfArmies) {
+void Player::DestroyArmy(Vertex* v, int numOfArmies) {
 	std::cout << "Entered BuildCity method" << std::endl;
 }
 
-void Player::BuildCity(Vertex v, int numOfArmies) {
+void Player::BuildCity(Vertex* v, int numOfArmies) {
 	std::cout << "Entered BuildCity method" << std::endl;
 }
 
