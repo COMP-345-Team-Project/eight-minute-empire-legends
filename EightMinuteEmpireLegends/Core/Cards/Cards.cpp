@@ -403,4 +403,8 @@ int Hand::getSize() {
     return hand.size();
 }
 
+vector<Card> Hand::getCards() {
+    return hand;
+}
+
 

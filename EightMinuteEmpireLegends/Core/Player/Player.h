@@ -19,6 +19,7 @@ public:
 	void BuildCity(Vertex v, int numOfArmies);
 	void DestroyArmy(Vertex v, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
+	vector<Card> getCards();
 
 private:
 	std::string playerName;
