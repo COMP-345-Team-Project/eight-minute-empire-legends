@@ -337,14 +337,15 @@ std::ostream& operator <<(std::ostream& os, const Edge* e) {
 
 // Territory function/constructor definitions
 
-Territory::Territory(std::string name, std::string c)
-	: name(name), owner(""), armies(0), c(c) { }
+Territory::Territory(std::string name, std::string continent)
+	: name(name), owner(""), continent(continent) { }
 
 Territory::Territory(const Territory& t)
-	: name(t.name), owner(t.owner), armies(t.armies), c(t.c) { }
+	: name(t.name), owner(t.owner), continent(t.continent), armies(t.armies), cities(t.cities) {
+}
 
 Territory::Territory()
-	: name(""), owner(""), armies(0), c("") { }
+	: name(""), owner(""), continent("") { }
 
 void Territory::setName(std::string name) {
 	this->name = name;
@@ -354,8 +355,24 @@ void Territory::setOwner(std::string owner) {
 	this->owner = owner;
 }
 
-void Territory::setArmies(int armies) {
-	this->armies += armies;
+void Territory::setArmiesByPlayer(int armies, std::string playerName) {
+	std::map<std::string, int>::iterator it;
+	it = this->armies.find(playerName);
+
+	if (it == this->armies.end())
+		this->armies.insert(std::pair<std::string, int>(playerName, armies));
+
+	this->armies[playerName] += armies;
+}
+
+void Territory::setArmiesByPlayer(int cities, std::string playerName) {
+	std::map<std::string, int>::iterator it;
+	it = this->cities.find(playerName);
+
+	if (it == this->cities.end())
+		this->cities.insert(std::pair<std::string, int>(playerName, cities));
+
+	this->cities[playerName] += cities;
 }
 
 std::string Territory::getName() {
@@ -366,12 +383,28 @@ std::string Territory::getOwner() {
 	return this->owner;
 }
 
-int Territory::getArmies() {
-	return this->armies;
+int Territory::getArmiesByPlayer(std::string playerName) {
+	std::map<std::string, int>::iterator it;
+	it = this->armies.find(playerName);
+
+	if (it == this->armies.end())
+		return 0;
+	else
+		return this->armies[playerName];
+}
+
+int Territory::getCitiesByPlayer(std::string playerName) {
+	std::map<std::string, int>::iterator it;
+	it = this->cities.find(playerName);
+
+	if (it == this->cities.end())
+		return 0;
+	else
+		return this->cities[playerName];
 }
 
 std::string Territory::getContinent() {
-	return this->c;
+	return this->continent;
 }
 
 Territory& Territory::operator =(const Territory& t) {
@@ -383,6 +416,6 @@ Territory& Territory::operator =(const Territory& t) {
 }
 
 std::ostream& operator <<(std::ostream& os, const Territory* t) {
-	os << "Name: " << t->name << "\nOwner: " << t->owner << "\nArmies: " << std::to_string(t->armies) << "\nContinent: " << t->c;
+	os << "Name: " << t->name << "\nOwner: " << t->owner << "\nContinent: " << t->continent;
 	return os;
 }

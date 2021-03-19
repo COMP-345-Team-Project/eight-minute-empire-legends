@@ -7,26 +7,26 @@ Player::Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker) : play
 
 Player::~Player() {}
 
-void Player::payCoin() {
+void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;
 }
 
-void Player::PlaceNewArmies() {
+void Player::PlaceNewArmies(Vertex v, int numOfArmies) {
 	std::cout << "Entered PlaceNewArmies method" << std::endl;
 }
 
-void Player::MoveArmies() {
+void Player::MoveArmies(Vertex from, Vertex to, int numOfArmies) {
 	std::cout << "Entered MoveArmies method" << std::endl;
 }
 
-void Player::MoveOverLand() {
-	std::cout << "Entered MoveOverLand method" << std::endl;
-}
-
-void Player::BuildCity() {
+void Player::DestroyArmy(Vertex v, int numOfArmies) {
 	std::cout << "Entered BuildCity method" << std::endl;
 }
 
-void Player::DestroyArmy() {
+void Player::BuildCity(Vertex v, int numOfArmies) {
+	std::cout << "Entered BuildCity method" << std::endl;
+}
+
+void Player::InitResources(int coin, int armies, int cities) {
 	std::cout << "Entered DestroyArmy method" << std::endl;
 }

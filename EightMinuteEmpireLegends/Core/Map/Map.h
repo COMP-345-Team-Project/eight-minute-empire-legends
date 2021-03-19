@@ -16,8 +16,9 @@ class Territory
 private:
 	std::string name;
 	std::string owner;	
-	int armies;		
-	std::string const c;
+	std::map<std::string, int> armies;	
+	std::map<std::string, int> cities;
+	std::string const continent;
 public:
 	Territory(std::string name, std::string c);
 	Territory(const Territory& t);
@@ -25,10 +26,12 @@ public:
 
 	void setName(std::string name);
 	void setOwner(std::string owner);
-	void setArmies(int armies);
+	void setArmiesByPlayer(int armies, std::string playerName);
+	void setCitiesByPlayer(int cities, std::string playerName);
 	std::string getName();
 	std::string getOwner();	
-	int getArmies();
+	int getArmiesByPlayer(std::string playerName);
+	int getCitiesByPlayer(std::string playerName);
 	std::string getContinent();
 	Territory& operator =(const Territory& t);
 	friend std::ostream& operator <<(std::ostream& os, const Territory* t);
