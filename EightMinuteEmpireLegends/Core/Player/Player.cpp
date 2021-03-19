@@ -3,9 +3,27 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker) : playerName(name), coin(14), hand(deck), biddingFacility(bidTieBreaker) {}
+Player::Player(std::string name, Deck deck, BiddingFacility& biddingFacility) : playerName(name), coin(14), hand(deck), biddingFacility(biddingFacility) {}
 
 Player::~Player() {}
+
+int Player::getCoins() {
+	return coin;
+}
+
+int Player::getAvailableArmies() {
+	return availableArmies;
+}
+
+int Player::getAvailableCities() {
+	return availableCities;
+}
+
+
+vector<Card> Player::getCards() {
+	return hand.getCards();
+}
+
 
 void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;

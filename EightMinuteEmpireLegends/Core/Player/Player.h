@@ -8,9 +8,15 @@
 class Player
 {
 public:
-	Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker);
+	Player(std::string name, Deck deck, BiddingFacility& biddingFacility);
 	Player(const Player& player);
 	~Player();
+
+	int getCoins();
+	int getAvailableArmies();
+	int getAvailableCities();
+	vector<Card> getCards();
+
 	void PayCoin(int coins);
 	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region
 	//To make things simple, we move armies 1 region at a time, and we ask the player the details for each move
@@ -19,7 +25,7 @@ public:
 	void BuildCity(Vertex* v, int numOfArmies);
 	void DestroyArmy(Vertex* v, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
-	vector<Card> getCards();
+	
 
 private:
 	std::string playerName;
