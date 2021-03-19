@@ -11,7 +11,7 @@ void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;
 }
 
-void Player::PlaceNewArmies(Vertex v, int numOfArmies) {
+void Player::PlaceNewArmies(Map* map, Vertex v, int numOfArmies) {
 	std::cout << "Entered PlaceNewArmies method" << std::endl;
 }
 
