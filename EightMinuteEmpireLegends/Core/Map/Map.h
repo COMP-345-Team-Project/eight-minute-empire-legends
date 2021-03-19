@@ -32,6 +32,9 @@ public:
 	std::string getOwner();	
 	int getArmiesByPlayer(std::string playerName);
 	int getCitiesByPlayer(std::string playerName);
+	void addArmiesByPlayer(int armies, std::string playerName);
+	void destroyArmiesByPlayer(int armies, std::string playerName);
+	void addCitiesByPlayer(int cities, std::string playerName);
 	std::string getContinent();
 	Territory& operator =(const Territory& t);
 	friend std::ostream& operator <<(std::ostream& os, const Territory* t);
