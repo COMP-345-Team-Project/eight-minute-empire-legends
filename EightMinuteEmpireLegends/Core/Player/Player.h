@@ -16,6 +16,7 @@ public:
 	int getAvailableArmies();
 	int getAvailableCities();
 	vector<Card> getCards();
+	std::string getPlayerName();
 
 	void PayCoin(int coins);
 	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region

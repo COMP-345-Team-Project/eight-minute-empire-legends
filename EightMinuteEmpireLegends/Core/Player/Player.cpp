@@ -19,9 +19,12 @@ int Player::getAvailableCities() {
 	return availableCities;
 }
 
-
 vector<Card> Player::getCards() {
 	return hand.getCards();
+}
+
+std::string Player::getPlayerName() {
+	return playerName;
 }
 
 
