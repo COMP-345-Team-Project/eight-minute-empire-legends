@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, Deck deck, BiddingFacility& biddingFacility) : playerName(name), coin(14), hand(deck), biddingFacility(biddingFacility) {}
+Player::Player(std::string name, BiddingFacility& biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility) {}
 
 Player::~Player() {}
 
@@ -27,28 +27,34 @@ std::string Player::getPlayerName() {
 	return playerName;
 }
 
-
 void Player::PayCoin(int coins) {
 	std::cout << "Entered payCoin method" << std::endl;
 }
 
 void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	//The number of Armies must be more than 0
-	if (numOfArmies < 0) {
-		std::cout << "Number of armies must be larger than 0" << std::endl;
+	if (numOfArmies <= 0) {
+		throw PlayerActionException("Number of armies must be larger than 0");
 		return;
+	}
+
+	//Player must have enough available armies
+	if (availableArmies < numOfArmies) {
+		std::string errorMessage = "Not enough armies to deploy, require " + std::to_string(numOfArmies) + " but only have " + std::to_string(availableArmies);
+		throw PlayerActionException(errorMessage);
 	}
 
 	Territory* t = v->getTerritory();
 	//You can only place new armies in the starting region or a region you owned with at least 1 city
-	if (v != map->getStartingRegion() || !(t->getCitiesByPlayer(playerName) > 0)) { 
-		std::cout << "Armies must be built on a starting region, or a region owned by a player wit at least 1 city built" << std::endl;
-		return;
+	if (v != map->getStartingRegion() && !(t->getCitiesByPlayer(playerName) > 0)) { 
+		std::string errorMessage = "Armies must be built on a starting region, or a region owned by a player with at least 1 city built";
+		throw PlayerActionException(errorMessage);
 	}
 
 	//Update the number of armies and owner
 	int newNumOfArmies = t->getArmiesByPlayer(playerName) + numOfArmies;
 	t->setArmiesByPlayer(numOfArmies, playerName);
+	availableArmies -= numOfArmies;
 }
 
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
@@ -90,28 +96,40 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 
 			//Decrease the cost and move the armies
 			remainingMoves -= movementCost;
-			from->getTerritory()->destroyArmiesByPlayer(numOfArmies);
-			to->getTerritory()->addArmiesByPlayer(numOfArmies);
+			from->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
+			to->getTerritory()->addArmiesByPlayer(numOfArmies, playerName);
 		}
 	}
 }
 
 void Player::DestroyArmy(Vertex* v, int numOfArmies) {
-	std::cout << "Entered BuildCity method" << std::endl;
+	int currentNumOfArmies = v->getTerritory()->getArmiesByPlayer(playerName);
+	if (currentNumOfArmies < numOfArmies) {
+		std::cout << "The amount of armies to be removed exceed the number of deployed armies. Need to move " << numOfArmies << " but only have " << currentNumOfArmies << std::endl;
+		return;
+	}
+
+	v->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
+	availableCities += numOfArmies;
 }
 
-void Player::BuildCity(Vertex* v, int numOfArmies) {
-	std::cout << "Entered BuildCity method" << std::endl;
+void Player::BuildCity(Vertex* v, int numOfCities) {
+	if (availableCities < numOfCities) {
+		std::cout << "The amount of cities to be built is not sufficient. Need to build " << numOfCities << " but only have " << availableCities << std::endl;
+		return;
+	}
+
+	v->getTerritory()->addCitiesByPlayer(numOfCities, playerName);
+	availableCities -= numOfCities;
 }
 
 void Player::InitResources(int coin, int armies, int cities) {
-	std::cout << "Entered DestroyArmy method" << std::endl;
+	this->coin = coin;
+	this->availableArmies = armies;
+	this->availableCities = cities;
 }
 
-vector<Card> Player::getCards() {
-	return hand.getCards();
-}
-int Player::ComputeScore(Map& map) {
+/*int Player::ComputeScore(Map& map) {
 	cout << "Starting score calculation of player " << this->playerName << ": " << endl;
 
 	//Calculating the territories owned by the player
@@ -245,4 +263,11 @@ int Player::ComputeAbilityScore() {
 	}
 
 	return total;
+}*/
+
+PlayerActionException::PlayerActionException(const std::string& msg) : errorMessage(msg) {}
+
+const char* PlayerActionException::what() const throw ()
+{
+	return errorMessage.c_str();
 }
