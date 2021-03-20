@@ -6,14 +6,6 @@
 #include "../../Core/Bidding/BidTieBreakerByLastName.h"
 #include "../../Core/MapLoader/MapLoader.h"
 
-//Test constants
-const int numOfArmiesToDeploy = 1;
-const int badNumOfArmiesToDeploy = 0;
-const int numOfCoins = 11;
-const int numOfArmies = 10;
-const int numOfCities = 3;
-const string playerName = "player1";
-
 Vertex* findVertexById(Map* map, string id) {
 	vector<Vertex*> vertices = map->vertices();
 	for (vector<Vertex*>::iterator vertexIter = vertices.begin(); vertexIter != vertices.end(); vertexIter++) {
@@ -22,22 +14,30 @@ Vertex* findVertexById(Map* map, string id) {
 	}
 }
 
-int PlayerTests::Test_PlayerFunctionsExecute()
+PlayerTests::PlayerTests() {
+	numOfArmiesToDeploy = 1;
+	badNumOfArmiesToDeploy = 0;
+	numOfCoins = 11;
+	numOfArmies = 10;
+	numOfCities = 3;
+	playerName = "player1";
+	mapPath = "C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json";
+}
+
+int PlayerTests::Test_PlaceArmies()
 {	
-	Map* map = MapLoader::parseMap("C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json");
+	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
 	BiddingFacility biddingFacility(bidTieBreakerByLastName);
-	Player* p1 = new Player("player1", biddingFacility);
+	Player* p1 = new Player(playerName, biddingFacility);
 
 	//Arrange
 	//Set the starting region
 	Vertex* startingRegion = findVertexById(map, "1");
 	map->setStartingRegion(startingRegion);
-	std::cout << "Starting region:" << std::endl;
-	std::cout << map->getStartingRegion() << std::endl;
 	//Build a city on a specific region
 	Vertex* regionWithCity = findVertexById(map, "2");
-	regionWithCity->getTerritory()->addCitiesByPlayer(1, "player1");
+	regionWithCity->getTerritory()->addCitiesByPlayer(1, playerName);
 	//Get a region without a city
 	Vertex*  regionWithoutCity = findVertexById(map, "3");
 
@@ -81,40 +81,163 @@ int PlayerTests::Test_PlayerFunctionsExecute()
 	p1->PlaceNewArmies(map, regionWithCity, numOfArmiesToDeploy);
 
 	//Assert
-	assert(startingRegion->getTerritory()->getArmiesByPlayer("player1") == numOfArmiesToDeploy);
-	assert(regionWithCity->getTerritory()->getArmiesByPlayer("player1") == numOfArmiesToDeploy);
+	assert(startingRegion->getTerritory()->getArmiesByPlayer(playerName) == numOfArmiesToDeploy);
+	assert(regionWithCity->getTerritory()->getArmiesByPlayer(playerName) == numOfArmiesToDeploy);
 	assert(p1->getAvailableArmies() == (numOfArmies - (numOfArmiesToDeploy + numOfArmiesToDeploy)));
 
 
 	//delete p1;
+	delete map;
 	return 0;
 }
 
-
-
-/*int PlayerTests::Test_PlayerComputeScoreFunctionsExecute() {
-	//Create map
-	std::cout << "Load a valid map file..." << std::endl;
-	Map* map = MapLoader::parseMap("./MapLoaderTests/Resources/validJson_validMap.json");
-	
-	Deck deck(2);
+int PlayerTests::Test_MoveArmies() {
+	std::cout << "Testing Player::MoveArmies()" << std::endl;
+	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
-	Player* p1 = new Player("player1", deck, bidTieBreakerByLastName);
-	Player* p2 = new Player("player2", deck, bidTieBreakerByLastName);
+	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	Player* p1 = new Player(playerName, biddingFacility);
 
-	//Assign some regions to players
-	Vertex* v0 = findVertexById(map, "0");
-	p1->PlaceNewArmies(map, v0, 2);
+	//Arrange
+	//Set from region
+	Vertex* fromRegion = findVertexById(map, "1");
+	map->setStartingRegion(fromRegion);
+	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
+	p1->PlaceNewArmies(map, fromRegion, 3);
+	//Set the to region the move over land
+	Vertex* toRegionLand = findVertexById(map, "0");
+	//Set the to region the move over water
+	Vertex* toRegionWater = findVertexById(map, "9");
+	int remainingMoves = 0;
 
-	p1->BuildCity();
-	p1->DestroyArmy();
-	p1->MoveArmies();
-	p1->MoveOverLand();
-	p1->payCoin();
-	p1->PlaceNewArmies();
+	//Testing errorneous cases
+	std::cout << "Testing error cases, error messages will be output..." << std::endl;
+	//From and To regions are the same
+	bool errorCaught = false;
+	try {
+		p1->MoveArmies(map, fromRegion, fromRegion, 1, remainingMoves);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
 
-	delete p1;
-	delete p2;
-	delete map;
+	//Number of armies to move exceeding available armies
+	errorCaught = false;
+	try {
+		p1->MoveArmies(map, fromRegion, toRegionLand, 12, remainingMoves);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+
+	//Not enough moves
+	errorCaught = false;
+	try {
+		p1->MoveArmies(map, fromRegion, toRegionLand, 1, remainingMoves);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+
+	//Testing correct cases
+	std::cout << "Testing correct cases using assertions..." << std::endl;
+	remainingMoves = 4;
+	p1->MoveArmies(map, fromRegion, toRegionLand, 1, remainingMoves);
+	assert(fromRegion->getTerritory()->getArmiesByPlayer(playerName) == 2);
+	assert(toRegionLand->getTerritory()->getArmiesByPlayer(playerName) == 1);
+	assert(remainingMoves == 3);
+	p1->MoveArmies(map, fromRegion, toRegionWater, 1, remainingMoves);
+	assert(fromRegion->getTerritory()->getArmiesByPlayer(playerName) == 1);
+	assert(toRegionLand->getTerritory()->getArmiesByPlayer(playerName) == 1);
+	assert(remainingMoves == 0);
+
 	return 0;
-}*/
+}
+
+int PlayerTests::Test_DestroyArmies() {
+	std::cout << "Testing Player::DestroyArmy()" << std::endl;
+	Map* map = MapLoader::parseMap(mapPath);
+	BidTieBreakerByLastName bidTieBreakerByLastName;
+	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	Player* p1 = new Player(playerName, biddingFacility);
+
+	//Arrange
+	//Set the starting region then set some armies at the starting region
+	Vertex* region = findVertexById(map, "1");
+	map->setStartingRegion(region);
+	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
+	p1->PlaceNewArmies(map, region, 3);
+
+	//Testing errorneous cases
+	std::cout << "Testing error cases, error messages will be output..." << std::endl;
+	//Remove more than deployed
+	bool errorCaught = false;
+	try {
+		p1->DestroyArmy(region, 4);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+
+	//Testing correct cases
+	std::cout << "Testing correct cases using assertions..." << std::endl;
+	p1->DestroyArmy(region, 2);
+	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 1);
+	assert(p1->getAvailableArmies() == 9);
+
+	return 0;
+}
+
+int PlayerTests::Test_PlaceCities() {
+	std::cout << "Testing Player::DestroyArmy()" << std::endl;
+	Map* map = MapLoader::parseMap(mapPath);
+	BidTieBreakerByLastName bidTieBreakerByLastName;
+	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	Player* p1 = new Player(playerName, biddingFacility);
+
+	//Arrange
+	//Set the starting region then set some armies at the starting region
+	Vertex* region = findVertexById(map, "1");
+	map->setStartingRegion(region);
+
+	//Testing errorneous cases
+	std::cout << "Testing error cases, error messages will be output..." << std::endl;
+	//Do not have enough cities to build
+	bool errorCaught = false;
+	try {
+		p1->BuildCity(region, 1);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+
+	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
+	//Region does not have armies
+	errorCaught = false;
+	try {
+		p1->BuildCity(region, 1);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+
+	std::cout << "Testing correct cases using assertions..." << std::endl;
+	p1->PlaceNewArmies(map, region, 3);
+	assert(p1->getAvailableCities() == 3);
+	p1->BuildCity(region, 1);
+	assert(p1->getAvailableCities() == 2);
+	assert(region->getTerritory()->getCitiesByPlayer(playerName) ==  1);
+	return 0;
+}

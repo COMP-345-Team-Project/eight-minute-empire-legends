@@ -8,7 +8,7 @@
 class Player
 {
 public:
-	Player(std::string name, Deck deck, BiddingFacility& biddingFacility);
+	Player(std::string name, BiddingFacility& biddingFacility);
 	Player(const Player& player);
 	~Player();
 
@@ -36,4 +36,13 @@ private:
 	vector<Vertex> deployedVertices;
 	Hand hand;
 	BiddingFacility biddingFacility;
+};
+
+class PlayerActionException : public std::exception
+{
+	private:
+		std::string errorMessage;
+	public:
+		PlayerActionException(const std::string& msg);
+		const char* what() const throw();
 };

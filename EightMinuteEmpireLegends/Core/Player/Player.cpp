@@ -60,14 +60,13 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
 	//We perform some validation before actually moving the armies
 	if (from == to) {
-		std::cout << "The from and to destination is the same territory." << std::endl;
-		return;
+		throw PlayerActionException("The from and to destination is the same territory.");
 	}
 
 	int fromNumOfArmies = from->getTerritory()->getArmiesByPlayer(playerName);
 	if (numOfArmies > fromNumOfArmies) {
-		std::cout << "The amount of armies moved exceed the number of available armies. Need to move " << numOfArmies << " but only have " << fromNumOfArmies << std::endl;
-		return;
+		std::string errorMessage = "The amount of armies moved exceed the number of available armies. Need to move " + std::to_string(numOfArmies) + " but only have " + std::to_string(fromNumOfArmies);
+		throw PlayerActionException(errorMessage);
 	}
 
 	//Make sure that the vertices are adjacent
@@ -80,18 +79,16 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 			//First we calculate the movement cost
 			int movementCost = 0;
 			if (from->getTerritory()->getContinent().compare(to->getTerritory()->getContinent()) == 0) {
-				std::cout << "Moving across land..." << std::endl;
 				movementCost = numOfArmies;
 			}
 			else {
-				std::cout << "Moving across water..." << std::endl;
 				movementCost = numOfArmies*3;
 			}
 			
 			//If we dont have enough remaining moves
 			if (movementCost > remainingMoves) {
-				std::cout << "Not enough remaining moves to move the armies, required " << movementCost << " but only have" << remainingMoves << std::endl;
-				return;
+				std::string errorMessage = "Not enough remaining moves to move the armies, required " + std::to_string(movementCost) + " but only have " + std::to_string(remainingMoves);
+				throw PlayerActionException(errorMessage);
 			}
 
 			//Decrease the cost and move the armies
@@ -105,18 +102,22 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 void Player::DestroyArmy(Vertex* v, int numOfArmies) {
 	int currentNumOfArmies = v->getTerritory()->getArmiesByPlayer(playerName);
 	if (currentNumOfArmies < numOfArmies) {
-		std::cout << "The amount of armies to be removed exceed the number of deployed armies. Need to move " << numOfArmies << " but only have " << currentNumOfArmies << std::endl;
-		return;
+		std::string errorMessage = "The amount of armies to be removed exceed the number of deployed armies. Need to move " + std::to_string(numOfArmies) + " but only have " + std::to_string(currentNumOfArmies);
+		throw PlayerActionException(errorMessage);
 	}
 
 	v->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
-	availableCities += numOfArmies;
+	availableArmies += numOfArmies;
 }
 
 void Player::BuildCity(Vertex* v, int numOfCities) {
 	if (availableCities < numOfCities) {
-		std::cout << "The amount of cities to be built is not sufficient. Need to build " << numOfCities << " but only have " << availableCities << std::endl;
-		return;
+		std::string errorMessage = "The amount of cities to be built is not sufficient. Need to build " + std::to_string(numOfCities) + " but only have " + std::to_string(availableCities);
+		throw PlayerActionException(errorMessage);
+	}
+
+	if (v->getTerritory()->getArmiesByPlayer(playerName) == 0) {
+		throw PlayerActionException("City must be built in a region with at least 1 army of the player");
 	}
 
 	v->getTerritory()->addCitiesByPlayer(numOfCities, playerName);
