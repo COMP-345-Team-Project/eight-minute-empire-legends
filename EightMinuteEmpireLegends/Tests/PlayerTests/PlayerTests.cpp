@@ -17,7 +17,7 @@ int PlayerTests::Test_PlayerFunctionsExecute()
 	p1->MoveArmies();
 	p1->MoveOverLand();
 	p1->payCoin();
-	p1->PlaceNewArmies();*/
+	p1->PlaceNewArmies();
 
 	delete p1;*/
 	return 0;
