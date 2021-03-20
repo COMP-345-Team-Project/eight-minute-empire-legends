@@ -20,12 +20,12 @@ int AssignmentOneDriver::RunMapDriver()
 int AssignmentOneDriver::RunMapLoaderDriver()
 {
 	MapLoaderTests mapLoaderTests;
-	//mapLoaderTests.Test_LoadIncorrectFileFormat_ReturnsNullPointer();
-	//mapLoaderTests.Test_LoadJsonDisconnectedGraph_WhatShouldHappen();
-	//mapLoaderTests.Test_LoadJsonMissingContinents_WhatShouldHappen();
-	//mapLoaderTests.Test_LoadJsonMissingVertices_WhatShouldHappen();
-	//mapLoaderTests.Test_LoadJsonWrongDataType_WhatShouldHappen();
-	//mapLoaderTests.Test_LoadValidMap2_Successful();
+	mapLoaderTests.Test_LoadIncorrectFileFormat_ReturnsNullPointer();
+	mapLoaderTests.Test_LoadJsonDisconnectedGraph_WhatShouldHappen();
+	mapLoaderTests.Test_LoadJsonMissingContinents_WhatShouldHappen();
+	mapLoaderTests.Test_LoadJsonMissingVertices_WhatShouldHappen();
+	mapLoaderTests.Test_LoadJsonWrongDataType_WhatShouldHappen();
+	mapLoaderTests.Test_LoadValidMap2_Successful();
 	mapLoaderTests.Test_LoadValidMap_Successful();
 	return 0;
 }
@@ -39,7 +39,11 @@ int AssignmentOneDriver::RunCardsDriver()
 int AssignmentOneDriver::RunPlayerDriver()
 {
 	PlayerTests playerTests;
-	return playerTests.Test_PlayerComputeScoreFunctionsExecute();
+	playerTests.Test_PlaceArmies();
+	playerTests.Test_MoveArmies();
+	playerTests.Test_DestroyArmies();
+	playerTests.Test_PlaceCities();
+	return 0;
 }
 
 int AssignmentOneDriver::RunBiddingFacilityDriver()
