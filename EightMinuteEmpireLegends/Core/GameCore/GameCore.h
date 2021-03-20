@@ -2,6 +2,7 @@
 #include "../pch.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
+#include "../Bidding/BidTieBreakerByLastName.h"
 
 //This represent the pile of resources provided by the game board
 class Resources {
@@ -45,7 +46,7 @@ public:
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly
 class GameBuilder {
-    static Game build(int numPlayers, Map& map);
+    static Game* build(int numPlayers, Map& map);    
 };
 
 //We need to separate the concerns of the Hand class, which is fuzzy right now. We split Hand into CardSpace (the cards available for purchase, part of deck) and Hand (the cards owned by the player)
@@ -69,3 +70,4 @@ public:
     int costCalc(int index);
 };
 
+static std::tuple<int, int, int> fetchConfigResources(std::string path);

@@ -8,7 +8,7 @@
 class Player
 {
 public:
-	Player(std::string name, Deck deck, BidTieBreaker& bidTieBreaker);
+	Player(std::string name, Deck deck, BiddingFacility& biddingFacility);
 	~Player();
 	void payCoin();
 	void PlaceNewArmies();
