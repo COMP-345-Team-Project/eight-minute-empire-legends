@@ -114,6 +114,8 @@ public:
 
     //Getter
     int getSize();
+    vector<Card> getCards();
+
 
 private:
     vector<Card> hand;
