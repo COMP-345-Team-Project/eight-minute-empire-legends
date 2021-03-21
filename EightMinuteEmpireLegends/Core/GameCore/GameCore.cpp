@@ -33,18 +33,18 @@ Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
 
 	// Initiallize resources if path to config is specified		
 	if (path != "") {
-		std::tuple<int, int, int> tResources;
-		try {
+	std::tuple<int, int, int> tResources;
+	try {
 			tResources = fetchConfigResources(path);
 			rsc = Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
-		}
+	}
 		catch (ConfigFileException& e) {
-			std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
-			tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
-		}		
+		std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
+		tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
+	}
 	}
 	else {
-
+		
 		//Initiallize resources to default parameters if path to config is not specified
 		rsc = Resources();
 	}
@@ -55,7 +55,7 @@ Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
 	for (int i = 1; i <= numPlayers; i++) {
 		BiddingFacility bf(tieBreaker);
 		pl.push_back(new Player("Player " + i, deck, bf));
-	}	
+	}
 
 	//Crete a new game object and pass above objects to Game
 	return new Game(rsc, map, deck, pl);
@@ -78,12 +78,12 @@ std::tuple<int, int, int> fetchConfigResources(std::string path) {
 			}
 			if (line.substr(0, line.find(delim)) == "rCities") {
 				cities = std::stoi(line.substr(line.find(delim) + 1));
-			}			
-		}
+			}
+			}
 		rFile.close();
-	}
+		}
 	else {
 		throw ConfigFileException("ERR: Unable to open file at " + path);
-	}	
+	}
 	return std::make_tuple(coins, armies, cities);;
 }
