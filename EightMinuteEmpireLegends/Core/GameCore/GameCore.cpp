@@ -1,15 +1,12 @@
 #pragma once
+
 #include "../pch.h"
 #include "GameCore.h"
 
-const int _dCoins = 36;
-const int _dArmies = 18;
-const int _dCities = 3;
-
 Resources::Resources() {
-	this->coins = 36;
-	this->armies = 18;
-	this->cities = 3;
+	this->coins = _dCoins;
+	this->armies = _dArmies;
+	this->cities = _dCities;
 }
 
 Resources::Resources(int coins, int armies, int cities) {
@@ -20,7 +17,7 @@ Resources::Resources(int coins, int armies, int cities) {
 
 void Resources::assignInitialResources(vector<Player*> players) {
 	for (Player* pl : players) {
-		// Assign resources to players
+		pl->InitResources(this->coins, this->armies, this->cities);
 	}
 }
 
@@ -31,14 +28,25 @@ Game::Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players) 
 	this->players = players;
 }
 
-Game* GameBuilder::build(int numPlayers, Map& map) {
-	std::tuple<int, int, int> tResources;
-	try {
-		tResources = fetchConfigResources("../../../config/EightMinuteEmpireLengendsPrefs.ini");
+Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
+	Resources rsc;
+
+	// Initiallize resources if path to config is specified		
+	if (path != "") {
+		std::tuple<int, int, int> tResources;
+		try {
+			tResources = fetchConfigResources(path);
+			rsc = Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
+		}
+		catch (ConfigFileException& e) {
+			std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
+			tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
+		}		
 	}
-	catch (std::exception& e) {
-		std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
-		tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
+	else {
+
+		//Initiallize resources to default parameters if path to config is not specified
+		rsc = Resources();
 	}
 		
 	Deck deck = Deck(numPlayers);
@@ -47,10 +55,7 @@ Game* GameBuilder::build(int numPlayers, Map& map) {
 	for (int i = 1; i <= numPlayers; i++) {
 		BiddingFacility bf(tieBreaker);
 		pl.push_back(new Player("Player " + i, deck, bf));
-	}
-
-	//Initiallize resources via constructor
-	Resources rsc = Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
+	}	
 
 	//Crete a new game object and pass above objects to Game
 	return new Game(rsc, map, deck, pl);
@@ -64,19 +69,21 @@ std::tuple<int, int, int> fetchConfigResources(std::string path) {
 	char delim = '=';
 	std::ifstream rFile(path);
 	if (rFile.is_open()) {
-		while (getline(rFile, line, delim)) {
-			std::vector<std::string> ln{};
-			ln.push_back(line);
-			if (ln.size() > 1 && ln[0] == "rCoins") {
-				coins = std::stoi(ln[1]);
+		while (getline(rFile, line)) {										
+			if (line.substr(0, line.find(delim)) == "rCoins") {				
+				coins = std::stoi(line.substr(line.find(delim) + 1));
 			}
-			if (ln.size() > 1 && ln[0] == "rArmies") {
-				armies = std::stoi(ln[1]);
+			if (line.substr(0, line.find(delim)) == "rArmies") {
+				armies = std::stoi(line.substr(line.find(delim) + 1));
 			}
-			if (ln.size() > 1 && ln[0] == "rCities") {
-				cities = std::stoi(ln[1]);
-			}
+			if (line.substr(0, line.find(delim)) == "rCities") {
+				cities = std::stoi(line.substr(line.find(delim) + 1));
+			}			
 		}
+		rFile.close();
 	}
-	return std::make_tuple(cities, armies, cities);
+	else {
+		throw ConfigFileException("ERR: Unable to open file at " + path);
+	}	
+	return std::make_tuple(coins, armies, cities);;
 }

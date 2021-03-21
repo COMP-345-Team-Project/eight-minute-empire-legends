@@ -46,5 +46,7 @@ void Player::BuildCity(Vertex* v, int numOfArmies) {
 }
 
 void Player::InitResources(int coin, int armies, int cities) {
-	std::cout << "Entered DestroyArmy method" << std::endl;
+	this->coin = coin;
+	this->availableArmies = armies;
+	this->availableCities = cities;
 }

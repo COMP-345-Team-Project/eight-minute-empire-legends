@@ -165,6 +165,7 @@
     <ClInclude Include="Bidding\BidTieBreakerByLastName.h" />
     <ClInclude Include="Cards\Cards.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameCore\ConfigFileException.h" />
     <ClInclude Include="GameCore\GameCore.h" />
     <ClInclude Include="MapLoader\MapLoader.h" />
     <ClInclude Include="MapLoader\MapLoaderException.h" />
@@ -192,6 +193,9 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="GameCore\ConfigFileException.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="GameCore\GameCore.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
