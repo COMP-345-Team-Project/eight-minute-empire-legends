@@ -3,6 +3,11 @@
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Bidding/BidTieBreakerByLastName.h"
+#include "ConfigFileException.h"
+
+const int _dCoins = 36;
+const int _dArmies = 18;
+const int _dCities = 3;
 
 //This represent the pile of resources provided by the game board
 class Resources {
@@ -17,6 +22,8 @@ public:
 
     //assign the initial resources to each player for the game setup
     void assignInitialResources(vector<Player*> players);
+    //Resources& operator =(const Resources& r);
+    //friend std::ostream& operator <<(std::ostream& os, const Resources* r);
 };
 
 class Game {
@@ -46,7 +53,8 @@ public:
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly
 class GameBuilder {
-    static Game* build(int numPlayers, Map& map);    
+public:
+    static Game* build(int numPlayers, Map& map, std::string path = "");    
 };
 
 //We need to separate the concerns of the Hand class, which is fuzzy right now. We split Hand into CardSpace (the cards available for purchase, part of deck) and Hand (the cards owned by the player)
@@ -70,4 +78,4 @@ public:
     int costCalc(int index);
 };
 
-static std::tuple<int, int, int> fetchConfigResources(std::string path);
+std::tuple<int, int, int> fetchConfigResources(std::string path);
