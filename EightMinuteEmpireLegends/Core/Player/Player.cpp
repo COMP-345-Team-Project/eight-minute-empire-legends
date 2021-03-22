@@ -7,15 +7,43 @@ Player::Player(std::string name, BiddingFacility& biddingFacility) : playerName(
 
 Player::~Player() {}
 
-int Player::getCoins() {
+//Missing assignment operator for bidding facility
+Player::Player(const Player& player) : biddingFacility(player.biddingFacility) {
+	this->playerName = player.playerName;
+	this->coin = player.coin;
+	this->availableArmies = player.availableArmies;
+	this->availableCities = player.availableCities;
+	this->deployedVertices = player.deployedVertices; //for vectors this is a copy
+	this->hand = player.hand; //calling the assignment operator
+	//this->biddingFacility(biddingFacility); //calling the assignment operator
+}
+
+Player& Player::operator =(const Player& p) {
+	this->playerName = p.playerName;
+	this->coin = p.coin;
+	this->availableArmies = p.availableArmies;
+	this->availableCities = p.availableCities;
+	this->deployedVertices = p.deployedVertices; //for vectors this is a copy
+	this->hand = p.hand; //calling the assignment operator
+	//this->biddingFacility = p.biddingFacility; //Missing assignment operator for bidding facility
+	return *this;
+}
+
+std::ostream& operator <<(std::ostream& os, const Player* p) {
+	os << "Name: " << p->getPlayerName() << "\nAvailable coins: " << p->getCoins() << "\nAvailable armies: " << p->getAvailableArmies() << "\nAvailable cities: " << p->getAvailableCities();
+	return os;
+}
+
+
+int Player::getCoins() const {
 	return coin;
 }
 
-int Player::getAvailableArmies() {
+int Player::getAvailableArmies() const {
 	return availableArmies;
 }
 
-int Player::getAvailableCities() {
+int Player::getAvailableCities() const {
 	return availableCities;
 }
 
@@ -23,7 +51,7 @@ vector<Card> Player::getCards() {
 	return hand.getCards();
 }
 
-std::string Player::getPlayerName() {
+std::string Player::getPlayerName() const {
 	return playerName;
 }
 
@@ -168,11 +196,11 @@ void Player::RemoveDeployedVertex(Vertex* v) {
 	deployedVertices.erase(std::remove(deployedVertices.begin(), deployedVertices.end(), v), deployedVertices.end());
 }
 
-/*int Player::ComputeScore(Map& map) {
+int Player::ComputeScore(Map* map) {
 	cout << "Starting score calculation of player " << this->playerName << ": " << endl;
 
 	//Calculating the territories owned by the player
-	int ownedTerritoriesScore = this->territories.size();
+	/*int ownedTerritoriesScore = this->territories.size();
 	cout << "Territories score: " << ownedTerritoriesScore << endl;
 
 	int ownedContinentsScore = ComputeRegionalScore(map);
@@ -182,36 +210,32 @@ void Player::RemoveDeployedVertex(Vertex* v) {
 	cout << "Ability score: " << abilityScore << endl;
 
 	int total = ownedTerritoriesScore + ownedContinentsScore + abilityScore;
-	cout << "Total score: " << total << endl;
+	cout << "Total score: " << total << endl;*/
 
-	return total;
+	return ComputeTerritoryScore() + ComputeRegionalScore(map);
 }
 
 int Player::ComputeTerritoryScore() {
 	//The territory score equals to the number of regions owned
-	return this->territories.size();
+	return deployedVertices.size();
 }
 
-int Player::ComputeRegionalScore(Map& map) {
+int Player::ComputeRegionalScore(Map* map) {
 	int continentPoints = 0;
 
 	//Calculating the regional score of all players
 	//Initializing the point accumlator to store the points of all players
 	std::map<string, std::map<string, int>> pointAccumulator;
-	for (int i = 0; i < map.continents().size(); i++) {
-		Continent* continent = map.continents().at(i);
+	for (vector<Continent*>::iterator continentIter = map->continents().begin(); continentIter != map->continents().end(); continentIter++) {
 		std::map<string, int> playerPointsPerRegion;
-		pointAccumulator.insert(pair<string, std::map<string, int>>(continent->name, playerPointsPerRegion));
-		continent = NULL;
+		pointAccumulator.insert(pair<string, std::map<string, int>>((**continentIter).name, playerPointsPerRegion));
 	}
 
-	//For each vertex (territory) by each player, we add 1 point to that player
-	for (int i = 0; i < map.vertices().size(); i++) {
-		Vertex* currVertex = map.vertices().at(i);
-		Territory* currTerritory = map.vertices().at(i)->getTerritory();
-		string owner = currTerritory->getOwner();
-
-		std::map<string, int> continentPoints = pointAccumulator[currTerritory->getName()];
+	//For each vertex (territory) owned by each player, we add 1 point to that player
+	for (vector<Vertex*>::iterator vertexIter = map->vertices().begin(); vertexIter != map->vertices().end(); vertexIter++) {
+		Territory* t = (**vertexIter).getTerritory();
+		string owner = t->getOwner();
+		std::map<string, int> continentPoints = pointAccumulator[t->getContinent()];
 
 		if (continentPoints.find(owner) == continentPoints.end()) {
 			continentPoints.insert(pair<string, int>(owner, 0));
@@ -230,7 +254,7 @@ int Player::ComputeRegionalScore(Map& map) {
 }
 
 bool Player::OwnsContinent(std::map<string, int>& continentScores) {
-	string owner = "";
+	/*string owner = "";
 	int maxScore = 0;
 	bool tied = false;
 	
@@ -252,14 +276,16 @@ bool Player::OwnsContinent(std::map<string, int>& continentScores) {
 	if (owner.compare(this->playerName) == 0 && !tied)
 		return true;
 	else
-		return false;
+		return false;*/
+	std::map<std::string, int>::iterator owner = std::max_element(continentScores.begin(), continentScores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
+	return owner->first == playerName;
 }
 
 int Player::CountCardsBasedOnType(string cardType) {
 	int cardCount = 0;
 	vector<Card>::iterator cardIter;
 
-	for (cardIter = this->hand.getCards().begin(); cardIter != this->hand.getCards().end(); cardIter++) {
+	for (cardIter = hand.getCards().begin(); cardIter != hand.getCards().end(); cardIter++) {
 		if (cardIter->getName().find(cardType) > 0){
 			cardCount++;
 		}
@@ -302,7 +328,7 @@ int Player::ComputeAbilityScore() {
 	}
 
 	return total;
-}*/
+}
 
 PlayerActionException::PlayerActionException(const std::string& msg) : errorMessage(msg) {}
 

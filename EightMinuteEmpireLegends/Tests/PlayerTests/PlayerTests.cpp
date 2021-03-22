@@ -21,6 +21,7 @@ PlayerTests::PlayerTests() {
 	numOfArmies = 10;
 	numOfCities = 3;
 	playerName = "player1";
+	//Temporary fix for the running directory issue, will be removed after
 	mapPath = "C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json";
 }
 
@@ -49,6 +50,7 @@ int PlayerTests::Test_PlaceArmies()
 	}
 	catch (PlayerActionException& ex) {
 		errorCaught = true;
+		std::cout << ex.what() << std::endl;
 	}
 	assert(errorCaught == true);
 	
@@ -59,6 +61,7 @@ int PlayerTests::Test_PlaceArmies()
 	}
 	catch (PlayerActionException& ex) {
 		errorCaught = true;
+		std::cout << ex.what() << std::endl;
 	}
 	assert(errorCaught == true);
 	errorCaught = false;
@@ -71,6 +74,7 @@ int PlayerTests::Test_PlaceArmies()
 	}
 	catch (PlayerActionException& ex) {
 		errorCaught = true;
+		std::cout << ex.what() << std::endl;
 	}
 	assert(errorCaught == true);
 	errorCaught = false;
@@ -89,7 +93,7 @@ int PlayerTests::Test_PlaceArmies()
 	assert(p1->getAvailableArmies() == (numOfArmies - (numOfArmiesToDeploy + numOfArmiesToDeploy)));
 
 
-	//delete p1;
+	delete p1;
 	delete map;
 	return 0;
 }
