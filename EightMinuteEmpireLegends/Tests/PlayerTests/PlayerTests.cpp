@@ -83,6 +83,9 @@ int PlayerTests::Test_PlaceArmies()
 	//Assert
 	assert(startingRegion->getTerritory()->getArmiesByPlayer(playerName) == numOfArmiesToDeploy);
 	assert(regionWithCity->getTerritory()->getArmiesByPlayer(playerName) == numOfArmiesToDeploy);
+	assert(p1->HasArmyDeployedInVertex(startingRegion));
+	assert(p1->HasArmyDeployedInVertex(regionWithCity));
+	assert(p1->HasArmyDeployedInVertex(regionWithoutCity) == false);
 	assert(p1->getAvailableArmies() == (numOfArmies - (numOfArmiesToDeploy + numOfArmiesToDeploy)));
 
 
@@ -103,7 +106,7 @@ int PlayerTests::Test_MoveArmies() {
 	Vertex* fromRegion = findVertexById(map, "1");
 	map->setStartingRegion(fromRegion);
 	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
-	p1->PlaceNewArmies(map, fromRegion, 3);
+	p1->PlaceNewArmies(map, fromRegion, 2);
 	//Set the to region the move over land
 	Vertex* toRegionLand = findVertexById(map, "0");
 	//Set the to region the move over water
@@ -148,14 +151,20 @@ int PlayerTests::Test_MoveArmies() {
 	//Testing correct cases
 	std::cout << "Testing correct cases using assertions..." << std::endl;
 	remainingMoves = 4;
+	assert(p1->HasArmyDeployedInVertex(toRegionLand) == false);
+	assert(p1->HasArmyDeployedInVertex(toRegionWater) == false);
 	p1->MoveArmies(map, fromRegion, toRegionLand, 1, remainingMoves);
-	assert(fromRegion->getTerritory()->getArmiesByPlayer(playerName) == 2);
-	assert(toRegionLand->getTerritory()->getArmiesByPlayer(playerName) == 1);
-	assert(remainingMoves == 3);
-	p1->MoveArmies(map, fromRegion, toRegionWater, 1, remainingMoves);
 	assert(fromRegion->getTerritory()->getArmiesByPlayer(playerName) == 1);
 	assert(toRegionLand->getTerritory()->getArmiesByPlayer(playerName) == 1);
+	assert(remainingMoves == 3);
+	assert(p1->HasArmyDeployedInVertex(fromRegion)); // 1 army left in the from region
+	assert(p1->HasArmyDeployedInVertex(toRegionLand));
+	p1->MoveArmies(map, fromRegion, toRegionWater, 1, remainingMoves);
+	assert(fromRegion->getTerritory()->getArmiesByPlayer(playerName) == 0);
+	assert(toRegionLand->getTerritory()->getArmiesByPlayer(playerName) == 1);
 	assert(remainingMoves == 0);
+	assert(p1->HasArmyDeployedInVertex(fromRegion) == false); // No more army left in the from region
+	assert(p1->HasArmyDeployedInVertex(toRegionWater));
 
 	return 0;
 }
@@ -173,6 +182,8 @@ int PlayerTests::Test_DestroyArmies() {
 	map->setStartingRegion(region);
 	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
 	p1->PlaceNewArmies(map, region, 3);
+	//Make sure that region is added to deployedVertices of the player
+	assert(p1->HasArmyDeployedInVertex(region));
 
 	//Testing errorneous cases
 	std::cout << "Testing error cases, error messages will be output..." << std::endl;
@@ -192,6 +203,12 @@ int PlayerTests::Test_DestroyArmies() {
 	p1->DestroyArmy(region, 2);
 	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 1);
 	assert(p1->getAvailableArmies() == 9);
+	assert(p1->HasArmyDeployedInVertex(region)); //still has 1 army
+	//Remove the last army
+	p1->DestroyArmy(region, 1);
+	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 0);
+	assert(p1->getAvailableArmies() == 10);
+	assert(p1->HasArmyDeployedInVertex(region) == false); 
 
 	return 0;
 }

@@ -55,6 +55,10 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	int newNumOfArmies = t->getArmiesByPlayer(playerName) + numOfArmies;
 	t->setArmiesByPlayer(numOfArmies, playerName);
 	availableArmies -= numOfArmies;
+
+	//Update the list of deployed region
+	if (!HasArmyDeployedInVertex(v))
+		AddDeployedVertex(v);
 }
 
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
@@ -95,6 +99,18 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 			remainingMoves -= movementCost;
 			from->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
 			to->getTerritory()->addArmiesByPlayer(numOfArmies, playerName);
+
+			//Update the list of deployed region
+			//Remove all armies from the from region if there is no remaining armies left
+			int currentNumOfArmies = from->getTerritory()->getArmiesByPlayer(playerName);
+			if (currentNumOfArmies == 0) {
+				RemoveDeployedVertex(from);
+			}
+			//Add the to region to deployed regions list if it is not in it
+			if (!HasArmyDeployedInVertex(to))
+				AddDeployedVertex(to);
+
+			
 		}
 	}
 }
@@ -108,6 +124,11 @@ void Player::DestroyArmy(Vertex* v, int numOfArmies) {
 
 	v->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
 	availableArmies += numOfArmies;
+
+	currentNumOfArmies = v->getTerritory()->getArmiesByPlayer(playerName);
+	if (currentNumOfArmies == 0) {
+		RemoveDeployedVertex(v);
+	}
 }
 
 void Player::BuildCity(Vertex* v, int numOfCities) {
@@ -128,6 +149,23 @@ void Player::InitResources(int coin, int armies, int cities) {
 	this->coin = coin;
 	this->availableArmies = armies;
 	this->availableCities = cities;
+}
+
+bool Player::HasArmyDeployedInVertex(Vertex* v) {
+	for (vector<Vertex*>::iterator vertexIter = deployedVertices.begin(); vertexIter != deployedVertices.end(); vertexIter++) {
+		if (*vertexIter == v)
+			return true;
+	}
+
+	return false;
+}
+
+void Player::AddDeployedVertex(Vertex* v) {
+	deployedVertices.push_back(v);
+}
+
+void Player::RemoveDeployedVertex(Vertex* v) {
+	deployedVertices.erase(std::remove(deployedVertices.begin(), deployedVertices.end(), v), deployedVertices.end());
 }
 
 /*int Player::ComputeScore(Map& map) {

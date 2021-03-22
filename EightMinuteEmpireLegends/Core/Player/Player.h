@@ -17,6 +17,7 @@ public:
 	int getAvailableCities();
 	vector<Card> getCards();
 	std::string getPlayerName();
+	bool HasArmyDeployedInVertex(Vertex* v); 
 
 	void PayCoin(int coins);
 	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region
@@ -33,9 +34,11 @@ private:
 	int coin;
 	int availableArmies;
 	int availableCities;
-	vector<Vertex> deployedVertices;
+	vector<Vertex*> deployedVertices;
 	Hand hand;
 	BiddingFacility biddingFacility;
+	void AddDeployedVertex(Vertex* v);
+	void RemoveDeployedVertex(Vertex* v);
 };
 
 class PlayerActionException : public std::exception
