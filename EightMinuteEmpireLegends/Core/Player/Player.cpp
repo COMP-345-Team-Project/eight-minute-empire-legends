@@ -3,19 +3,19 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, BiddingFacility& biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility) {}
+Player::Player(std::string name, BiddingFacility* biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility) {}
 
 Player::~Player() {}
 
 //Missing assignment operator for bidding facility
-Player::Player(const Player& player) : biddingFacility(player.biddingFacility) {
+Player::Player(const Player& player){
 	this->playerName = player.playerName;
 	this->coin = player.coin;
 	this->availableArmies = player.availableArmies;
 	this->availableCities = player.availableCities;
 	this->deployedVertices = player.deployedVertices; //for vectors this is a copy
 	this->hand = player.hand; //calling the assignment operator
-	//this->biddingFacility(biddingFacility); //calling the assignment operator
+	this->biddingFacility = player.biddingFacility; //calling the assignment operator
 }
 
 Player& Player::operator =(const Player& p) {
@@ -25,7 +25,7 @@ Player& Player::operator =(const Player& p) {
 	this->availableCities = p.availableCities;
 	this->deployedVertices = p.deployedVertices; //for vectors this is a copy
 	this->hand = p.hand; //calling the assignment operator
-	//this->biddingFacility = p.biddingFacility; //Missing assignment operator for bidding facility
+	this->biddingFacility = p.biddingFacility; //calling the assignment operator
 	return *this;
 }
 

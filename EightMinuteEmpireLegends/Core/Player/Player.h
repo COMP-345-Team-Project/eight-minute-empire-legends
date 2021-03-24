@@ -9,7 +9,7 @@ class Player
 {
 public:
 	//Constructors
-	Player(std::string name, BiddingFacility& biddingFacility);
+	Player(std::string name, BiddingFacility* biddingFacility);
 	Player(const Player& player);
 	~Player();
 
@@ -45,7 +45,7 @@ private:
 	int availableCities;
 	vector<Vertex*> deployedVertices;
 	Hand hand;
-	BiddingFacility biddingFacility;
+	BiddingFacility* biddingFacility;
 
 	//Private methods
 	void AddDeployedVertex(Vertex* v);

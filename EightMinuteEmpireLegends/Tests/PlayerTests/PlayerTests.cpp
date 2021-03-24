@@ -29,7 +29,7 @@ int PlayerTests::Test_PlaceArmies()
 {	
 	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
-	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
 
 	//Arrange
@@ -92,7 +92,7 @@ int PlayerTests::Test_PlaceArmies()
 	assert(p1->HasArmyDeployedInVertex(regionWithoutCity) == false);
 	assert(p1->getAvailableArmies() == (numOfArmies - (numOfArmiesToDeploy + numOfArmiesToDeploy)));
 
-
+	delete biddingFacility;
 	delete p1;
 	delete map;
 	return 0;
@@ -102,7 +102,7 @@ int PlayerTests::Test_MoveArmies() {
 	std::cout << "Testing Player::MoveArmies()" << std::endl;
 	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
-	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
 
 	//Arrange
@@ -170,6 +170,9 @@ int PlayerTests::Test_MoveArmies() {
 	assert(p1->HasArmyDeployedInVertex(fromRegion) == false); // No more army left in the from region
 	assert(p1->HasArmyDeployedInVertex(toRegionWater));
 
+	delete biddingFacility;
+	delete p1;
+	delete map;
 	return 0;
 }
 
@@ -177,7 +180,7 @@ int PlayerTests::Test_DestroyArmies() {
 	std::cout << "Testing Player::DestroyArmy()" << std::endl;
 	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
-	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
 
 	//Arrange
@@ -214,6 +217,9 @@ int PlayerTests::Test_DestroyArmies() {
 	assert(p1->getAvailableArmies() == 10);
 	assert(p1->HasArmyDeployedInVertex(region) == false); 
 
+	delete biddingFacility;
+	delete p1;
+	delete map;
 	return 0;
 }
 
@@ -221,7 +227,7 @@ int PlayerTests::Test_PlaceCities() {
 	std::cout << "Testing Player::DestroyArmy()" << std::endl;
 	Map* map = MapLoader::parseMap(mapPath);
 	BidTieBreakerByLastName bidTieBreakerByLastName;
-	BiddingFacility biddingFacility(bidTieBreakerByLastName);
+	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
 
 	//Arrange
@@ -260,5 +266,9 @@ int PlayerTests::Test_PlaceCities() {
 	p1->BuildCity(region, 1);
 	assert(p1->getAvailableCities() == 2);
 	assert(region->getTerritory()->getCitiesByPlayer(playerName) ==  1);
+
+	delete biddingFacility;
+	delete p1;
+	delete map;
 	return 0;
 }
