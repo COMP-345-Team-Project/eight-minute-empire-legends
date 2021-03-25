@@ -3,6 +3,8 @@
 #include "../pch.h"
 #include "GameCore.h"
 
+// Resources class implementation
+
 Resources::Resources() {
 	this->coins = _dCoins;
 	this->armies = _dArmies;
@@ -21,12 +23,23 @@ void Resources::assignInitialResources(vector<Player*> players) {
 	}
 }
 
+// Game class implementation.
+
 Game::Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players) {
 	this->resources = &resources;
 	this->map = &map;
 	this->deck = &deck;
 	this->players = players;
 }
+
+Game::~Game() {	
+	delete this->map;	
+	for (Player* pl : this->players) {
+		delete pl;
+	}
+}
+
+// Gamebuilder class implementation. 
 
 Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
 	Resources rsc;
@@ -52,15 +65,16 @@ Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
 	Deck deck = Deck(numPlayers);
 	BidTieBreakerByLastName tieBreaker;
 	BiddingFacility* bf = new BiddingFacility(tieBreaker);
-	vector<Player*> pl{};
+	std::vector<Player*> pl{};
 	for (int i = 1; i <= numPlayers; i++) {		
-		pl.push_back(new Player("Player " + i, deck, *bf));
+		pl.push_back(new Player("Player " + i, bf));
 	}
 
 	//Crete a new game object and pass above objects to Game
 	return new Game(rsc, map, deck, pl);
 }
 
+// Helper function. Reads resources from config file.
 std::tuple<int, int, int> fetchConfigResources(std::string path) {
 	int coins;
 	int armies;

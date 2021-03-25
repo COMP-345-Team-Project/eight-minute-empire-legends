@@ -166,6 +166,7 @@
     <ClInclude Include="Cards\Cards.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameCore\ConfigFileException.h" />
+    <ClInclude Include="GameCore\GameBuilderException.h" />
     <ClInclude Include="GameCore\GameCore.h" />
     <ClInclude Include="MapLoader\MapLoader.h" />
     <ClInclude Include="MapLoader\MapLoaderException.h" />
@@ -194,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="GameCore\ConfigFileException.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GameCore\GameBuilderException.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameCore\GameCore.cpp">

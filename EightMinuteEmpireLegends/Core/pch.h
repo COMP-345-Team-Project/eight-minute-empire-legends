@@ -21,6 +21,7 @@
 #include <exception>
 #include <fstream>
 #include <random>
+#include <filesystem>
 
 // JSON parsing for map loader
 #include "../Vendor/nlohmann/json.hpp"

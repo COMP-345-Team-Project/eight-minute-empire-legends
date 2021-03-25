@@ -40,6 +40,7 @@ private:
 
 public:
     Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
+    ~Game();
 
     //Set up phase
     void startUp();
