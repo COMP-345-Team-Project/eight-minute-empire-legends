@@ -51,11 +51,11 @@ Game* GameBuilder::build(int numPlayers, Map& map, std::string path) {
 		
 	Deck deck = Deck(numPlayers);
 	BidTieBreakerByLastName tieBreaker;
+	BiddingFacility* bf = new BiddingFacility(tieBreaker);
 	vector<Player*> pl{};
-	for (int i = 1; i <= numPlayers; i++) {
-		BiddingFacility bf(tieBreaker);
-		pl.push_back(new Player("Player " + i, deck, bf));
-	}	
+	for (int i = 1; i <= numPlayers; i++) {		
+		pl.push_back(new Player("Player " + i, deck, *bf));
+	}
 
 	//Crete a new game object and pass above objects to Game
 	return new Game(rsc, map, deck, pl);

@@ -32,11 +32,11 @@ int GameStart::Test_MissingConfigFile() {
 
 int GameStart::Test_BuildGame() {
 	int numPlayers = 2;
-	Map* map = MapLoader::parseMap("./Resources/narrows.json");
+	Map* map = MapLoader::parseMap("./GameStartTests/Resources/narrows.json");
 	Game* validGame = GameBuilder::build(numPlayers, *map);
 
-	int result = (map != NULL && map->validate() && validGame != NULL) ? 0 : 1;
+	int result = (map != NULL && map->validate() && validGame != NULL) ? 0 : 1;		
 	delete map;
-	
+	cin >> numPlayers;
 	return result;
 }
