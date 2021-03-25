@@ -41,6 +41,15 @@
     <ClCompile Include="MapTests\MapTestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="GameStartTests\GameStartTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A2MainLoopTests\A2MainLoopTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h">
@@ -61,5 +70,14 @@
     <ClInclude Include="MapTests\MapTestUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="GameStartTests\GameStartTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A2MainLoopTests\A2MainLoopTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

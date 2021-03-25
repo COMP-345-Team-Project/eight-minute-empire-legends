@@ -8,15 +8,25 @@
 class Player
 {
 public:
-	Player(std::string name, Deck deck, BiddingFacility& biddingFacility);
+	//Constructors
+	Player(std::string name);
 	Player(const Player& player);
 	~Player();
 
-	int getCoins();
-	int getAvailableArmies();
-	int getAvailableCities();
-	vector<Card> getCards();
+	void assignResources(int coin, int availableArmies, int availableCities);
 
+	//Getters
+	int getCoins() const;
+	int getAvailableArmies() const;
+	int getAvailableCities() const;
+	vector<Card> getCards();
+	std::string getPlayerName() const;
+
+	//Buy card from Card Space
+	void buyCard(Card cardBought, int costs);
+
+	//Player actions
+	bool HasArmyDeployedInVertex(Vertex* v);
 	void PayCoin(int coins);
 	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region
 	//To make things simple, we move armies 1 region at a time, and we ask the player the details for each move
@@ -25,14 +35,38 @@ public:
 	void BuildCity(Vertex* v, int numOfArmies);
 	void DestroyArmy(Vertex* v, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
-	
+	int ComputeScore(Map* map);
+
+	//Operators overloading
+	Player& operator =(const Player& p);
+	friend std::ostream& operator <<(std::ostream& os, const Player* p);
+
 
 private:
+	//Private data members
 	std::string playerName;
 	int coin;
 	int availableArmies;
 	int availableCities;
-	vector<Vertex> deployedVertices;
-	Hand hand;
-	BiddingFacility biddingFacility;
+	vector<Vertex*> deployedVertices;
+	vector<Card> hand;
+	//BiddingFacility biddingFacility;
+
+	//Private methods
+	void AddDeployedVertex(Vertex* v);
+	void RemoveDeployedVertex(Vertex* v);
+	int ComputeTerritoryScore();
+	int ComputeRegionalScore(Map* map);
+	bool OwnsContinent(std::map<string, int>& continentScores);
+	int CountCardsBasedOnType(string cardType);
+	int ComputeAbilityScore();
+};
+
+class PlayerActionException : public std::exception
+{
+private:
+	std::string errorMessage;
+public:
+	PlayerActionException(const std::string& msg);
+	const char* what() const throw();
 };
