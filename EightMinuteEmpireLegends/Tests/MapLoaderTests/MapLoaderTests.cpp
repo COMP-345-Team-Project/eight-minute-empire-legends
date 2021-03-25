@@ -4,13 +4,21 @@
 
 #include "../../Core/Map/Map.h"
 #include "../../Core/MapLoader/MapLoader.h"
+#include <direct.h>
+#define GetCurrentDir _getcwd
 
 //The file is stored in \eight-minute-empire-legends\EightMinuteEmpireLegends\Debug, make sure you have the map1.json file there
-
+std::string get_current_dir() {
+	char buff[FILENAME_MAX]; //create string buffer to hold path
+	GetCurrentDir(buff, FILENAME_MAX);
+	string current_working_dir(buff);
+	return current_working_dir;
+}
 
 // TODO: Make test function names more descriptive.
 int MapLoaderTests::Test_LoadValidMap_Successful()
 {
+	std::cout << get_current_dir() << std::endl;
 	std::cout << "Load a valid map file..." << std::endl;
 	Map* map1 = MapLoader::parseMap("./MapLoaderTests/Resources/validJson_validMap_simple.json");
 	delete map1;

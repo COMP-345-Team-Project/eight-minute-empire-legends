@@ -338,21 +338,17 @@ std::ostream& operator <<(std::ostream& os, const Edge* e) {
 // Territory function/constructor definitions
 
 Territory::Territory(std::string name, std::string continent)
-	: name(name), owner(""), continent(continent) { }
+	: name(name), continent(continent) { }
 
 Territory::Territory(const Territory& t)
-	: name(t.name), owner(t.owner), continent(t.continent), armies(t.armies), cities(t.cities) {
+	: name(t.name), continent(t.continent), armies(t.armies), cities(t.cities) {
 }
 
 Territory::Territory()
-	: name(""), owner(""), continent("") { }
+	: name(""), continent("") { }
 
 void Territory::setName(std::string name) {
 	this->name = name;
-}
-
-void Territory::setOwner(std::string owner) {
-	this->owner = owner;
 }
 
 void Territory::setArmiesByPlayer(int armies, std::string playerName) {
@@ -380,7 +376,9 @@ std::string Territory::getName() {
 }
 
 std::string Territory::getOwner() {
-	return this->owner;
+	//return this->owner;
+	std::map<std::string, int>::iterator owner = std::max_element(armies.begin(), armies.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
+	return owner->first;
 }
 
 int Territory::getArmiesByPlayer(std::string playerName) {
@@ -424,13 +422,12 @@ std::string Territory::getContinent() {
 
 Territory& Territory::operator =(const Territory& t) {
 	this->name = t.name;
-	this->owner = t.owner;
 	this->armies = t.armies;
 
 	return *this;
 }
 
 std::ostream& operator <<(std::ostream& os, const Territory* t) {
-	os << "Name: " << t->name << "\nOwner: " << t->owner << "\nContinent: " << t->continent;
+	os << "Name: " << t->name << "\nContinent: " << t->continent;
 	return os;
 }

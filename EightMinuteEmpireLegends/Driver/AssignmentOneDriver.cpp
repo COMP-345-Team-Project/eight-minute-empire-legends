@@ -39,7 +39,11 @@ int AssignmentOneDriver::RunCardsDriver()
 int AssignmentOneDriver::RunPlayerDriver()
 {
 	PlayerTests playerTests;
-	return playerTests.Test_PlayerFunctionsExecute();
+	playerTests.Test_PlaceArmies();
+	playerTests.Test_MoveArmies();
+	playerTests.Test_DestroyArmies();
+	playerTests.Test_PlaceCities();
+	return 0;
 }
 
 int AssignmentOneDriver::RunBiddingFacilityDriver()

@@ -15,7 +15,7 @@ class Territory
 {
 private:
 	std::string name;
-	std::string owner;	
+	//std::string owner;	
 	std::map<std::string, int> armies;	
 	std::map<std::string, int> cities;
 	std::string const continent;
@@ -25,7 +25,6 @@ public:
 	Territory();		
 
 	void setName(std::string name);
-	void setOwner(std::string owner);
 	void setArmiesByPlayer(int armies, std::string playerName);
 	void setCitiesByPlayer(int cities, std::string playerName);
 	std::string getName();

@@ -286,6 +286,9 @@ int Deck::getSize() {
 }
 
 
+Hand::Hand() {
+}
+
 //Hand is hardcoded to draw 6 cards from deck upon initialization
 Hand::Hand(Deck& mainDeck) {
 

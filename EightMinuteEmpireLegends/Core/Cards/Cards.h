@@ -95,7 +95,7 @@ private:
 class Hand {
 
 public:
-
+    Hand();
     //Hand is hardcoded to draw 6 cards from deck upon initialization
     Hand(Deck& mainDeck);
 
@@ -115,8 +115,6 @@ public:
     //Getter
     int getSize();
     vector<Card> getCards();
-
-
 private:
     vector<Card> hand;
 };
