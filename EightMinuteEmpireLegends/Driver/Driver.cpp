@@ -27,3 +27,11 @@ int Driver::RunAssignmentTwoDriver()
 	ass2Driver.RunGameStartDriver();
 	return 0;
 }
+
+int Driver::RunAssignmentTwoDriver()
+{
+	AssignmentTwoDriver ass2Driver;
+	std::cout << "(1) Running the Game Start Driver..." << std::endl;
+	ass2Driver.RunGameStartDriver();
+	return 0;
+}

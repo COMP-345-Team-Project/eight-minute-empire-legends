@@ -11,11 +11,11 @@ int GameStart::Test_ReadConfigFile_Success() {
 	std::string path = "D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\config\\EightMinuteEmpireLengendsPrefs.ini";
 	std::tuple<int, int, int> rsc;
 	try {
-		rsc = fetchConfigResources(path);
+		rsc = fetchConfigResources(path);		
 	}
 	catch (ConfigFileException& e) {
 		std::cout << e.what() << std::endl;
-	}
+	}	
 	std::cout << ".INI resources are \nrCoins : " << get<0>(rsc) << " rArmies : " << get<1>(rsc) << " rCities : " << get<2>(rsc) << std::endl;
 	assert(get<0>(rsc) > 0 && get<1>(rsc) > 0 && get<2>(rsc) > 0);
 	Passed("Test_ReadConfigFile_Success()");
@@ -147,7 +147,7 @@ int GameStart::Test_BuildGame_Failure() {
 	Passed("Test_BuildGameFailure()");
 	return 0;
 }
-
+	
 void GameStart::Passed(std::string testName) {
 	std::cout << std::endl << testName << " >> Passed\n" << std::endl;
 }
