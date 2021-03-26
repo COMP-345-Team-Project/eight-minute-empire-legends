@@ -18,11 +18,11 @@ int CardsTests::Test_CanBuildDeckAndHand_Demo()
 	testDeck.reveal();
 
 	//Demo hand
-	Hand testHand(testDeck);
+	CardSpace testCardSpace(testDeck);
 
 	//Demo exchange cards until both Deck and Hand are emptry
-	while (testHand.getSize() > 0) {
-		testHand.exchange(testDeck, true); //Invoked demo mode here to automate all user interaction
+	while (testCardSpace.getSize() > 0) {
+		testCardSpace.exchange(testDeck, true); //Invoked demo mode here to automate all user interaction
 		testDeck.reveal();
 	}
 	std::cout << "Hand has been depleted, demo ends" << std::endl;

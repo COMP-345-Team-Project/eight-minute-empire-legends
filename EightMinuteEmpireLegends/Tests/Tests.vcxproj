@@ -171,6 +171,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="A2MainLoopTests\A2MainLoopTests.cpp" />
     <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp" />
     <ClCompile Include="CardsTests\CardsTests.cpp" />
     <ClCompile Include="GameStartTests\GameStartTests.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="PlayerTests\PlayerTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="A2MainLoopTests\A2MainLoopTests.h" />
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h" />
     <ClInclude Include="CardsTests\CardsTests.h" />
     <ClInclude Include="GameStartTests\GameStartTests.h" />

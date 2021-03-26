@@ -25,5 +25,7 @@ int Driver::RunAssignmentTwoDriver()
 	AssignmentTwoDriver ass2Driver;
 	std::cout << "(1) Running the Game Start Driver..." << std::endl;
 	ass2Driver.RunGameStartDriver();
+	std::cout << "\n\n(2) Running the A2 Main Loop Driver..." << std::endl;
+	ass2Driver.RunA2MainLoopDriver();
 	return 0;
 }

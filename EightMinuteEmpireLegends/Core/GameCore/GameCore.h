@@ -40,6 +40,7 @@ private:
 
 public:
     Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
+    ~Game();
 
     //Set up phase
     void startUp();
@@ -55,8 +56,12 @@ public:
 class GameBuilder {
 public:
     static Game* build(int numPlayers, Map& map, std::string path = "");    
+    static Game* buildGame(int numPlayers, Map& map);
+    static Game* buildForMainLoop(Map& map, bool demoMode);
 };
 
+//Definition of Card Space by Jason
+/*
 //We need to separate the concerns of the Hand class, which is fuzzy right now. We split Hand into CardSpace (the cards available for purchase, part of deck) and Hand (the cards owned by the player)
 class CardSpace {
 private:
@@ -77,5 +82,7 @@ public:
     //Utility function for calculating cost of exchange dynamically besed on their current index position
     int costCalc(int index);
 };
+
+*/
 
 std::tuple<int, int, int> fetchConfigResources(std::string path);

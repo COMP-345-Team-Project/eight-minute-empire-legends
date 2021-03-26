@@ -48,6 +48,9 @@
     <ClCompile Include="GameStartTests\GameStartTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="A2MainLoopTests\A2MainLoopTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameStartTests\GameStartTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A2MainLoopTests\A2MainLoopTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
