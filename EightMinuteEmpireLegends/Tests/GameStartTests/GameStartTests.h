@@ -13,6 +13,7 @@ public:
 	int Test_PlayerInput_MapSelect_InvalidEntry();
 	int Test_BuildGame_Success();
 	int Test_BuildGame_Failure();
+	int Demo_BuildGame();
 
 	void Passed(std::string testName);
 };

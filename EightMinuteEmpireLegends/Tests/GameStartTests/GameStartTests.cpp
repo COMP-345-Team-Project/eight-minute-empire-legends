@@ -7,15 +7,13 @@
 
 // Tests fetching and reading configuration file. Success case.
 int GameStart::Test_ReadConfigFile_Success() {
-	// ./../../config/EightMinuteEmpireLengendsPrefs.ini
-	std::string path = "D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\config\\EightMinuteEmpireLengendsPrefs.ini";
 	std::tuple<int, int, int> rsc;
 	try {
-		rsc = fetchConfigResources(path);		
+		rsc = fetchConfigResources(_configPath);
 	}
 	catch (ConfigFileException& e) {
 		std::cout << e.what() << std::endl;
-	}	
+	}
 	std::cout << ".INI resources are \nrCoins : " << get<0>(rsc) << " rArmies : " << get<1>(rsc) << " rCities : " << get<2>(rsc) << std::endl;
 	assert(get<0>(rsc) > 0 && get<1>(rsc) > 0 && get<2>(rsc) > 0);
 	Passed("Test_ReadConfigFile_Success()");
@@ -45,7 +43,7 @@ int GameStart::Test_PlayerInput_SelectPlayerCount_ValidEntry() {
 	std::cin >> numPlayers;
 	if (numPlayers >= 2 && numPlayers <= 4) {
 		std::cout << "This game is set to " << numPlayers << " players." << std::endl;
-	}	
+	}
 	assert(numPlayers >= 2 && numPlayers <= 4);
 	Passed("Test_PlayerInput_SelectPlayerCount_ValidEntry()");
 	return 0;
@@ -55,7 +53,7 @@ int GameStart::Test_PlayerInput_SelectPlayerCount_ValidEntry() {
 int GameStart::Test_PlayerInput_SelectPlayerCount_InvalidEntry() {
 	int numPlayers;
 	std::cout << "Please enter the number of players (2-4) : ";
-	std::cin >> numPlayers; 
+	std::cin >> numPlayers;
 	if (numPlayers < 2 || numPlayers > 4) {
 		std::cout << "Invalid entry. Defaulting to 2 players." << std::endl;
 		numPlayers = 2;
@@ -66,15 +64,12 @@ int GameStart::Test_PlayerInput_SelectPlayerCount_InvalidEntry() {
 }
 
 // Tests accepting player input for selecting map. Success case.
-int GameStart::Test_PlayerInput_MapSelect_ValidEntry() {
-	namespace fs = std::filesystem;
-	std::vector<fs::path> maps{};	
-	// ./GameStartTests/Resources
-	std::string dirPath = "D:/Users/Forte/Documents/GitHub/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/GameStartTests/Resources";
+int GameStart::Test_PlayerInput_MapSelect_ValidEntry() {	
+	std::vector<filesystem::path> maps{};	
 	std::cout << "Please select a map.\n" << std::endl;
 	int index = 0;
 	int selection;
-	for (const auto & entry : fs::directory_iterator(dirPath)) {
+	for (const auto& entry : filesystem::directory_iterator(_mapDir)) {
 		maps.push_back(entry.path());
 		std::cout << index << ") " << entry.path().filename() << std::endl;
 		index++;
@@ -87,15 +82,12 @@ int GameStart::Test_PlayerInput_MapSelect_ValidEntry() {
 }
 
 // Tests accepting player input for selecting map. Failed case.
-int GameStart::Test_PlayerInput_MapSelect_InvalidEntry() {
-	namespace fs = std::filesystem;
-	std::vector<fs::path> maps{};
-	// ./GameStartTests/Resources
-	std::string dirPath = "D:/Users/Forte/Documents/GitHub/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/GameStartTests/Resources";
+int GameStart::Test_PlayerInput_MapSelect_InvalidEntry() {	
+	std::vector<filesystem::path> maps{};
 	std::cout << "Please select a map.\n" << std::endl;
 	int index = 0;
 	int selection;
-	for (const auto& entry : fs::directory_iterator(dirPath)) {
+	for (const auto& entry : filesystem::directory_iterator(_mapDir)) {
 		maps.push_back(entry.path());
 		std::cout << index << ") " << entry.path().filename() << std::endl;
 		index++;
@@ -110,19 +102,11 @@ int GameStart::Test_PlayerInput_MapSelect_InvalidEntry() {
 // Tests building game. Success case.
 int GameStart::Test_BuildGame_Success() {
 	int numPlayers = 2;
+	std::vector<std::string> names{ "Player 1", "Player 2" };
 	// ./GameStartTests/Resources/narrows.json
-	Map* map = nullptr;
-	try {
-		map = MapLoader::parseMap("D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\EightMinuteEmpireLegends\\Tests\\GameStartTests\\Resources\\narrows.json");
-	}
-	catch (MapLoaderException& e) {
-		std::cout << e.what() << std::endl;
-	}
-	Game* validGame = nullptr;
-	if (map != NULL) {
-		validGame = GameBuilder::build(numPlayers, *map);
-	}
-	assert(map != NULL && map->validate() && validGame != NULL);
+	std::string mapPath = _mapDir + "\\narrows.json";
+	Game* validGame = GameBuilder::build(numPlayers, names, mapPath);
+	assert(validGame->getMap() != NULL);
 	delete validGame;
 	Passed("Test_BuildGame_Success()");
 	return 0;
@@ -131,23 +115,26 @@ int GameStart::Test_BuildGame_Success() {
 // Tests building game. Failed case.
 int GameStart::Test_BuildGame_Failure() {
 	int numPlayers = 2;
-	Map* map = nullptr;
-	try {
-		Map* map = MapLoader::parseMap("./wrong-path/Resources/narrows.json");
-	}
-	catch (MapLoaderException& e) {
-		std::cout << e.what() << std::endl;
-	}
-	Game* validGame = nullptr;
-	if (map != NULL) {
-		validGame = GameBuilder::build(numPlayers, *map);
-	}
-	assert(map == NULL || !map->validate() || validGame == NULL);
+	std::vector<std::string> names{ "Player 1", "Player 2" };
+	std::string mapPath = "./wrong-path/Resources/narrows.json";
+	Game* validGame = GameBuilder::build(numPlayers, names, mapPath);
+	assert(validGame->getMap() == NULL);
 	delete validGame;
-	Passed("Test_BuildGameFailure()");
+	Passed("Test_BuildGame_Failure()");
 	return 0;
 }
-	
+
+int GameStart::Demo_BuildGame() {
+	try {
+		Game* game = GameBuilder::build();
+		std::cout << game;
+	}
+	catch (GameBuilderException& e) {
+		std::cout << e.what() << std::endl;
+	}
+	return 0;
+}
+
 void GameStart::Passed(std::string testName) {
 	std::cout << std::endl << testName << " >> Passed\n" << std::endl;
 }

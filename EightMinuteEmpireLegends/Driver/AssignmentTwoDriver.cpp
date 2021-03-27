@@ -13,5 +13,6 @@ int AssignmentTwoDriver::RunGameStartDriver()
 	gameStartTest.Test_PlayerInput_SelectPlayerCount_InvalidEntry();
 	gameStartTest.Test_PlayerInput_MapSelect_ValidEntry();
 	gameStartTest.Test_PlayerInput_MapSelect_InvalidEntry();
+	gameStartTest.Demo_BuildGame();
 	return 0;
 }
