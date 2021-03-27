@@ -40,6 +40,44 @@ Card::Card() {
 
 }
 
+Card::~Card() {}
+
+Card::Card(const Card& card) {
+    this->name = card.name;
+    this->newArmy = card.newArmy;
+    this->moveArmy = card.moveArmy;
+    this->buildCity = card.buildCity;
+    this->destroyArmy = card.destroyArmy;
+    this->firstAction = card.firstAction;
+    this->secondAction = card.secondAction;
+    this->andAction = card.andAction;
+    this->extraMove = card.extraMove;
+    this->extraArmy = card.extraArmy;
+    this->flying = card.flying;
+    this->elixer = card.elixer;
+    this->extraCoin = card.extraCoin;
+    this->specialAbility = card.specialAbility;
+}
+
+Card& Card::operator =(const Card& card) {
+    this->name = card.name;
+    this->newArmy = card.newArmy;
+    this->moveArmy = card.moveArmy;
+    this->buildCity = card.buildCity;
+    this->destroyArmy = card.destroyArmy;
+    this->firstAction = card.firstAction;
+    this->secondAction = card.secondAction;
+    this->andAction = card.andAction;
+    this->extraMove = card.extraMove;
+    this->extraArmy = card.extraArmy;
+    this->flying = card.flying;
+    this->elixer = card.elixer;
+    this->extraCoin = card.extraCoin;
+    this->specialAbility = card.specialAbility;
+
+    return *this;
+}
+
 //Print out card's attributes
 void Card::print() {
     //Card's Action
@@ -151,11 +189,13 @@ string Card::getSpecialAbility() {
 }
 
 
-
+//Deck Implementation
 
 Deck::Deck() {
 
 }
+
+Deck::~Deck() {}
 
 Deck::Deck(int numPlayer) {
 
@@ -241,6 +281,16 @@ Deck::Deck(int numPlayer) {
     shuffle();
 }
 
+Deck::Deck(const Deck& deck) {
+    this->deck = deck.deck;
+}
+
+Deck& Deck::operator =(const Deck& deck) {
+    this->deck = deck.deck;
+
+    return *this;
+}
+
 //Add cards into the deck
 void Deck::addCard(Card newCard) {
     deck.push_back(newCard);
@@ -285,38 +335,50 @@ int Deck::getSize() {
     return deck.size();
 }
 
+// CardSpace Implementation
 
-Hand::Hand() {
+// CardSpace is hardcoded to draw 6 cards from deck upon initialization
+CardSpace::CardSpace(Deck& mainDeck) {
+
+    std::cout << "Card Space initializing... Six cards will be drawn from the deck" << endl;
+    addCard(mainDeck.draw());
+    addCard(mainDeck.draw());
+    addCard(mainDeck.draw());
+    addCard(mainDeck.draw());
+    addCard(mainDeck.draw());
+    addCard(mainDeck.draw());
+    std::cout << "Card Space initialized" << endl;
 }
 
-//Hand is hardcoded to draw 6 cards from deck upon initialization
-Hand::Hand(Deck& mainDeck) {
+CardSpace::~CardSpace() {}
 
-    addCard(mainDeck.draw());
-    addCard(mainDeck.draw());
-    addCard(mainDeck.draw());
-    addCard(mainDeck.draw());
-    addCard(mainDeck.draw());
-    addCard(mainDeck.draw());
+CardSpace::CardSpace(const CardSpace& cardSpace) {
+    this->cardSpace = cardSpace.cardSpace;
 }
 
-//Add new cards into the hand
-void Hand::addCard(Card newCard) {
-    hand.push_back(newCard);
+CardSpace& CardSpace::operator =(const CardSpace& cardSpace) {
+    this->cardSpace = cardSpace.cardSpace;
+
+    return *this;
 }
 
-//Print out all cards in Hand associated with their current cost for exchange
-void Hand::showHand() {
+//Add new cards into the card space
+void CardSpace::addCard(Card newCard) {
+    cardSpace.push_back(newCard);
+}
+
+//Print out all cards in CardSpace associated with their current cost for exchange
+void CardSpace::showCardSpace() {
     cout << "\n---Cards currently in Hand--- \n";
 
-    for (unsigned i = 0; i < hand.size(); i++) {
+    for (unsigned i = 0; i < cardSpace.size(); i++) {
         cout << "(Cost " << costCalc(i) << " coins) " << (i + 1) << ". ";
-        hand[i].print();
+        cardSpace[i].print();
     }
 }
 
 //Utility function for calculating cost of exchange dynamically besed on their current index position
-int Hand::costCalc(int index) {
+int CardSpace::costCalc(int index) {
     if (index == 0) {
         return 0;
     }
@@ -333,14 +395,14 @@ int Hand::costCalc(int index) {
 }
 
 //Exchange function to allow player to buy cards from hand using coins
-//showHand function included for demonstration
-Card Hand::exchange(Deck& mainDeck, bool demo = false) {
+//showCardSpace function included for demonstration
+Card CardSpace::exchange(Deck& mainDeck, bool demo = false) {
     int cardInput; //Position from user input
-    int cardChoice; //Index position from hand vector
+    int cardChoice; //Index position from cardSpace vector
     Card cardChosen;
 
-    if (hand.size() > 0) {
-        showHand();
+    if (cardSpace.size() > 0) {
+        showCardSpace();
         cout << "Choose which card you'd like to exchange (1-6): " << endl;
 		
 		
@@ -349,7 +411,7 @@ Card Hand::exchange(Deck& mainDeck, bool demo = false) {
 			
 			cin >> cardInput;
 
-			if (cardInput > 0 && cardInput < (hand.size() + 1)) {
+			if (cardInput > 0 && cardInput < (cardSpace.size() + 1)) {
 				cardChoice = cardInput - 1;
 			}
 			else {
@@ -363,17 +425,17 @@ Card Hand::exchange(Deck& mainDeck, bool demo = false) {
 			cardChoice = 0;
 		}
 		
-		//Access the chosen card from the hand
-        cardChosen = hand[cardChoice];
+		//Access the chosen card from the cardSpace
+        cardChosen = cardSpace[cardChoice];
 
         cout << "The card you've selected to exchange is " << cardChosen.getName() << endl;
 
-        //Remove the card chosen from Hand and move all cards after it to the left by 1 position
-        for (int i = cardChoice; i < (hand.size() - 1); i++) {
-            hand[i] = hand[i + 1];
+        //Remove the card chosen from CardSpace and move all cards after it to the left by 1 position
+        for (int i = cardChoice; i < (cardSpace.size() - 1); i++) {
+            cardSpace[i] = cardSpace[i + 1];
         }
         //Remove the last now supposed to be emptry slot
-        hand.pop_back();
+        cardSpace.pop_back();
 
         //Draw new card to place into the rightmost position
         Card cardAdded = mainDeck.draw();
@@ -387,12 +449,12 @@ Card Hand::exchange(Deck& mainDeck, bool demo = false) {
         }
 
         cout << "Here is the cards in Hand after the exchange" << endl;
-        showHand();
+        showCardSpace();
 
         return cardChosen;
     }
 
-    //Return card named "EMPTRY" when hand is empty
+    //Return card named "EMPTY" when card space is empty
     else {
         Card tempEmpty("EMPTY", 0, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "");
         return tempEmpty;
@@ -401,13 +463,41 @@ Card Hand::exchange(Deck& mainDeck, bool demo = false) {
 
 }
 
-//Getter
-int Hand::getSize() {
-    return hand.size();
+Card CardSpace::sell(Deck& mainDeck, int cardInput) {
+    //Access the chosen card from the cardSpace
+    Card cardChosen;
+    cardChosen = cardSpace[cardInput - 1];
+
+    cout << "The card you've selected to buy is " << cardChosen.getName() << endl;
+
+    //Remove the card chosen from Card Space and move all cards after it to the left by 1 position
+    for (int i = (cardInput - 1); i < (cardSpace.size() - 1); i++) {
+        cardSpace[i] = cardSpace[i + 1];
+    }
+    //Remove the last now supposed to be emptry slot
+    cardSpace.pop_back();
+
+    //Draw new card to place into the rightmost position
+    Card cardAdded = mainDeck.draw();
+
+    //Handle when the deck is empty
+    if (cardAdded.getName() == "EMPTY") {
+        cout << "No more new cards from deck" << endl;
+    }
+    else {
+        addCard(cardAdded);
+    }
+
+    return cardChosen;
 }
 
-vector<Card> Hand::getCards() {
-    return hand;
+//Getter
+int CardSpace::getSize() {
+    return cardSpace.size();
+}
+
+vector<Card> CardSpace::getCards() {
+    return cardSpace;
 }
 
 

@@ -44,7 +44,7 @@ private:
 	int availableArmies;
 	int availableCities;
 	vector<Vertex*> deployedVertices;
-	Hand hand;
+	CardSpace hand;
 	BiddingFacility* biddingFacility;
 
 	//Private methods

@@ -14,6 +14,10 @@ public:
         string firstActionValue, string secondActionValue, bool andActionValue, int extraMoveValue,
         int extraArmyValue, bool flyingValue, int elixerValue, int extraCoinValue, string specialAbilityValue);
     Card();
+    ~Card();
+
+    Card(const Card& card);
+    Card& operator =(const Card& card);
 
     //Print out card's attributes
     void print();
@@ -70,6 +74,12 @@ public:
 
     Deck();
 
+    ~Deck();
+
+    Deck(const Deck& deck);
+
+    Deck& operator =(const Deck& deck);
+
     Deck(int numPlayer);
 
     //Add cards into the deck
@@ -91,19 +101,25 @@ private:
 
 };
 
-
-class Hand {
+//We split Hand into CardSpace (the cards available for purchase, part of deck) and Hand (the cards owned by the player)
+class CardSpace {
 
 public:
-    Hand();
-    //Hand is hardcoded to draw 6 cards from deck upon initialization
-    Hand(Deck& mainDeck);
+
+    //CardSpace is hardcoded to draw 6 cards from deck upon initialization
+    CardSpace(Deck& mainDeck);
+
+    ~CardSpace();
+
+    CardSpace(const CardSpace& cardSpace);
+
+    CardSpace& operator =(const CardSpace& cardSpace);
 
     //Add new cards into the hand
     void addCard(Card newCard);
 
-    //Print out all cards in Hand associated with their current cost for exchange
-    void showHand();
+    //Print out all cards in CardSpace associated with their current cost for exchange
+    void showCardSpace();
 
     //Utility function for calculating cost of exchange dynamically besed on their current index position
     int costCalc(int index);
@@ -112,9 +128,12 @@ public:
     //showHand function included for demonstration
     Card exchange(Deck& mainDeck, bool demo);
 
+    Card sell(Deck& mainDeck, int cardInput);
+
     //Getter
     int getSize();
     vector<Card> getCards();
+
 private:
-    vector<Card> hand;
+    vector<Card> cardSpace; //Store the 6 cards that are available for purchase
 };
