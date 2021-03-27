@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="GameStartTests\Resources\bloodgulch.json" />
+    <None Include="GameStartTests\Resources\guardian.json" />
+    <None Include="GameStartTests\Resources\highground.json" />
+    <None Include="GameStartTests\Resources\narrows.json" />
     <None Include="MapLoaderTests\Resources\invalidJson_missingContinents.json">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -169,6 +173,7 @@
   <ItemGroup>
     <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp" />
     <ClCompile Include="CardsTests\CardsTests.cpp" />
+    <ClCompile Include="GameStartTests\GameStartTests.cpp" />
     <ClCompile Include="MapLoaderTests\MapLoaderTests.cpp" />
     <ClCompile Include="MapTests\MapTestUtils.cpp" />
     <ClCompile Include="MapTests\MapTests.cpp" />
@@ -177,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h" />
     <ClInclude Include="CardsTests\CardsTests.h" />
+    <ClInclude Include="GameStartTests\GameStartTests.h" />
     <ClInclude Include="MapLoaderTests\MapLoaderTests.h" />
     <ClInclude Include="MapTests\MapTestUtils.h" />
     <ClInclude Include="MapTests\MapTests.h" />

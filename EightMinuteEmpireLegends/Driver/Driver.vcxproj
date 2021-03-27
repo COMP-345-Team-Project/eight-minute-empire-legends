@@ -29,6 +29,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../Core/pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="AssignmentTwoDriver.cpp" />
     <ClCompile Include="Main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../Core/pch.h</PrecompiledHeaderFile>
@@ -52,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssignmentOneDriver.h" />
+    <ClInclude Include="AssignmentTwoDriver.h" />
     <ClInclude Include="Driver.h" />
   </ItemGroup>
   <ItemGroup>
