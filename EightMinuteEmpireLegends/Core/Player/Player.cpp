@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, BiddingFacility* biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility) {}
+Player::Player(std::string name, BiddingFacility* biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
 
 Player::~Player() {}
 
@@ -14,8 +14,9 @@ Player::Player(const Player& player){
 	this->availableArmies = player.availableArmies;
 	this->availableCities = player.availableCities;
 	this->deployedVertices = player.deployedVertices; //for vectors this is a copy
-	this->hand = player.hand; //calling the assignment operator
+	this->cards = player.cards; //calling the assignment operator
 	this->biddingFacility = player.biddingFacility; //calling the assignment operator
+	this->elixir = player.elixir;
 }
 
 Player& Player::operator =(const Player& p) {
@@ -24,8 +25,9 @@ Player& Player::operator =(const Player& p) {
 	this->availableArmies = p.availableArmies;
 	this->availableCities = p.availableCities;
 	this->deployedVertices = p.deployedVertices; //for vectors this is a copy
-	this->hand = p.hand; //calling the assignment operator
+	this->cards = p.cards; //calling the assignment operator
 	this->biddingFacility = p.biddingFacility; //calling the assignment operator
+	this->elixir = p.elixir;
 	return *this;
 }
 
@@ -47,16 +49,31 @@ int Player::getAvailableCities() const {
 	return availableCities;
 }
 
-vector<Card> Player::getCards() {
-	return hand.getCards();
+vector<Card*> Player::getCards() {
+	return cards;
+}
+
+void Player::addCard(Card* card) {
+	cards.push_back(card);
 }
 
 std::string Player::getPlayerName() const {
 	return playerName;
 }
 
-void Player::PayCoin(int coins) {
-	std::cout << "Entered payCoin method" << std::endl;
+void Player::PayCoin(int amount) {
+	if (amount > coin)
+		throw PlayerActionException("Insufficient fund");
+
+	coin -= amount;
+}
+
+void Player::addElixirs(int elixir) {
+	this->elixir += elixir;
+}
+
+int Player::getElixirs() {
+	return this->elixir;
 }
 
 void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
@@ -196,52 +213,48 @@ void Player::RemoveDeployedVertex(Vertex* v) {
 	deployedVertices.erase(std::remove(deployedVertices.begin(), deployedVertices.end(), v), deployedVertices.end());
 }
 
-int Player::ComputeScore(Map* map) {
-	cout << "Starting score calculation of player " << this->playerName << ": " << endl;
-
-	//Calculating the territories owned by the player
-	/*int ownedTerritoriesScore = this->territories.size();
-	cout << "Territories score: " << ownedTerritoriesScore << endl;
-
-	int ownedContinentsScore = ComputeRegionalScore(map);
-	cout << "Continents score: " << ownedContinentsScore << endl;
-
-	int abilityScore = ComputeAbilityScore();
-	cout << "Ability score: " << abilityScore << endl;
-
-	int total = ownedTerritoriesScore + ownedContinentsScore + abilityScore;
-	cout << "Total score: " << total << endl;*/
-
-	return ComputeTerritoryScore() + ComputeRegionalScore(map);
+int Player::ComputeScore(Map* map, vector<Player*> players) {
+	return ComputeTerritoryScore() + ComputeRegionalScore(map) + ComputeAbilityScore() + ComputeElixirScore(players);
 }
 
 int Player::ComputeTerritoryScore() {
+	int score = 0;
+
 	//The territory score equals to the number of regions owned
-	return deployedVertices.size();
+	for (vector<Vertex*>::iterator vertexIter = deployedVertices.begin(); vertexIter != deployedVertices.end(); vertexIter++) {
+		if ((**vertexIter).getTerritory()->getOwner().compare(playerName) == 0)
+			score++;
+	}
+
+	return score;
 }
 
 int Player::ComputeRegionalScore(Map* map) {
 	int continentPoints = 0;
-
 	//Calculating the regional score of all players
 	//Initializing the point accumlator to store the points of all players
-	std::map<string, std::map<string, int>> pointAccumulator;
-	for (vector<Continent*>::iterator continentIter = map->continents().begin(); continentIter != map->continents().end(); continentIter++) {
+	std::map<string, std::map<string, int>> pointAccumulator; 
+	
+	for (int i = 0; i < map->continents().size(); i++) {
 		std::map<string, int> playerPointsPerRegion;
-		pointAccumulator.insert(pair<string, std::map<string, int>>((**continentIter).name, playerPointsPerRegion));
+		pointAccumulator.insert(pair<string, std::map<string, int>>(map->continents().at(i)->name, playerPointsPerRegion));
 	}
 
-	//For each vertex (territory) owned by each player, we add 1 point to that player
-	for (vector<Vertex*>::iterator vertexIter = map->vertices().begin(); vertexIter != map->vertices().end(); vertexIter++) {
-		Territory* t = (**vertexIter).getTerritory();
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Territory* t = map->vertices().at(i)->getTerritory();
 		string owner = t->getOwner();
-		std::map<string, int> continentPoints = pointAccumulator[t->getContinent()];
 
-		if (continentPoints.find(owner) == continentPoints.end()) {
-			continentPoints.insert(pair<string, int>(owner, 0));
+		//If someone actually owns the continent
+		if (owner.compare("") != 0) {
+			std::map<string, int> continentPoints = pointAccumulator[t->getContinent()];
+
+			if (continentPoints.find(owner) == continentPoints.end()) {
+				continentPoints.insert(pair<string, int>(owner, 0));
+			}
+
+			continentPoints[owner]++;
+			pointAccumulator[t->getContinent()] = continentPoints;
 		}
-
-		continentPoints[owner]++;
 	}
 
 	//Now we check if this player has the maximum points in each continent
@@ -278,15 +291,46 @@ bool Player::OwnsContinent(std::map<string, int>& continentScores) {
 	else
 		return false;*/
 	std::map<std::string, int>::iterator owner = std::max_element(continentScores.begin(), continentScores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	return owner->first == playerName;
+	std::string ownerName = owner->first;
+	int ownerArmies = owner->second;
+
+	//We must check that there is only 1 player that owns the continent
+	for (std::map<std::string, int>::iterator mapIter = continentScores.begin(); mapIter != continentScores.end(); mapIter++) {
+		if (mapIter->first.compare(ownerName) != 0 && mapIter->second == ownerArmies) {
+			ownerName = "";
+			break;
+		}
+	}
+	
+	return ownerName == playerName;
+}
+
+int Player::ComputeElixirScore(vector<Player*> players) {
+	vector<Player*>::iterator player = std::max_element(players.begin(), players.end(), [](Player* a, Player* b)->bool { return a->getElixirs() < b->getElixirs(); });
+	int maxElixirs = (**player).getElixirs();
+	std::string playerNameWithMaxElixir = (**player).getPlayerName();
+
+	//If the player with the maximum of elixir is not the player
+	if (playerNameWithMaxElixir.compare(playerName) != 0)
+		return 0;
+
+	//Else we check if there is a tied between players
+	for (vector<Player*>::iterator iter = players.begin(); iter != players.end(); ++iter) {
+		if ((**iter).getElixirs() == maxElixirs && playerNameWithMaxElixir.compare(playerName) != 0) {
+			//If the player ties with another player for the amount of elixirs
+			return 1;
+		}
+	}
+
+	return 2;
 }
 
 int Player::CountCardsBasedOnType(string cardType) {
 	int cardCount = 0;
-	vector<Card>::iterator cardIter;
+	vector<Card*>::iterator cardIter;
 
-	for (cardIter = hand.getCards().begin(); cardIter != hand.getCards().end(); cardIter++) {
-		if (cardIter->getName().find(cardType) > 0){
+	for (cardIter = cards.begin(); cardIter != cards.end(); cardIter++) {
+		if ((**cardIter).getName().find(cardType) != string::npos){
 			cardCount++;
 		}
 	}
@@ -298,32 +342,33 @@ int Player::ComputeAbilityScore() {
 	int total = 0;
 	vector<Card>::iterator cardAbilityIter;
 
-	//We loop through all the cards, check the ability and calculate the points accordingly
-	for (cardAbilityIter = this->hand.getCards().begin(); cardAbilityIter != this->hand.getCards().end(); cardAbilityIter++) {
+	for (int i = 0; i < cards.size(); i++) {
+		std::string specialAbility = cards.at(i)->getSpecialAbility();
 		//First we check cards that grant 1 point per each card type, 1 card=1 point
-		if (cardAbilityIter->getSpecialAbility().compare("1VPperAncient")) //1 point per ancient card
-			total = total + CountCardsBasedOnType("Ancient");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperFlying")) //1 point per flying card
-			total = total + CountCardsBasedOnType("Flying");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperCursedCard")) //1 point per cursed card
-			total = total + CountCardsBasedOnType("Cursed");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperForestCard")) //1 point per forest card
-			total = total + CountCardsBasedOnType("Forest");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperNightCard")) //1 point per night card
-			total = total + CountCardsBasedOnType("Night");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperDireCard")) //1 point per dire card
-			total = total + CountCardsBasedOnType("Dire");
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPperArcaneCard")) //1 point per dire card
-			total = total + CountCardsBasedOnType("Arcane");
+		if (specialAbility.compare("1VPperAncient") == 0) //1 point per ancient card
+			total += CountCardsBasedOnType("Ancient");
+		else if (specialAbility.compare("1VPperFlying") == 0) //1 point per flying card
+			total += CountCardsBasedOnType("Flying");
+		else if (specialAbility.compare("1VPperCursedCard") == 0) //1 point per cursed card
+			total += CountCardsBasedOnType("Cursed");
+		else if (specialAbility.compare("1VPperForestCard") == 0) //1 point per forest card
+			total += CountCardsBasedOnType("Forest");
+		else if (specialAbility.compare("1VPperNightCard") == 0) //1 point per night card
+			total += CountCardsBasedOnType("Night");
+		else if (specialAbility.compare("1VPperDireCard") == 0) //1 point per dire card
+			total += CountCardsBasedOnType("Dire");
+		else if (specialAbility.compare("1VPperArcaneCard") == 0) //1 point per dire card
+			total += CountCardsBasedOnType("Arcane");
 		//Now we handle the other cases
-		else if (cardAbilityIter->getSpecialAbility().compare("1VPper3Coins")) //1 point per every 3 coins
-			total = (coin / 3); //Perform integer division here
-		else if (cardAbilityIter->getSpecialAbility().compare("3NobleCards=4VP")) { //4 points per every 3 noble cards
+		else if (specialAbility.compare("1VPper3Coins") == 0) //1 point per every 3 coins
+			total += (coin / 3); //Perform integer division here
+		else if (specialAbility.compare("3NobleCards=4VP") == 0) { //4 points per every 3 noble cards
 			int numOfNobleCards = CountCardsBasedOnType("Noble"); //Get the number of noble cards
-			total = (numOfNobleCards / 3) * 4; //Calculate the actual score based on the number of cards
-		}else if (cardAbilityIter->getSpecialAbility().compare("3VPfor2MountainCards")) { //4 points per every 3 noble cards
+			total += (numOfNobleCards / 3) * 4; //Calculate the actual score based on the number of cards
+		}
+		else if (specialAbility.compare("3VPfor2MountainCards") == 0) { //4 points per every 3 noble cards
 			int numOfMountainCards = CountCardsBasedOnType("Mountain"); //Get the number of noble cards
-			total = (numOfMountainCards / 2) * 3; //Calculate the actual score based on the number of cards
+			total += (numOfMountainCards / 2) * 3; //Calculate the actual score based on the number of cards
 		}
 	}
 

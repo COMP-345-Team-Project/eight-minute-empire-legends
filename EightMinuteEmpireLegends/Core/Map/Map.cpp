@@ -377,8 +377,21 @@ std::string Territory::getName() {
 
 std::string Territory::getOwner() {
 	//return this->owner;
-	std::map<std::string, int>::iterator owner = std::max_element(armies.begin(), armies.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	return owner->first;
+	if (armies.size() > 0) {
+		std::map<std::string, int>::iterator owner = std::max_element(armies.begin(), armies.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
+		std::string ownerName = owner->first;
+		int ownerArmies = owner->second;
+
+		//We also need to make sure there is no player with the same maximum value
+		for (std::map<std::string, int>::iterator mapIter = armies.begin(); mapIter != armies.end(); mapIter++) {
+			if (mapIter->first.compare(ownerName) != 0 && mapIter->second == ownerArmies)
+				return "";
+		}
+
+		return ownerName;
+	}
+	
+	return "";
 }
 
 int Territory::getArmiesByPlayer(std::string playerName) {

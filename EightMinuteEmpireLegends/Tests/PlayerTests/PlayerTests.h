@@ -11,6 +11,8 @@ public:
 	int Test_MoveArmies();
 	int Test_DestroyArmies();
 	int Test_PlaceCities();
+	int Test_ComputeScore();
+	int Test_PayCoin();
 
 private:
 	int numOfArmiesToDeploy;
@@ -19,5 +21,6 @@ private:
 	int numOfArmies;
 	int numOfCities;
 	string playerName;
+	string altPlayerName;
 	string mapPath;
 };

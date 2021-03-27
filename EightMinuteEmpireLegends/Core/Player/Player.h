@@ -17,8 +17,11 @@ public:
 	int getCoins() const;
 	int getAvailableArmies() const;
 	int getAvailableCities() const;
-	vector<Card> getCards();
+	vector<Card*> getCards();
+	void addCard(Card* card);
 	std::string getPlayerName() const;
+	void addElixirs(int elixir);
+	int getElixirs();
 
 	//Player actions
 	bool HasArmyDeployedInVertex(Vertex* v); 
@@ -30,8 +33,13 @@ public:
 	void BuildCity(Vertex* v, int numOfArmies);
 	void DestroyArmy(Vertex* v, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
-	int ComputeScore(Map* map);
-
+	int ComputeScore(Map* map, vector<Player*> players);
+	void AddDeployedVertex(Vertex* v);
+	int ComputeTerritoryScore();
+	int ComputeRegionalScore(Map* map);
+	int ComputeAbilityScore();
+	int ComputeElixirScore(vector<Player*> players);
+	
 	//Operators overloading
 	Player& operator =(const Player& p);
 	friend std::ostream& operator <<(std::ostream& os, const Player* p);
@@ -44,17 +52,14 @@ private:
 	int availableArmies;
 	int availableCities;
 	vector<Vertex*> deployedVertices;
-	Hand hand;
+	vector<Card*> cards;
 	BiddingFacility* biddingFacility;
+	int elixir;
 
 	//Private methods
-	void AddDeployedVertex(Vertex* v);
 	void RemoveDeployedVertex(Vertex* v);
-	int ComputeTerritoryScore();
-	int ComputeRegionalScore(Map* map);
 	bool OwnsContinent(std::map<string, int>& continentScores);
 	int CountCardsBasedOnType(string cardType);
-	int ComputeAbilityScore();
 };
 
 class PlayerActionException : public std::exception
