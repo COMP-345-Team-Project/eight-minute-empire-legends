@@ -43,6 +43,8 @@ int AssignmentOneDriver::RunPlayerDriver()
 	playerTests.Test_MoveArmies();
 	playerTests.Test_DestroyArmies();
 	playerTests.Test_PlaceCities();
+	playerTests.Test_ComputeScore();
+	playerTests.Test_PayCoin();
 	return 0;
 }
 
