@@ -194,6 +194,24 @@ void Game::displayTerritories(std::vector<Vertex*> vertices) {
 	}
 }
 
+void Game::displayTerritories(std::vector<Vertex*> vertices) {
+	for (Vertex* v : vertices) {		
+		std::cout << "Territory : " << v->getTerritory()->getName() << std::endl;
+		std::cout << "Owner     : " << v->getTerritory()->getOwner() << std::endl;
+		std::cout << "Continent : " << v->getTerritory()->getContinent() << std::endl;
+		std::cout << "--- Armies ---" << std::endl;
+		for (Player* pl : this->getPlayers()) {
+			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getArmiesByPlayer(pl->getPlayerName()) << std::endl; 
+		}	
+		std::cout << "--- Cities ---" << std::endl;
+		for (Player* pl : this->getPlayers()) {
+			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getCitiesByPlayer(pl->getPlayerName()) << std::endl;
+		}
+		std::cout << std::endl;
+		
+	}
+}
+
 std::ostream& operator <<(std::ostream& os, const Game* g) {
 	os << g->resources << std::endl;
 	os << g->map;
