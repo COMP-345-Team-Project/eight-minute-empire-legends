@@ -2,6 +2,9 @@
 
 #include "AssignmentTwoDriver.h"
 
+#include "../Tests/GameStartTests/GameStartTests.h"
+
+// Part 1: Game start
 int AssignmentTwoDriver::RunGameStartDriver() 
 {
 	GameStart gameStartTest;
@@ -16,3 +19,25 @@ int AssignmentTwoDriver::RunGameStartDriver()
 	gameStartTest.Demo_BuildGame();
 	return 0;
 }
+
+#include "../Tests/SetupPhaseTests/SetupPhaseTests.h"
+
+// Part 2: Game play: startup phase
+int AssignmentTwoDriver::RunSetupPhaseAndMainLoopDriver()
+{
+	SetupPhaseTests setupPhaseTests;
+	setupPhaseTests.Test_SetupPhaseAndGameLoopExecutes_GivenValidInput();
+
+	return 0;
+}
+
+// Part 3: Game play: main game loop
+
+
+// Part 4: Main game loop: The player actions
+
+
+// Part 5: Main game loop : after the action
+
+
+// Part 6: Main game loop : Compute the game score

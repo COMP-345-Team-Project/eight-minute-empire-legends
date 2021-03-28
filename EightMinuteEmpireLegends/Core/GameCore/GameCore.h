@@ -57,13 +57,13 @@ public:
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
-    void startUp();
+    void runSetupPhase();
 
     //Main game loop, part 3, 5
-    void startGame();
+    void runRoundsUntilEndGame();
 
-    //End game
-    void endGame();
+    //End game, announce winners, and cleanup
+    void runEndGame();
 };
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly

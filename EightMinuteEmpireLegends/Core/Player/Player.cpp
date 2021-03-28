@@ -5,7 +5,13 @@
 
 Player::Player(std::string name, BiddingFacility* biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
 
-Player::~Player() {}
+Player::~Player() {
+	vector<Card*>::iterator cardItter;
+	for (cardItter = this->cards.begin(); cardItter != cards.end(); cardItter++)
+	{
+		delete *cardItter;
+	}
+}
 
 //Missing assignment operator for bidding facility
 Player::Player(const Player& player){
@@ -59,6 +65,12 @@ void Player::addCard(Card* card) {
 
 std::string Player::getPlayerName() const {
 	return playerName;
+}
+
+void Player::BuyCard(Card * cardBought, int costs) {
+	// These boys are nuked in the player destructor
+	cards.push_back(new Card(*cardBought));
+	PayCoin(costs);
 }
 
 void Player::PayCoin(int amount) {
