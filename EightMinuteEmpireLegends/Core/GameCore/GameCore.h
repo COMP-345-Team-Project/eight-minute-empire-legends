@@ -12,10 +12,10 @@ const int _dCoins = 36;
 const int _dArmies = 18;
 const int _dCities = 3;
 
-// ./GameStartTests/Resources
-const std::string _mapDir = "../Tests/GameStartTests/Resources";
-// ./../../config/EightMinuteEmpireLengendsPrefs.ini
-const std::string _configPath = "../../config/EightMinuteEmpireLengendsPrefs.ini";
+// ../Tests/GameStartTests/Resources
+const std::string _mapDir = "D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\EightMinuteEmpireLegends\\Tests\\GameStartTests\\Resources";
+// ../../config/EightMinuteEmpireLengendsPrefs.ini
+const std::string _configPath = "D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\config\\EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
 class Resources {
