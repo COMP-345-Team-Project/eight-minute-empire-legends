@@ -12,10 +12,10 @@ const int _dCoins = 36;
 const int _dArmies = 18;
 const int _dCities = 3;
 
-// ./GameStartTests/Resources
+// ../Tests/GameStartTests/Resources
 const std::string _mapDir = "../Tests/GameStartTests/Resources";
-// ./../../config/EightMinuteEmpireLengendsPrefs.ini
-const std::string _configPath = "../../config/EightMinuteEmpireLengendsPrefs.ini";
+// ../../config/EightMinuteEmpireLengendsPrefs.ini
+const std::string _configPath = "../../../config/EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
 class Resources {
@@ -55,6 +55,7 @@ public:
     Map* getMap();
     Deck* getDeck();
     std::vector<Player*> getPlayers();
+    void displayTerritories(std::vector<Vertex*> vertices);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
