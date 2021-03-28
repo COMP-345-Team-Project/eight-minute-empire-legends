@@ -47,6 +47,55 @@ Vertex* Map::getStartingRegion() {
 	return this->startingRegion;
 }
 
+std::vector<Vertex*> Map::getPotentialStartingRegions()
+{
+	std::vector<Vertex*> possibleStartingTerritories;
+	// Find possible starting regions
+	for (Vertex* currTerritoryVertex : vertices()) {
+		// Must have water connection to another continent
+		bool hasWaterConnection = false;
+		// and be adjacent to a territory with, or have itself, another water connection
+		bool hasAdditionalWaterConnection = false;
+
+		std::vector<Vertex*> adjVerteces = adjacentVertices(currTerritoryVertex);
+
+		for (Vertex* adjTerritoryVertex : adjVerteces) {
+			if (adjTerritoryVertex->getTerritory()->getContinent() != currTerritoryVertex->getTerritory()->getContinent())
+			{
+				if (hasWaterConnection)
+				{
+					hasAdditionalWaterConnection = true;
+				}
+				else
+				{
+					hasWaterConnection = true;
+				}
+
+			}
+		}
+		if (hasWaterConnection && !hasAdditionalWaterConnection) {
+			for (Vertex* adjTerritoryVertex : adjVerteces)
+			{
+				if (hasAdditionalWaterConnection == true) {
+					break;
+				}
+				std::vector<Vertex*> adjadjTerritoryVerteces = adjacentVertices(adjTerritoryVertex);
+				for (Vertex* adjadjTerritoryVertex : adjadjTerritoryVerteces) {
+					if (adjadjTerritoryVertex->getTerritory()->getContinent() != adjTerritoryVertex->getTerritory()->getContinent()) {
+						hasAdditionalWaterConnection = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (hasWaterConnection && hasAdditionalWaterConnection) {
+			possibleStartingTerritories.push_back(currTerritoryVertex);
+		}
+	}
+	return possibleStartingTerritories;
+}
+
 int Map::numVertices() {
 	return this->v_vertices.size();
 }

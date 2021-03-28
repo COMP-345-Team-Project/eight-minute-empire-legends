@@ -39,6 +39,7 @@ private:
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _assignResources(); //Call assignResources() from resource
@@ -56,6 +57,7 @@ public:
     Deck* getDeck();
     std::vector<Player*> getPlayers();
     void displayTerritories(std::vector<Vertex*> vertices);
+    void displayTerritories(std::vector<Vertex*> vertices, bool numbered);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase

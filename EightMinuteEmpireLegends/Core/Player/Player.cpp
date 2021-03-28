@@ -3,7 +3,8 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 
-Player::Player(std::string name, BiddingFacility* biddingFacility) : playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
+Player::Player(std::string name, BiddingFacility* biddingFacility, bool isNeutral) : isNeutral(isNeutral), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
+Player::Player(std::string name, BiddingFacility* biddingFacility) : isNeutral(false), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
 
 Player::~Player() {
 	vector<Card*>::iterator cardItter;
@@ -42,6 +43,9 @@ std::ostream& operator <<(std::ostream& os, const Player* p) {
 	return os;
 }
 
+bool Player::isNeutralPlayer() {
+	return isNeutral;
+}
 
 int Player::getCoins() const {
 	return coin;
@@ -103,7 +107,7 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 
 	Territory* t = v->getTerritory();
 	//You can only place new armies in the starting region or a region you owned with at least 1 city
-	if (v != map->getStartingRegion() && !(t->getCitiesByPlayer(playerName) > 0)) { 
+	if (v != map->getStartingRegion() && !(t->getCitiesByPlayer(playerName) > 0) && !isNeutral) { 
 		std::string errorMessage = "Armies must be built on a starting region, or a region owned by a player with at least 1 city built";
 		throw PlayerActionException(errorMessage);
 	}
