@@ -3,6 +3,7 @@
 #include "PlayerTests.h"
 
 #include "../../Core/Player/Player.h"
+#include "../../Core/GameCore/GameCore.h"
 #include "../../Core/Bidding/BidTieBreakerByLastName.h"
 #include "../../Core/MapLoader/MapLoader.h"
 
@@ -23,7 +24,7 @@ PlayerTests::PlayerTests() {
 	playerName = "player1";
 	altPlayerName = "player2";
 	//Temporary fix for the running directory issue, will be removed after
-	mapPath = "C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json";
+	mapPath = "../Tests/MapLoaderTests/Resources/validJson_validMap.json";
 }
 
 int PlayerTests::Test_PlaceArmies()
@@ -438,6 +439,9 @@ int PlayerTests::Test_ComputeScore() {
 	//Finally we check the overall compute score function
 	assert(p1->ComputeScore(map, players) == 18);
 	assert(p2->ComputeScore(map, players) == 13);
+
+	Game testGame;
+	testGame.endGame(map, players);
 
 	delete biddingFacility;
 	delete p1;

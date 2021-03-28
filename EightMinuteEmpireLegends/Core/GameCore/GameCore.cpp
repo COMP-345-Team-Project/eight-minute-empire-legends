@@ -37,6 +37,12 @@ Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) 
 	this->players = players;
 }
 
+Game::Game() { //For testing only
+	this->resources = NULL;
+	this->map = NULL;
+	this->deck = NULL;
+} 
+
 // TODO: We sure about this? Pretty sure whoever builds it should destroy it, 
 // so Game shouldn't be destroying it's injected dependencies.
 Game::~Game() {
@@ -60,6 +66,114 @@ Deck* Game::getDeck() {
 
 std::vector<Player*> Game::getPlayers() {
 	return this->players;
+}
+
+void Game::endGame(Map* map, vector<Player*> players) {
+	//Please dont remove this code because this is optimize for a variable number of players
+	/*std::map<std::string, int> scores;
+	
+	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
+		scores.insert(pair<std::string, int>((**playerIter).getPlayerName(), (**playerIter).ComputeScore(map, players)));
+	}
+
+	//We find the player with the maximum score
+	std::map<std::string, int>::iterator winner = std::max_element(scores.begin(), scores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
+	std::string winnerName = winner->first;
+	int winnerScore = winner->second;
+
+	//We check to make sure that there is no tie
+	bool isTied = false;
+	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
+		std::string currPlayerName = (**playerIter).getPlayerName();
+		if (currPlayerName.compare(winnerName) != 0 && scores[currPlayerName] == winnerScore) {
+			isTied = true;
+			break;
+		}
+	}
+	//No tied based on score
+	if (!isTied) {
+		std::cout << "The winner is player: " << winnerName << std::endl;
+		return;
+	}
+
+	//We next check the number of coins
+	std::vector<Player*>::iterator mostCoinPlayer = std::max_element(players.begin(), players.end(), [](const Player* a, const Player* b)->bool { return a->getCoins() < b->getCoins(); });
+	winnerName = (**mostCoinPlayer).getPlayerName();
+	int winnerCoins = (**mostCoinPlayer).getCoins();
+	isTied = false;
+	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
+		if ((**playerIter).getPlayerName().compare(winnerName) != 0 && (**playerIter).getCoins() == winnerCoins) {
+			isTied = true;
+			break;
+		}
+	}
+	//No tied based on coins
+	if (!isTied) {
+		std::cout << "The winner is player: " << winnerName << std::endl;
+		return;
+	}*/
+
+	//Assume we only have 2 players for now
+	if (players.size() == 2) {
+		Player* p1 = players.at(0);
+		Player* p2 = players.at(1);
+		
+		//First we compare the scores
+		int p1Score = p1->ComputeScore(map, players);
+		int p2Score = p2->ComputeScore(map, players);
+
+		if (p1Score > p2Score) {
+			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			return;
+		}
+		else if (p1Score < p2Score) {
+			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			return;
+		}
+
+		//If there is a tie, we compare the number of coins
+		if (p1->getCoins() > p2->getCoins()) {
+			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			return;
+		}
+		else if (p1->getCoins() < p2->getCoins()) {
+			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			return;
+		}
+
+		//If there is a tie, we then compare the number of controlled regions
+		int p1RegionScore = p1->ComputeTerritoryScore();
+		int p2RegionScore = p2->ComputeTerritoryScore();
+
+		if (p1RegionScore > p2RegionScore) {
+			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			return;
+		}
+		else if (p1RegionScore < p2RegionScore) {
+			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			return;
+		}
+
+		std::cout << " This game is a tie!" << std::endl;
+	}
+}
+
+void Game::displayTerritories(std::vector<Vertex*> vertices) {
+	for (Vertex* v : vertices) {		
+		std::cout << "Territory : " << v->getTerritory()->getName() << std::endl;
+		std::cout << "Owner     : " << v->getTerritory()->getOwner() << std::endl;
+		std::cout << "Continent : " << v->getTerritory()->getContinent() << std::endl;
+		std::cout << "--- Armies ---" << std::endl;
+		for (Player* pl : this->getPlayers()) {
+			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getArmiesByPlayer(pl->getPlayerName()) << std::endl; 
+		}	
+		std::cout << "--- Cities ---" << std::endl;
+		for (Player* pl : this->getPlayers()) {
+			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getCitiesByPlayer(pl->getPlayerName()) << std::endl;
+		}
+		std::cout << std::endl;
+		
+	}
 }
 
 std::ostream& operator <<(std::ostream& os, const Game* g) {

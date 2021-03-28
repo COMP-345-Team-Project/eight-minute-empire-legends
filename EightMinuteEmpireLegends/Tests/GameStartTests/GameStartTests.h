@@ -14,6 +14,7 @@ public:
 	int Test_BuildGame_Success();
 	int Test_BuildGame_Failure();
 	int Demo_BuildGame();
+	int Demo_DisplayTerritories();
 
 	void Passed(std::string testName);
 };

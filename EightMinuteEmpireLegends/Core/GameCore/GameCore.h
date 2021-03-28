@@ -12,10 +12,10 @@ const int _dCoins = 36;
 const int _dArmies = 18;
 const int _dCities = 3;
 
-// ./GameStartTests/Resources
-const std::string _mapDir = "D:/Users/Forte/Documents/GitHub/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/GameStartTests/Resources";
-// ./../../config/EightMinuteEmpireLengendsPrefs.ini
-const std::string _configPath = "D:\\Users\\Forte\\Documents\\GitHub\\eight-minute-empire-legends\\config\\EightMinuteEmpireLengendsPrefs.ini";
+// ../Tests/GameStartTests/Resources
+const std::string _mapDir = "../Tests/GameStartTests/Resources";
+// ../../config/EightMinuteEmpireLengendsPrefs.ini
+const std::string _configPath = "../../../config/EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
 class Resources {
@@ -46,6 +46,7 @@ private:
     bool _isEndGame();
 
 public:
+    Game();
     Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
@@ -54,6 +55,7 @@ public:
     Map* getMap();
     Deck* getDeck();
     std::vector<Player*> getPlayers();
+    void displayTerritories(std::vector<Vertex*> vertices);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
@@ -64,6 +66,8 @@ public:
 
     //End game, announce winners, and cleanup
     void runEndGame();
+    //End game
+    void endGame(Map* map, vector<Player*> players);
 };
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly
