@@ -23,9 +23,14 @@ int Driver::RunAssignmentOneDriver()
 int Driver::RunAssignmentTwoDriver()
 {
 	AssignmentTwoDriver ass2Driver;
-	//std::cout << "(1) Running the Game Start Driver..." << std::endl;
-	//ass2Driver.RunGameStartDriver();
+	std::cout << "(1) Running the Game Start Driver..." << std::endl;
+	ass2Driver.RunGameStartDriver();
 	std::cout << "(2 & 3) Running the Setup Phase and Main Game Loop Driver..." << std::endl;
 	ass2Driver.RunSetupPhaseAndMainLoopDriver();
+	std::cout << "(4) Running the Player Driver..." << std::endl;
+	ass2Driver.RunPlayerDriver();
+	std::cout << "(6) Running the Computer Score Driver..." << std::endl;
+	ass2Driver.RunComputeScoreTest();
+	
 	return 0;
 }

@@ -35,9 +35,28 @@ int AssignmentTwoDriver::RunSetupPhaseAndMainLoopDriver()
 
 
 // Part 4: Main game loop: The player actions
-
+int AssignmentTwoDriver::RunPlayerDriver()
+{
+	PlayerTests playerTests;
+	playerTests.Test_PlaceArmies();
+	playerTests.Test_MoveArmies();
+	playerTests.Test_DestroyArmies();
+	playerTests.Test_PlaceCities();
+	playerTests.Test_PayCoin();
+	return 0;
+}
 
 // Part 5: Main game loop : after the action
 
 
 // Part 6: Main game loop : Compute the game score
+}
+
+
+
+int AssignmentTwoDriver::RunComputeScoreTest()
+{
+	PlayerTests playerTests;
+	playerTests.Test_ComputeScore();
+	return 0;
+}

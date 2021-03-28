@@ -3,6 +3,7 @@
 #include "PlayerTests.h"
 
 #include "../../Core/Player/Player.h"
+#include "../../Core/GameCore/GameCore.h"
 #include "../../Core/Bidding/BidTieBreakerByLastName.h"
 #include "../../Core/MapLoader/MapLoader.h"
 
@@ -438,6 +439,9 @@ int PlayerTests::Test_ComputeScore() {
 	//Finally we check the overall compute score function
 	assert(p1->ComputeScore(map, players) == 18);
 	assert(p2->ComputeScore(map, players) == 13);
+
+	Game testGame;
+	testGame.endGame(map, players);
 
 	delete biddingFacility;
 	delete p1;
