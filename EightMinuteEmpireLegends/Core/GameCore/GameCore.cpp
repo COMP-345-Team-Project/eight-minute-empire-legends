@@ -166,6 +166,10 @@ void Game::displayTerritories(std::vector<Vertex*> vertices) {
 		std::cout << "--- Armies ---" << std::endl;
 		for (Player* pl : this->getPlayers()) {
 			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getArmiesByPlayer(pl->getPlayerName()) << std::endl; 
+		}	
+		std::cout << "--- Cities ---" << std::endl;
+		for (Player* pl : this->getPlayers()) {
+			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getCitiesByPlayer(pl->getPlayerName()) << std::endl;
 		}
 		std::cout << std::endl;
 		
