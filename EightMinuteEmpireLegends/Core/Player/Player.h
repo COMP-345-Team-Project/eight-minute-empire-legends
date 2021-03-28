@@ -25,6 +25,7 @@ public:
 
 	//Player actions
 	bool HasArmyDeployedInVertex(Vertex* v); 
+	void BuyCard(Card* cardBought, int costs);
 	void PayCoin(int coins);
 	void PlaceNewArmies(Map* map, Vertex* v, int numOfArmies); //We need to map to check for the starting region
 	//To make things simple, we move armies 1 region at a time, and we ask the player the details for each move

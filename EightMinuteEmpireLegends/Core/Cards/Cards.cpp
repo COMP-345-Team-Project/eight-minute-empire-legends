@@ -201,33 +201,33 @@ Deck::Deck(int numPlayer) {
 
     //Card cardSample("Sample", 0, 0, 0, 0, "", "", false, 0, 0, false, 0, 0, "");
 
-    Card card1("Ancient Phoenix", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, true, 0, 0, "");
-    Card card2("Ancient Sage", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPperAncient");
-    Card card3("Ancient Tree Spirit", 4, 0, 0, 0, "newArmy", "", false, 0, 0, false, 3, 0, "");
-    Card card4("Ancient Woods", 1, 0, 1, 0, "buildCity", "newArmy", true, 0, 1, false, 0, 0, "");
-    Card card5("Cursed Banshee", 0, 6, 0, 0, "moveArmy", "", false, 0, 0, false, 2, 0, "");
-    Card card6("Cursed Gargoyles", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, true, 0, 0, "");
-    Card card7("Cursed King", 3, 4, 0, 0, "newArmy", "moveArmy", false, 0, 0, false, 1, 0, "");
-    Card card8("Cursed Mausoleum", 0, 0, 1, 0, "buildCity", "", false, 1, 0, false, 0, 0, "");
-    Card card9("Cursed Tower", 0, 0, 1, 0, "buildCity", "", false, 0, 0, false, 0, 0, "1VPperFlying");
-    Card card10("Dire Dragon", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, true, 0, 0, "");
-    Card card11("Dire Eye", 4, 0, 0, 0, "newArmy", "", false, 0, 0, true, 0, 0, "");
-    Card card12("Dire Giant", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "immuneToAttack");
-    Card card13("Dire Goblin", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, false, 1, 0, "");
-    Card card14("Dire Ogre", 0, 2, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPper3Coins");
-    Card card15("Forest Elf", 3, 2, 0, 0, "newArmy", "moveArmy", false, 0, 1, false, 0, 0, "");
-    Card card16("Forest Gnome", 0, 2, 0, 0, "moveArmy", "", false, 0, 0, false, 3, 0, "");
-    Card card17("Forest Pixie", 0, 4, 0, 0, "moveArmy", "", false, 0, 1, false, 0, 0, "");
-    Card card18("Forest Tree Town", 0, 0, 1, 0, "buildCity", "", false, 1, 0, false, 0, 0, "");
-    Card card19("Graveyard", 2, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "1VPperCursedCard");
-    Card card20("Lake", 2, 3, 0, 0, "newArmy", "moveArmy", false, 0, 0, false, 0, 0, "1VPperForestCard");
-    Card card21("Night Hydra", 0, 5, 0, 1, "moveArmy", "destroyArmy", true, 0, 1, false, 0, 0, "");
-    Card card22("Night Village", 0, 0, 1, 0, "buildCity", "", false, 0, 1, false, 0, 0, "");
-    Card card23("Night Wizard", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "1VPperNightCard");
-    Card card24("Noble Hills", 3, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "3NobleCards=4VP");
-    Card card25("Noble Knight", 4, 0, 0, 1, "newArmy", "destroyArmy", true, 1, 0, false, 0, 0, "");
-    Card card26("Noble Unicorn", 1, 4, 0, 0, "moveArmy", "newArmy", true, 1, 0, false, 0, 0, "");
-    Card card27("Stronghold", 0, 0, 1, 0, "buildCity", "", false, 0, 0, false, 0, 0, "1VPperDireCard");
+    Card* card1 = new Card("Ancient Phoenix", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, true, 0, 0, "");
+    Card* card2 = new Card("Ancient Sage", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPperAncient");
+    Card* card3 = new Card("Ancient Tree Spirit", 4, 0, 0, 0, "newArmy", "", false, 0, 0, false, 3, 0, "");
+    Card* card4 = new Card("Ancient Woods", 1, 0, 1, 0, "buildCity", "newArmy", true, 0, 1, false, 0, 0, "");
+    Card* card5 = new Card("Cursed Banshee", 0, 6, 0, 0, "moveArmy", "", false, 0, 0, false, 2, 0, "");
+    Card* card6 = new Card("Cursed Gargoyles", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, true, 0, 0, "");
+    Card* card7 = new Card("Cursed King", 3, 4, 0, 0, "newArmy", "moveArmy", false, 0, 0, false, 1, 0, "");
+    Card* card8 = new Card("Cursed Mausoleum", 0, 0, 1, 0, "buildCity", "", false, 1, 0, false, 0, 0, "");
+    Card* card9 = new Card("Cursed Tower", 0, 0, 1, 0, "buildCity", "", false, 0, 0, false, 0, 0, "1VPperFlying");
+    Card* card10 = new Card("Dire Dragon", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, true, 0, 0, "");
+    Card* card11 = new Card("Dire Eye", 4, 0, 0, 0, "newArmy", "", false, 0, 0, true, 0, 0, "");
+    Card* card12 = new Card("Dire Giant", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "immuneToAttack");
+    Card* card13 = new Card("Dire Goblin", 0, 5, 0, 0, "moveArmy", "", false, 0, 0, false, 1, 0, "");
+    Card* card14 = new Card("Dire Ogre", 0, 2, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPper3Coins");
+    Card* card15 = new Card("Forest Elf", 3, 2, 0, 0, "newArmy", "moveArmy", false, 0, 1, false, 0, 0, "");
+    Card* card16 = new Card("Forest Gnome", 0, 2, 0, 0, "moveArmy", "", false, 0, 0, false, 3, 0, "");
+    Card* card17 = new Card("Forest Pixie", 0, 4, 0, 0, "moveArmy", "", false, 0, 1, false, 0, 0, "");
+    Card* card18 = new Card("Forest Tree Town", 0, 0, 1, 0, "buildCity", "", false, 1, 0, false, 0, 0, "");
+    Card* card19 = new Card("Graveyard", 2, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "1VPperCursedCard");
+    Card* card20 = new Card("Lake", 2, 3, 0, 0, "newArmy", "moveArmy", false, 0, 0, false, 0, 0, "1VPperForestCard");
+    Card* card21 = new Card("Night Hydra", 0, 5, 0, 1, "moveArmy", "destroyArmy", true, 0, 1, false, 0, 0, "");
+    Card* card22 = new Card("Night Village", 0, 0, 1, 0, "buildCity", "", false, 0, 1, false, 0, 0, "");
+    Card* card23 = new Card("Night Wizard", 3, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "1VPperNightCard");
+    Card* card24 = new Card("Noble Hills", 3, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "3NobleCards=4VP");
+    Card* card25 = new Card("Noble Knight", 4, 0, 0, 1, "newArmy", "destroyArmy", true, 1, 0, false, 0, 0, "");
+    Card* card26 = new Card("Noble Unicorn", 1, 4, 0, 0, "moveArmy", "newArmy", true, 1, 0, false, 0, 0, "");
+    Card* card27 = new Card("Stronghold", 0, 0, 1, 0, "buildCity", "", false, 0, 0, false, 0, 0, "1VPperDireCard");
     addCard(card1);
     addCard(card2);
     addCard(card3);
@@ -258,11 +258,11 @@ Deck::Deck(int numPlayer) {
 
     //For more than 2 players
     if (numPlayer >= 3) {
-        Card card28("Arcane Manticore", 4, 0, 0, 1, "newArmy", "destroyArmy", true, 1, 0, false, 0, 0, "");
-        Card card29("Arcane Sphinx", 3, 4, 0, 0, "newArmy", "moveArmy", false, 0, 0, true, 0, 0, "");
-        Card card30("Arcane Temple", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPperArcaneCard");
-        Card card31("Mountain Dwarf", 2, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "3VPfor2MountainCards");
-        Card card32("Mountain Treasury", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 1, 2, "");
+        Card* card28 = new Card("Arcane Manticore", 4, 0, 0, 1, "newArmy", "destroyArmy", true, 1, 0, false, 0, 0, "");
+        Card* card29 = new Card("Arcane Sphinx", 3, 4, 0, 0, "newArmy", "moveArmy", false, 0, 0, true, 0, 0, "");
+        Card* card30 = new Card("Arcane Temple", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 0, 0, "1VPperArcaneCard");
+        Card* card31 = new Card("Mountain Dwarf", 2, 0, 0, 1, "newArmy", "destroyArmy", true, 0, 0, false, 0, 0, "3VPfor2MountainCards");
+        Card* card32 = new Card("Mountain Treasury", 0, 3, 0, 0, "moveArmy", "", false, 0, 0, false, 1, 2, "");
         addCard(card28);
         addCard(card29);
         addCard(card30);
@@ -271,8 +271,8 @@ Deck::Deck(int numPlayer) {
     }
 
     if (numPlayer == 4) {
-        Card card33("Castle", 3, 0, 1, 0, "newArmy", "buildCity", false, 0, 0, false, 1, 0, "");
-        Card card34("Castle 2", 0, 3, 1, 0, "moveArmy", "buildCity", true, 0, 0, false, 1, 0, "");
+        Card* card33 = new Card("Castle", 3, 0, 1, 0, "newArmy", "buildCity", false, 0, 0, false, 1, 0, "");
+        Card* card34 = new Card("Castle 2", 0, 3, 1, 0, "moveArmy", "buildCity", true, 0, 0, false, 1, 0, "");
         addCard(card33);
         addCard(card34);
     }
@@ -292,7 +292,7 @@ Deck& Deck::operator =(const Deck& deck) {
 }
 
 //Add cards into the deck
-void Deck::addCard(Card newCard) {
+void Deck::addCard(Card* newCard) {
     deck.push_back(newCard);
 }
 
@@ -309,23 +309,24 @@ void Deck::reveal() {
     cout << "Current deck size: " << deck.size() << endl;
     for (unsigned i = 0; i < deck.size(); i++) {
         cout << (i + 1) << ". ";
-        deck[i].print();
+        (*deck[i]).print();
     }
     cout << "\n";
 }
 
 //Draw card from deck
-Card Deck::draw() {
+Card* Deck::draw() {
 
     if (deck.size() > 0) {
-        Card tempCard = deck.back();
-        cout << "The card drawn from deck is: " << deck.back().getName() << endl;
+        Card* tempCard = deck.back();
+        cout << "The card drawn from deck is: " << tempCard->getName() << endl;
         deck.pop_back();
         return tempCard;
     }
     else { //If the deck is empty, the card being returned will be named "EMPTY"
-        Card tempEmpty("EMPTY", 0, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "");
-        return tempEmpty;
+        //We should change this to null
+        //Card tempEmpty("EMPTY", 0, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "");
+        return NULL;
     }
 
 }
@@ -363,17 +364,17 @@ CardSpace& CardSpace::operator =(const CardSpace& cardSpace) {
 }
 
 //Add new cards into the card space
-void CardSpace::addCard(Card newCard) {
+void CardSpace::addCard(Card* newCard) {
     cardSpace.push_back(newCard);
 }
 
 //Print out all cards in CardSpace associated with their current cost for exchange
 void CardSpace::showCardSpace() {
-    cout << "\n---Cards currently in Hand--- \n";
+    cout << "\n---Cards currently in Card Space--- \n";
 
     for (unsigned i = 0; i < cardSpace.size(); i++) {
         cout << "(Cost " << costCalc(i) << " coins) " << (i + 1) << ". ";
-        cardSpace[i].print();
+        (*cardSpace[i]).print();
     }
 }
 
@@ -396,10 +397,10 @@ int CardSpace::costCalc(int index) {
 
 //Exchange function to allow player to buy cards from hand using coins
 //showCardSpace function included for demonstration
-Card CardSpace::exchange(Deck& mainDeck, bool demo = false) {
+Card* CardSpace::exchange(Deck& mainDeck, bool demo = false) {
     int cardInput; //Position from user input
     int cardChoice; //Index position from cardSpace vector
-    Card cardChosen;
+    Card* cardChosen = NULL;
 
     if (cardSpace.size() > 0) {
         showCardSpace();
@@ -428,7 +429,7 @@ Card CardSpace::exchange(Deck& mainDeck, bool demo = false) {
 		//Access the chosen card from the cardSpace
         cardChosen = cardSpace[cardChoice];
 
-        cout << "The card you've selected to exchange is " << cardChosen.getName() << endl;
+        cout << "The card you've selected to exchange is " << cardChosen->getName() << endl;
 
         //Remove the card chosen from CardSpace and move all cards after it to the left by 1 position
         for (int i = cardChoice; i < (cardSpace.size() - 1); i++) {
@@ -438,10 +439,10 @@ Card CardSpace::exchange(Deck& mainDeck, bool demo = false) {
         cardSpace.pop_back();
 
         //Draw new card to place into the rightmost position
-        Card cardAdded = mainDeck.draw();
+        Card* cardAdded = mainDeck.draw();
 
         //Handle when the deck is empty
-        if (cardAdded.getName() == "EMPTY") {
+        if (cardAdded == NULL) {
             cout << "No more new cards from deck" << endl;
         }
         else {
@@ -457,18 +458,18 @@ Card CardSpace::exchange(Deck& mainDeck, bool demo = false) {
     //Return card named "EMPTY" when card space is empty
     else {
         Card tempEmpty("EMPTY", 0, 0, 0, 0, "newArmy", "", false, 0, 0, false, 0, 0, "");
-        return tempEmpty;
+        return NULL;
     }
 
 
 }
 
-Card CardSpace::sell(Deck& mainDeck, int cardInput) {
+Card* CardSpace::sell(Deck& mainDeck, int cardInput) {
     //Access the chosen card from the cardSpace
-    Card cardChosen;
+    Card* cardChosen;
     cardChosen = cardSpace[cardInput - 1];
 
-    cout << "The card you've selected to buy is " << cardChosen.getName() << endl;
+    cout << "The card you've selected to buy is " << cardChosen->getName() << endl;
 
     //Remove the card chosen from Card Space and move all cards after it to the left by 1 position
     for (int i = (cardInput - 1); i < (cardSpace.size() - 1); i++) {
@@ -478,10 +479,10 @@ Card CardSpace::sell(Deck& mainDeck, int cardInput) {
     cardSpace.pop_back();
 
     //Draw new card to place into the rightmost position
-    Card cardAdded = mainDeck.draw();
+    Card* cardAdded = mainDeck.draw();
 
     //Handle when the deck is empty
-    if (cardAdded.getName() == "EMPTY") {
+    if (cardAdded->getName() == "EMPTY") {
         cout << "No more new cards from deck" << endl;
     }
     else {
@@ -496,7 +497,7 @@ int CardSpace::getSize() {
     return cardSpace.size();
 }
 
-vector<Card> CardSpace::getCards() {
+vector<Card*> CardSpace::getCards() {
     return cardSpace;
 }
 

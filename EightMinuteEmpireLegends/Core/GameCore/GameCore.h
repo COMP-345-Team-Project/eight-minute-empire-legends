@@ -47,7 +47,7 @@ private:
 
 public:
     Game();
-    Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
+    Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
     // Getters
@@ -58,10 +58,10 @@ public:
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
-    void startUp();
+    void runSetupPhase();
 
     //Main game loop, part 3, 5
-    void startGame();
+    void runRoundsUntilEndGame();
 
     //End game
     void endGame(Map* map, vector<Player*> players);

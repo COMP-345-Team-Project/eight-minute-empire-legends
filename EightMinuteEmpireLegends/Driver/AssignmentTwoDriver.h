@@ -7,6 +7,7 @@ class AssignmentTwoDriver
 {
 public:
 	int RunGameStartDriver();
+	int RunSetupPhaseAndMainLoopDriver();
 	int RunPlayerDriver();
 	int RunComputeScoreTest();
 };

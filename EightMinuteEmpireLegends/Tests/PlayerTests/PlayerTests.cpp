@@ -24,7 +24,7 @@ PlayerTests::PlayerTests() {
 	playerName = "player1";
 	altPlayerName = "player2";
 	//Temporary fix for the running directory issue, will be removed after
-	mapPath = "C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json";
+	mapPath = "../Tests/MapLoaderTests/Resources/validJson_validMap.json";
 }
 
 int PlayerTests::Test_PlaceArmies()
