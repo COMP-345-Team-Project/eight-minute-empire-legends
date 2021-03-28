@@ -55,6 +55,7 @@ public:
     Map* getMap();
     Deck* getDeck();
     std::vector<Player*> getPlayers();
+    void displayTerritories(std::vector<Vertex*> vertices);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase

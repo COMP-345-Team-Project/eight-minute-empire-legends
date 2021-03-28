@@ -12,7 +12,7 @@ Map::Map(const Map& m)
 	: name(m.name), v_vertices(m.v_vertices), v_edges(m.v_edges), v_continents(m.v_continents) {
 	if (m.startingRegion != nullptr) {
 		this->startingRegion = new Vertex(*m.startingRegion);
-	}	
+	}
 }
 
 Map::Map()
@@ -236,10 +236,10 @@ Map& Map::operator =(const Map& m) {
 	return *this;
 }
 
-std::ostream& operator <<(std::ostream& os, const Map* m) {	
+std::ostream& operator <<(std::ostream& os, const Map* m) {
 	os << "Map : " << m->name << std::endl;
 	os << "Vertices: [" << std::endl;
-	for (Vertex* v : const_cast<Map*>(m)->vertices()) {		
+	for (Vertex* v : const_cast<Map*>(m)->vertices()) {
 		os << v << std::endl;
 	}
 	os << "]\n" << "Edges : [" << std::endl;
@@ -252,7 +252,7 @@ std::ostream& operator <<(std::ostream& os, const Map* m) {
 	}
 	os << "]\n" << "Starting Region : ";
 	m->startingRegion != nullptr ? os << m->startingRegion : os << "None";
-	
+
 	return os;
 }
 
