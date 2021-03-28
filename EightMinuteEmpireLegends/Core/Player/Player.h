@@ -53,7 +53,6 @@ private:
 	int availableCities;
 	vector<Vertex*> deployedVertices;
 	vector<Card*> cards;
-	CardSpace hand;
 	
 	BiddingFacility* biddingFacility;
 	int elixir;
