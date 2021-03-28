@@ -16,3 +16,21 @@ int AssignmentTwoDriver::RunGameStartDriver()
 	gameStartTest.Demo_BuildGame();
 	return 0;
 }
+
+int AssignmentTwoDriver::RunPlayerDriver()
+{
+	PlayerTests playerTests;
+	playerTests.Test_PlaceArmies();
+	playerTests.Test_MoveArmies();
+	playerTests.Test_DestroyArmies();
+	playerTests.Test_PlaceCities();
+	playerTests.Test_PayCoin();
+	return 0;
+}
+
+int AssignmentTwoDriver::RunComputeScoreTest()
+{
+	PlayerTests playerTests;
+	playerTests.Test_ComputeScore();
+	return 0;
+}
