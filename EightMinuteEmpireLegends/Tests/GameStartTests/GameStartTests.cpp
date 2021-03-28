@@ -135,6 +135,17 @@ int GameStart::Demo_BuildGame() {
 	return 0;
 }
 
+int GameStart::Demo_DisplayTerritories() {
+	int numPlayers = 4;
+	std::vector<std::string> names{ "Player 1", "Player 2", "Player 3", "Player 4" };
+	// ./GameStartTests/Resources/narrows.json
+	std::string mapPath = _mapDir + "\\narrows.json";
+	Game* validGame = GameBuilder::build(numPlayers, names, mapPath);	
+	validGame->displayTerritories(validGame->getMap()->vertices());
+
+	return 0;
+}
+
 void GameStart::Passed(std::string testName) {
 	std::cout << std::endl << testName << " >> Passed\n" << std::endl;
 }
