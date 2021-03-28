@@ -84,7 +84,7 @@ int GameStart::Test_PlayerInput_MapSelect_ValidEntry() {
 // Tests accepting player input for selecting map. Failed case.
 int GameStart::Test_PlayerInput_MapSelect_InvalidEntry() {	
 	std::vector<filesystem::path> maps{};
-	std::cout << "Please select an map invalid map number.\n" << std::endl;
+	std::cout << "Please select an invalid map number.\n" << std::endl;
 	int index = 0;
 	int selection;
 	for (const auto& entry : filesystem::directory_iterator(_mapDir)) {
