@@ -50,7 +50,6 @@ int AssignmentTwoDriver::RunPlayerDriver()
 
 
 // Part 6: Main game loop : Compute the game score
-}
 
 
 
