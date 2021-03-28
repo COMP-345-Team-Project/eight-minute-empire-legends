@@ -192,6 +192,7 @@ int PlayerTests::Test_DestroyArmies() {
 	BidTieBreakerByLastName bidTieBreakerByLastName;
 	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
+	Player* p2 = new Player(altPlayerName, biddingFacility);
 
 	//Arrange
 	//Set the starting region then set some armies at the starting region
@@ -199,6 +200,7 @@ int PlayerTests::Test_DestroyArmies() {
 	map->setStartingRegion(region);
 	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
 	p1->PlaceNewArmies(map, region, 3);
+	
 	//Make sure that region is added to deployedVertices of the player
 	assert(p1->HasArmyDeployedInVertex(region));
 
@@ -207,7 +209,17 @@ int PlayerTests::Test_DestroyArmies() {
 	//Remove more than deployed
 	bool errorCaught = false;
 	try {
-		p1->DestroyArmy(region, 4);
+		p1->DestroyArmy(region, p1, 4);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+	//Armies of opponent where you dont have any armies
+	errorCaught = false;
+	try {
+		p2->DestroyArmy(region, p1, 4);
 	}
 	catch (PlayerActionException& ex) {
 		errorCaught = true;
@@ -215,17 +227,23 @@ int PlayerTests::Test_DestroyArmies() {
 	}
 	assert(errorCaught == true);
 
+	//Initialize resources for player 2
+	p2->InitResources(numOfCoins, numOfArmies, numOfCities);
+	p2->PlaceNewArmies(map, region, 3);
+	//Make sure that region is added to deployedVertices of the player
+	assert(p2->HasArmyDeployedInVertex(region));
+
 	//Testing correct cases
 	std::cout << "Testing correct cases using assertions..." << std::endl;
-	p1->DestroyArmy(region, 2);
-	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 1);
-	assert(p1->getAvailableArmies() == 9);
-	assert(p1->HasArmyDeployedInVertex(region)); //still has 1 army
+	p1->DestroyArmy(region, p2, 2);
+	assert(region->getTerritory()->getArmiesByPlayer(altPlayerName) == 1);
+	assert(p2->getAvailableArmies() == 9);
+	assert(p2->HasArmyDeployedInVertex(region)); //still has 1 army
 	//Remove the last army
-	p1->DestroyArmy(region, 1);
-	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 0);
-	assert(p1->getAvailableArmies() == 10);
-	assert(p1->HasArmyDeployedInVertex(region) == false); 
+	p1->DestroyArmy(region, p2, 1);
+	assert(region->getTerritory()->getArmiesByPlayer(altPlayerName) == 0);
+	assert(p2->getAvailableArmies() == 10);
+	assert(p2->HasArmyDeployedInVertex(region) == false); 
 
 	delete biddingFacility;
 	delete p1;
