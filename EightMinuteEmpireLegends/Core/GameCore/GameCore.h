@@ -15,7 +15,7 @@ const int _dCities = 3;
 // ../Tests/GameStartTests/Resources
 const std::string _mapDir = "../Tests/GameStartTests/Resources";
 // ../../config/EightMinuteEmpireLengendsPrefs.ini
-const std::string _configPath = "../../../config/EightMinuteEmpireLengendsPrefs.ini";
+const std::string _configPath = "../../config/EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
 class Resources {
@@ -39,6 +39,7 @@ private:
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
@@ -62,6 +63,7 @@ public:
     Deck* getDeck();
     std::vector<Player*> getPlayers();
     void displayTerritories(std::vector<Vertex*> vertices);
+    void displayTerritories(std::vector<Vertex*> vertices, bool numbered);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
