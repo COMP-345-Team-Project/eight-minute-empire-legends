@@ -10,10 +10,12 @@ class Player
 public:
 	//Constructors
 	Player(std::string name, BiddingFacility* biddingFacility);
+	Player(std::string name, BiddingFacility* biddingFacility, bool isNeutral);
 	Player(const Player& player);
 	~Player();
 
 	//Getters
+	bool isNeutralPlayer();
 	int getCoins() const;
 	int getAvailableArmies() const;
 	int getAvailableCities() const;
@@ -48,6 +50,7 @@ public:
 
 private:
 	//Private data members
+	bool isNeutral;
 	std::string playerName;
 	int coin;
 	int availableArmies;

@@ -108,6 +108,7 @@ public:
 	std::string getName();
 	void setStartingRegion(Vertex* v);
 	Vertex* getStartingRegion();
+	std::vector<Vertex*> getPotentialStartingRegions();
 	int numVertices();
 	std::vector<Vertex*> vertices();		
 	int numEdges();

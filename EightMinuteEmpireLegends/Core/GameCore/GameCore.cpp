@@ -35,6 +35,10 @@ Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) 
 	this->map = map;
 	this->deck = deck;
 	this->players = players;
+	if (players.size() == 2) {
+		this->neutralPlayer = new Player("NeutralPlayer", nullptr, true);
+		neutralPlayer->InitResources(0, 10, 0);
+	}
 }
 
 Game::Game() { //For testing only
@@ -49,6 +53,9 @@ Game::~Game() {
 	delete this->map;
 	for (Player* pl : this->players) {
 		delete pl;
+	}
+	if (neutralPlayer != nullptr) {
+		delete neutralPlayer;
 	}
 }
 
@@ -159,17 +166,32 @@ void Game::endGame(Map* map, vector<Player*> players) {
 }
 
 void Game::displayTerritories(std::vector<Vertex*> vertices) {
-	for (Vertex* v : vertices) {		
-		std::cout << "Territory : " << v->getTerritory()->getName() << std::endl;
-		std::cout << "Owner     : " << v->getTerritory()->getOwner() << std::endl;
-		std::cout << "Continent : " << v->getTerritory()->getContinent() << std::endl;
-		std::cout << "--- Armies ---" << std::endl;
+	displayTerritories(vertices, false);
+}
+
+void Game::displayTerritories(std::vector<Vertex*> vertices, bool numbered) {
+	int number = 0;
+	for (Vertex* v : vertices) {
+		if (numbered) {
+			std::cout << "\n( " << number++ << " ) -------------------------" << std::endl;
+		}
+		else {
+			std::cout << "\n-------------------------------" << std::endl;
+		}
+		std::cout << "      Territory :      " << v->getTerritory()->getName() << std::endl;
+		std::cout << "      Owner :          " << v->getTerritory()->getOwner() << std::endl;
+		std::cout << "      Continent :      " << v->getTerritory()->getContinent() << std::endl;
+		if (neutralPlayer != nullptr) {
+		std::cout << "      Neutral Armies : " << v->getTerritory()->getArmiesByPlayer(neutralPlayer->getPlayerName()) << std::endl;
+		}
+		std::cout << "  --- Armies ---" << std::endl;
 		for (Player* pl : this->getPlayers()) {
-			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getArmiesByPlayer(pl->getPlayerName()) << std::endl; 
+			std::cout << "      " << pl->getPlayerName() << " - " << v->getTerritory()->getArmiesByPlayer(pl->getPlayerName()) << std::endl; 
 		}	
-		std::cout << "--- Cities ---" << std::endl;
+		
+		std::cout << "  --- Cities ---" << std::endl;
 		for (Player* pl : this->getPlayers()) {
-			std::cout << pl->getPlayerName() << " - " << v->getTerritory()->getCitiesByPlayer(pl->getPlayerName()) << std::endl;
+			std::cout << "      " << pl->getPlayerName() << " - " << v->getTerritory()->getCitiesByPlayer(pl->getPlayerName()) << std::endl;
 		}
 		std::cout << std::endl;
 		
@@ -188,34 +210,57 @@ std::ostream& operator <<(std::ostream& os, const Game* g) {
 // Startup Phase
 
 void Game::runSetupPhase() {
-
-	if (players.size() == 2) {
-		_placeArmies();
-	}
-
 	_assignResources();
 	_bid();
+	_placeArmies();
 }
 void Game::_placeArmies() {
+	std::vector<Vertex*> possibleStartingVertices = map->getPotentialStartingRegions();
+	
+	std::cout << "Please choose a starting region from among the following:\n" << endl;
+	displayTerritories(possibleStartingVertices, true);
+	std::cout << "Enter the number of your choice here: ";
+	int chosenStartingVertexIndex;
+	std::cin >> chosenStartingVertexIndex;
+	if (chosenStartingVertexIndex < 0 || chosenStartingVertexIndex >= possibleStartingVertices.size()) {
+		cout << "Invalid choice. Defaulting to the first option on the list above.";
+		chosenStartingVertexIndex = 0;
+	}
 
+	map->setStartingRegion(possibleStartingVertices[chosenStartingVertexIndex]);
+
+	// Place initial armies in starting territory
+	for (Player* player :  players) {
+		int numStartingArmies = 4;
+		player->PlaceNewArmies(
+			this->map, this->map->getStartingRegion(), numStartingArmies);
+	}
 
 	//Special Case for 2 players game
 	if (players.size() == 2) {
-
-		std::cout << "!! 2 Player special cases to be implemented !!\n" << endl;
-
-		///////////////////////////////////////////
-		////
-		////          2 Player's special action
-		////        
-		////
-		///////////////////////////////////////////
+		// Take turns placing a neutral army.
+		std::cout << "\nSetting up neutral armies...\n" << endl;
+		while (neutralPlayer->getAvailableArmies()) {
+			assert(neutralPlayer->getAvailableArmies() >= players.size());
+			for (Player* player : players) {
+				std::cout << "\n\n" << player->getPlayerName() << ",  choose a territory in which to place a neutral army:" << endl;
+				displayTerritories(map->vertices(), true);
+				int choice;
+				std::cout << "Enter the number of your choice here: ";
+				std::cin >> choice;
+				if (choice < 0 || choice >= map->vertices().size()) {
+					cout << "Invalid choice. Defaulting to the first option on the list above.";
+					choice = 0;
+				}
+				neutralPlayer->PlaceNewArmies(map, map->vertices()[choice], 1);
+				std::cout << "There are  " << neutralPlayer->getAvailableArmies() << "  neutral armies left to add to the board.";
+			}
+		}
 	}
 }
 void Game::_assignResources() {
 
 	std::cout << "Resources Initialization..." << endl;
-
 	for (int i = 0; i < players.size(); i++) {
 
 		if (players.size() == 2) {
