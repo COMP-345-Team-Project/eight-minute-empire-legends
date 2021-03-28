@@ -46,6 +46,7 @@ private:
     bool _isEndGame();
 
 public:
+    Game();
     Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
     ~Game();
 
@@ -63,7 +64,7 @@ public:
     void startGame();
 
     //End game
-    void endGame();
+    void endGame(Map* map, vector<Player*> players);
 };
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly
