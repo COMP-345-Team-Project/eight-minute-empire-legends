@@ -15,7 +15,7 @@ const int _dCities = 3;
 // ../Tests/GameStartTests/Resources
 const std::string _mapDir = "../Tests/GameStartTests/Resources";
 // ../../config/EightMinuteEmpireLengendsPrefs.ini
-const std::string _configPath = "../../../config/EightMinuteEmpireLengendsPrefs.ini";
+const std::string _configPath = "../../config/EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
 class Resources {
