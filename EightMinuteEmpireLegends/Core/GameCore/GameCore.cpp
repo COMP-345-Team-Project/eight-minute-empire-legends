@@ -30,10 +30,10 @@ std::ostream& operator <<(std::ostream& os, const Resources* r) {
 
 // Game class implementation.
 
-Game::Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players) {
-	this->resources = &resources;
-	this->map = &map;
-	this->deck = &deck;
+Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) {
+	this->resources = resources;
+	this->map = map;
+	this->deck = deck;
 	this->players = players;
 }
 
@@ -236,9 +236,9 @@ void Game::runRoundsUntilEndGame() {
 				std::cout << "!invalid selection! Default to first free card. \n";
 				cardInput = 1;
 			}
-			Card cardBeingPurchased = cardSpace.sell(*deck, cardInput);
+			Card* cardBeingPurchased = cardSpace.sell(*deck, cardInput);
 			//Make the card purchase
-			players[i]->BuyCard(&cardBeingPurchased, cardSpace.costCalc(cardInput - 1));
+			players[i]->BuyCard(cardBeingPurchased, cardSpace.costCalc(cardInput - 1));
 
 
 			//Print coin balance
@@ -322,7 +322,7 @@ Game* GameBuilder::build() {
 }
 
 Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::string mapPath, std::string configPath) {
-	Resources rsc;
+	Resources* rsc = nullptr;
 	Map* map = nullptr;
 
 	// Initiallize resources if path to config is specified		
@@ -330,7 +330,7 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 		std::tuple<int, int, int> tResources;
 		try {
 			tResources = fetchConfigResources(configPath);
-			rsc = Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
+			rsc = new Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
 		}
 		catch (ConfigFileException& e) {
 			std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
@@ -339,7 +339,7 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 	}
 	else {
 		//Initiallize resources to default parameters if path to config is not specified
-		rsc = Resources();
+		rsc = new Resources();
 	}
 
 	try {
@@ -349,7 +349,7 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 		std::cout << e.what() << std::endl;		
 	}
 
-	Deck deck = Deck(numPlayers);
+	Deck* deck = new Deck(numPlayers);
 	BidTieBreakerByLastName tieBreaker;
 	BiddingFacility* bf = new BiddingFacility(tieBreaker);
 	std::vector<Player*> pl{};
@@ -358,7 +358,7 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 	}
 
 	//Crete a new game object and pass above objects to Game
-	return new Game(rsc, *map, deck, pl);
+	return new Game(rsc, map, deck, pl);
 }
 
 // Helper function. Reads resources from config file.

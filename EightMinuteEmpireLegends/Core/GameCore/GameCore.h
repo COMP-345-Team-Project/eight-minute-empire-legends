@@ -46,7 +46,7 @@ private:
     bool _isEndGame();
 
 public:
-    Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
+    Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
     // Getters
