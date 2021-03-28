@@ -66,8 +66,14 @@ public:
 
     //End game, announce winners, and cleanup
     void runEndGame();
+<<<<<<< Updated upstream
     //End game
     void endGame(Map* map, vector<Player*> players);
+=======
+
+    //Helper functions
+    void PlaceArmies(Player* player, std::string action, int numOfArmies);
+>>>>>>> Stashed changes
 };
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly
