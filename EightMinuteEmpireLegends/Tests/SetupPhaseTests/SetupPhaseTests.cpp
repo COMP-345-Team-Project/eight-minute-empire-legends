@@ -81,7 +81,7 @@ void SetupPhaseTests::Test_DestroyArmies()
 	validGame->getMap()->setStartingRegion(startingRegion);
 	Player* p1 = validGame->getPlayers().at(0);
 	Player* p2 = validGame->getPlayers().at(1);
-	//p1->PlaceNewArmies(validGame->getMap(), startingRegion, 3);
+	p1->PlaceNewArmies(validGame->getMap(), startingRegion, 3);
 	p2->PlaceNewArmies(validGame->getMap(), startingRegion, 3);
 
 	validGame->DestroyArmies(p1, 3);

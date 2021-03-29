@@ -554,18 +554,13 @@ void Game::PlaceArmies(Player* player, int deployLimit) {
 		Vertex* chosenVertex = deployableVertices.at(_getVertexIndexFromUserInput(deployableVertices, "Select the territory you would like to deploy: "));
 
 		//Let the user select how many armies to deploy
-		int tobeDeployed;
-		do {
-			std::cout << "How many armies you want to deploy? ";
-			std::cin >> tobeDeployed;
-			if (tobeDeployed < 0 && tobeDeployed > deployLimit)
-				std::cout << "Invalid number of armies, you can place at most " << deployLimit << "armies." << std::endl;
-		} while (tobeDeployed < 0 && tobeDeployed > deployLimit);
+		int tobeDeployed = _getArmiesForOperation(deployLimit);
 
 		//Deploying the armies
 		try {
 			player->PlaceNewArmies(map, chosenVertex, tobeDeployed);
 			deployLimit -= tobeDeployed;
+			std::cout << "Armies deployed successfully." << std::endl;
 		}
 		catch (PlayerActionException& ex) {
 			std::cout << ex.what() << std::endl;
@@ -617,6 +612,7 @@ void Game::MoveArmies(Player* player, int moveLimit) {
 		//Deploying the armies
 		try {
 			player->MoveArmies(map, fromVertex, toVertex, armiesMoved, moveLimit);
+			std::cout << "Armies moved successfully." << std::endl;
 		}
 		catch (PlayerActionException& ex) {
 			std::cout << ex.what() << std::endl;
@@ -707,6 +703,7 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 		try {
 			currPlayer->DestroyArmy(chosenVertex, opponent, armiesToDestroy);
 			detroyLimit -= armiesToDestroy;
+			std::cout << "Armies destroyed successfully." << std::endl;
 		}
 		catch (PlayerActionException& ex) {
 			std::cout << ex.what() << std::endl;
@@ -728,13 +725,12 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 
 int Game::_getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt) {
 
-	displayTerritories(vertices);
+	displayTerritories(vertices, true);
 
 	int vertexIndex = -1;
 	do {
 		std::cout << prompt;
-		std::cin >> vertexIndex; //This is the order from the list, starts with 1
-		vertexIndex -= 1;        //Convert it into index
+		std::cin >> vertexIndex;
 		if (vertexIndex < 0 || vertexIndex > vertices.size())
 			std::cout << "Invalid option. Try again." << std::endl;
 	} while (vertexIndex < 0 || vertexIndex > vertices.size());
@@ -748,9 +744,9 @@ int Game::_getArmiesForOperation(int limit) {
 	do {
 		std::cout << "Enter the number of armies. Must be less than or equal to " << limit << ": ";
 		std::cin >> numOfArmies;
-		if (numOfArmies < 0 && numOfArmies > limit)
+		if (numOfArmies < 0 || numOfArmies > limit)
 			std::cout << "Invalid number of armies. Number of armies must be less than or equal to " << limit << std::endl;
-	} while (numOfArmies < 0 && numOfArmies > limit);
+	} while (numOfArmies < 0 || numOfArmies > limit);
 
 	return numOfArmies;
 }

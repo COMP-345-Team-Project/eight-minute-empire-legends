@@ -26,12 +26,12 @@ int AssignmentTwoDriver::RunGameStartDriver()
 int AssignmentTwoDriver::RunSetupPhaseAndMainLoopDriver()
 {
 	SetupPhaseTests setupPhaseTests;
-	setupPhaseTests.Test_SetupPhaseAndGameLoopExecutes_GivenValidInput();
+	//setupPhaseTests.Test_SetupPhaseAndGameLoopExecutes_GivenValidInput();
 
 	//setupPhaseTests.Test_PlaceArmies();
 	//setupPhaseTests.Test_MoveArmies();
 	//setupPhaseTests.Test_BuildCity();
-	//setupPhaseTests.Test_DestroyArmies();
+	setupPhaseTests.Test_DestroyArmies();
 	return 0;
 }
 
