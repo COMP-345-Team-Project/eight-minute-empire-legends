@@ -6,6 +6,7 @@
 class AssignmentTwoDriver
 {
 public:
+	int RunGame();
 	int RunGameStartDriver();
 	int RunSetupPhaseAndMainLoopDriver();
 	int RunPlayerDriver();

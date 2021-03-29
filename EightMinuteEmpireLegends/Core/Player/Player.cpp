@@ -71,7 +71,11 @@ std::string Player::getPlayerName() const {
 	return playerName;
 }
 
-void Player::BuyCard(Card * cardBought, int costs) {
+vector<Vertex*> Player::GetDeployedVertices() {
+	return deployedVertices;
+}
+
+void Player::BuyCard(Card* cardBought, int costs) {
 	// These boys are nuked in the player destructor
 	cards.push_back(new Card(*cardBought));
 	PayCoin(costs);
@@ -114,7 +118,7 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 
 	//Update the number of armies and owner
 	int newNumOfArmies = t->getArmiesByPlayer(playerName) + numOfArmies;
-	t->setArmiesByPlayer(numOfArmies, playerName);
+	t->setArmiesByPlayer(newNumOfArmies, playerName);
 	availableArmies -= numOfArmies;
 
 	//Update the list of deployed region
@@ -170,25 +174,29 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 			//Add the to region to deployed regions list if it is not in it
 			if (!HasArmyDeployedInVertex(to))
 				AddDeployedVertex(to);
-
-			
 		}
 	}
 }
 
-void Player::DestroyArmy(Vertex* v, int numOfArmies) {
-	int currentNumOfArmies = v->getTerritory()->getArmiesByPlayer(playerName);
-	if (currentNumOfArmies < numOfArmies) {
-		std::string errorMessage = "The amount of armies to be removed exceed the number of deployed armies. Need to move " + std::to_string(numOfArmies) + " but only have " + std::to_string(currentNumOfArmies);
+void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
+	int playerArmies = v->getTerritory()->getArmiesByPlayer(playerName);
+	if (playerArmies <= 0) {
+		std::string errorMessage = "You must have at least 1 army in this region to destroy the opponent armies";
 		throw PlayerActionException(errorMessage);
 	}
 
-	v->getTerritory()->destroyArmiesByPlayer(numOfArmies, playerName);
-	availableArmies += numOfArmies;
+	int opponentArmies = v->getTerritory()->getArmiesByPlayer(opponent->getPlayerName());
+	if (opponentArmies < numOfArmies) {
+		std::string errorMessage = "The amount of armies to be removed exceed the number of deployed armies. Need to destroy " + std::to_string(numOfArmies) + " but only have " + std::to_string(opponentArmies);
+		throw PlayerActionException(errorMessage);
+	}
 
-	currentNumOfArmies = v->getTerritory()->getArmiesByPlayer(playerName);
-	if (currentNumOfArmies == 0) {
-		RemoveDeployedVertex(v);
+	v->getTerritory()->destroyArmiesByPlayer(numOfArmies, opponent->getPlayerName());
+	opponent->availableArmies += numOfArmies;
+
+	opponentArmies = v->getTerritory()->getArmiesByPlayer(opponent->getPlayerName());
+	if (opponentArmies == 0) {
+		opponent->RemoveDeployedVertex(v);
 	}
 }
 

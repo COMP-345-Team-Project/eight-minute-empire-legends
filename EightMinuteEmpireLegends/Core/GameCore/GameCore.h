@@ -42,9 +42,15 @@ private:
     Player* neutralPlayer = nullptr; // Initialized if 2 player game
 
     void _placeArmies(); //2 players game are a bit different, check rules
-    void _assignResources(); //Call assignResources() from resource
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
     bool _isEndGame();
+    int _getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt);
+    int _getArmiesForOperation(int limit);
+    int _getPlayerIndexFromUserInput(std::string prompt);
+    bool _confirm();
+    void _performAction(Card* card, Player* player, int actionNumber);
+    void _promptPlayerToPerformAction(Card* card, std::string actionDisplay, int actionOrder, Player* player);
+    void _listActions(Card* card);
 
 public:
     Game();
@@ -66,8 +72,18 @@ public:
     //Main game loop, part 3, 5
     void runRoundsUntilEndGame();
 
+    //End game, announce winners, and cleanup
+    void endGame();
     //End game
     void endGame(Map* map, vector<Player*> players);
+    //Helper functions
+    void PlaceArmies(Player* player, int numOfArmies);
+    void MoveArmies(Player* player, int deployLimit);
+    void BuildCity(Player* player);
+    void DestroyArmies(Player* currPlayer, int detroyLimit);
+    Vertex* FindVertexById(Map* map, string id);
+
+    void _assignResources(); //Call assignResources() from resource, need to be public for testing
 };
 
 //We use a GameBuilder to create a new game object instead of initializing the Game object directly

@@ -130,7 +130,7 @@ int GameStart::Test_BuildGame_Failure() {
 int GameStart::Demo_BuildGame() {
 	std::cout << "--- Game Builder Demo --- " << std::endl;
 	try {
-		Game* game = GameBuilder::build();
+		Game* game = GameBuilder::build(); //The creation is handled here including getting user input
 		std::cout << game;
 	}
 	catch (GameBuilderException& e) {

@@ -33,8 +33,8 @@ public:
 	//To make things simple, we move armies 1 region at a time, and we ask the player the details for each move
 	//We need to check if the edge is water/land in this method
 	void MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves);
-	void BuildCity(Vertex* v, int numOfArmies);
-	void DestroyArmy(Vertex* v, int numOfArmies);
+	void BuildCity(Vertex* v, int numOfCities);
+	void DestroyArmy(Vertex* v, Player* opponent, int numOfArmies);
 	void InitResources(int coin, int armies, int cities);
 	int ComputeScore(Map* map, vector<Player*> players);
 	void AddDeployedVertex(Vertex* v);
@@ -42,6 +42,7 @@ public:
 	int ComputeRegionalScore(Map* map);
 	int ComputeAbilityScore();
 	int ComputeElixirScore(vector<Player*> players);
+	vector<Vertex*> GetDeployedVertices();
 	
 	//Operators overloading
 	Player& operator =(const Player& p);

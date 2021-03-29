@@ -3,6 +3,14 @@
 #include "AssignmentTwoDriver.h"
 
 #include "../Tests/GameStartTests/GameStartTests.h"
+#include "../Tests/GameTests/GameTest.h";
+
+int AssignmentTwoDriver::RunGame()
+{
+	GameTest gameTest;
+	gameTest.Test_RunGame();
+	return 0;
+}
 
 // Part 1: Game start
 int AssignmentTwoDriver::RunGameStartDriver() 
@@ -28,6 +36,10 @@ int AssignmentTwoDriver::RunSetupPhaseAndMainLoopDriver()
 	SetupPhaseTests setupPhaseTests;
 	setupPhaseTests.Test_SetupPhaseAndGameLoopExecutes_GivenValidInput();
 
+	//setupPhaseTests.Test_PlaceArmies();
+	//setupPhaseTests.Test_MoveArmies();
+	//setupPhaseTests.Test_BuildCity();
+	//setupPhaseTests.Test_DestroyArmies();
 	return 0;
 }
 
@@ -50,9 +62,6 @@ int AssignmentTwoDriver::RunPlayerDriver()
 
 
 // Part 6: Main game loop : Compute the game score
-
-
-
 int AssignmentTwoDriver::RunComputeScoreTest()
 {
 	PlayerTests playerTests;
