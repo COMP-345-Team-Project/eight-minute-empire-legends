@@ -75,7 +75,7 @@ vector<Vertex*> Player::GetDeployedVertices() {
 	return deployedVertices;
 }
 
-void Player::BuyCard(Card * cardBought, int costs) {
+void Player::BuyCard(Card* cardBought, int costs) {
 	// These boys are nuked in the player destructor
 	cards.push_back(new Card(*cardBought));
 	PayCoin(costs);

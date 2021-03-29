@@ -178,6 +178,7 @@
     <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp" />
     <ClCompile Include="CardsTests\CardsTests.cpp" />
     <ClCompile Include="GameStartTests\GameStartTests.cpp" />
+    <ClCompile Include="GameTests\GameTest.cpp" />
     <ClCompile Include="MapLoaderTests\MapLoaderTests.cpp" />
     <ClCompile Include="MapTests\MapTestUtils.cpp" />
     <ClCompile Include="MapTests\MapTests.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h" />
     <ClInclude Include="CardsTests\CardsTests.h" />
     <ClInclude Include="GameStartTests\GameStartTests.h" />
+    <ClInclude Include="GameTests\GameTest.h" />
     <ClInclude Include="MapLoaderTests\MapLoaderTests.h" />
     <ClInclude Include="MapTests\MapTestUtils.h" />
     <ClInclude Include="MapTests\MapTests.h" />

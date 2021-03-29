@@ -75,6 +75,10 @@ std::vector<Player*> Game::getPlayers() {
 	return this->players;
 }
 
+void Game::endGame() {
+	endGame(map, players);
+}
+
 void Game::endGame(Map* map, vector<Player*> players) {
 	//Please dont remove this code because this is optimize for a variable number of players
 	/*std::map<std::string, int> scores;
@@ -121,6 +125,7 @@ void Game::endGame(Map* map, vector<Player*> players) {
 	}*/
 
 	//Assume we only have 2 players for now
+	std::cout << "\n--------------Game ended, now Computing Scores-----------"<< std::endl;
 	if (players.size() == 2) {
 		Player* p1 = players.at(0);
 		Player* p2 = players.at(1);
@@ -128,6 +133,9 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		//First we compare the scores
 		int p1Score = p1->ComputeScore(map, players);
 		int p2Score = p2->ComputeScore(map, players);
+
+		std::cout << p1->getPlayerName() << "'s score is: " << p1Score << std::endl;
+		std::cout << p2->getPlayerName() << "'s score is: " << p2Score << std::endl;
 
 		if (p1Score > p2Score) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
@@ -139,6 +147,7 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		}
 
 		//If there is a tie, we compare the number of coins
+		std::cout << "Both players tied, comparing remmaining coins" << std::endl;
 		if (p1->getCoins() > p2->getCoins()) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
 			return;
@@ -149,6 +158,7 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		}
 
 		//If there is a tie, we then compare the number of controlled regions
+		std::cout << "Both players have the same amount of coins, comparing controlled regions" << std::endl;
 		int p1RegionScore = p1->ComputeTerritoryScore();
 		int p2RegionScore = p2->ComputeTerritoryScore();
 
@@ -162,6 +172,9 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		}
 
 		std::cout << " This game is a tie!" << std::endl;
+	}
+	else {
+		std::cout << " Current number of players not supported!" << std::endl;
 	}
 }
 
@@ -201,6 +214,7 @@ void Game::displayTerritories(std::vector<Vertex*> vertices, bool numbered) {
 std::ostream& operator <<(std::ostream& os, const Game* g) {
 	os << g->resources << std::endl;
 	os << g->map;
+	os << std::endl;
 	for (Player* pl : g->players) {
 		os << pl << std::endl;
 	}	
@@ -341,8 +355,6 @@ void Game::_bid() {
 }
 
 void Game::runRoundsUntilEndGame() {
-
-
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
 
@@ -367,7 +379,7 @@ void Game::runRoundsUntilEndGame() {
 
 			int cardInput = 1; //Position from user input
 
-			std::cout << "Card Exchange Phase for Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
+			std::cout << "\nCard Exchange Phase for Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
 
 			//Getting user input to buy cards
 			cardSpace.showCardSpace();
@@ -418,11 +430,12 @@ void Game::runRoundsUntilEndGame() {
 				else {
 					int option = -1;
 					do {
+						//We need to perform type checking somehow... to be implemented later
 						std::cin >> option;
-						if (option != 1 && option != 2) {
+						if (option < 1 || option > 2) {
 							std::cout << "Invalid action option, please try again." << std::endl;
 						}
-					} while (option != 1 && option != 2);
+					} while (option < 1 || option > 2);
 
 					_performAction(cardBeingPurchased, players.at(i), option);
 				}
@@ -431,24 +444,6 @@ void Game::runRoundsUntilEndGame() {
 				//We only have 1 option
 				_performAction(cardBeingPurchased, players.at(i), 1);
 			}
-
-			//First we displayer all player actions
-			/*if (cardBeingPurchased->getFirstAction().compare("") != 0) {
-				std::cout << "Action: ";
-				cardBeingPurchased->printHelper(cardBeingPurchased->getFirstAction());
-				std::cout << endl;
-				std::cout << "Take action? (Y/N) " << std::endl;
-				if (_confirm()) {
-					if (cardBeingPurchased->getFirstAction().compare("newArmy") == 0)
-						PlaceArmies(players.at(i), cardBeingPurchased->getNewArmy());
-				}
-			}
-
-			if (cardBeingPurchased->getSecondAction().compare("") != 0) {
-				std::cout << "2. ";
-				cardBeingPurchased->printHelper(cardBeingPurchased->getSecondAction());
-				std::cout << endl;
-			}  */
 		}
 
 	}
@@ -470,9 +465,9 @@ void Game::_listActions(Card* card) {
 		std::cout << std::endl;
 
 		if (card->getAndAction()) //And action
-			std::cout << "You can perform both actions" << std::endl;
+			std::cout << "You can perform both actions." << std::endl;
 		else //Or action
-			std::cout << "You can perform only one of the actions" << std::endl;
+			std::cout << "You can perform only one of the actions. Please select one of them." << std::endl;
 	}
 	else { //We only have 1 actions
 		std::cout << "1. ";
@@ -523,9 +518,13 @@ bool Game::_confirm() {
 		if (confirm == 'N') {
 			return false;
 		}
-		else if (confirm == 'Y')
+		else if (confirm == 'Y') {
 			return true;
-	} while (confirm == 'Y' || confirm == 'N');
+		}
+		else {
+			std::cout << "Please enter Y for yes or N for no";
+		}
+	} while (true);
 }
 
 void Game::PlaceArmies(Player* player, int deployLimit) {

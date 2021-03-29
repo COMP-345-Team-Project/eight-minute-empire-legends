@@ -73,7 +73,7 @@ public:
     void runRoundsUntilEndGame();
 
     //End game, announce winners, and cleanup
-    void runEndGame();
+    void endGame();
     //End game
     void endGame(Map* map, vector<Player*> players);
     //Helper functions
