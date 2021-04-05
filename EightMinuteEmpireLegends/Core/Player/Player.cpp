@@ -291,29 +291,6 @@ int Player::ComputeRegionalScore(Map* map) {
 }
 
 bool Player::OwnsContinent(std::map<string, int>& continentScores) {
-	/*string owner = "";
-	int maxScore = 0;
-	bool tied = false;
-	
-	//Looping through all the scores of all players in a specific continent
-	for (std::map<string, int>::const_iterator iter = continentScores.begin(); iter != continentScores.end(); ++iter)
-	{
-		//If a player has a score higher than the known max score, set the owner to the player and set his score to maxScore
-		if (iter->second > maxScore) {
-			owner = iter->first;
-			maxScore = iter->second;
-			tied = false;
-		}
-		else if (iter->second == maxScore) {
-			tied = true;
-		}
-	}
-
-	//If the owner is the player, returns true
-	if (owner.compare(this->playerName) == 0 && !tied)
-		return true;
-	else
-		return false;*/
 	std::map<std::string, int>::iterator owner = std::max_element(continentScores.begin(), continentScores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
 	std::string ownerName = owner->first;
 	int ownerArmies = owner->second;

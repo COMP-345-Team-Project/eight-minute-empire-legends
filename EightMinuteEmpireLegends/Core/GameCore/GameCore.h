@@ -43,13 +43,11 @@ private:
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
-    bool _isEndGame();
     int _getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt);
     int _getArmiesForOperation(int limit);
     int _getPlayerIndexFromUserInput(std::string prompt);
     bool _confirm();
     void _performAction(Card* card, Player* player, int actionNumber);
-    void _promptPlayerToPerformAction(Card* card, std::string actionDisplay, int actionOrder, Player* player);
     void _listActions(Card* card);
 
 public:

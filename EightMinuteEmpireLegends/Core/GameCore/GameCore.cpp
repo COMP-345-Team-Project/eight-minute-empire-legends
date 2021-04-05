@@ -80,50 +80,6 @@ void Game::endGame() {
 }
 
 void Game::endGame(Map* map, vector<Player*> players) {
-	//Please dont remove this code because this is optimize for a variable number of players
-	/*std::map<std::string, int> scores;
-	
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		scores.insert(pair<std::string, int>((**playerIter).getPlayerName(), (**playerIter).ComputeScore(map, players)));
-	}
-
-	//We find the player with the maximum score
-	std::map<std::string, int>::iterator winner = std::max_element(scores.begin(), scores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	std::string winnerName = winner->first;
-	int winnerScore = winner->second;
-
-	//We check to make sure that there is no tie
-	bool isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		std::string currPlayerName = (**playerIter).getPlayerName();
-		if (currPlayerName.compare(winnerName) != 0 && scores[currPlayerName] == winnerScore) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on score
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}
-
-	//We next check the number of coins
-	std::vector<Player*>::iterator mostCoinPlayer = std::max_element(players.begin(), players.end(), [](const Player* a, const Player* b)->bool { return a->getCoins() < b->getCoins(); });
-	winnerName = (**mostCoinPlayer).getPlayerName();
-	int winnerCoins = (**mostCoinPlayer).getCoins();
-	isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		if ((**playerIter).getPlayerName().compare(winnerName) != 0 && (**playerIter).getCoins() == winnerCoins) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on coins
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}*/
-
 	//Assume we only have 2 players for now
 	std::cout << "\n--------------Game ended, now Computing Scores-----------"<< std::endl;
 	if (players.size() == 2) {
@@ -222,12 +178,12 @@ std::ostream& operator <<(std::ostream& os, const Game* g) {
 }
 
 // Startup Phase
-
 void Game::runSetupPhase() {
 	_assignResources();
 	_bid();
 	_placeArmies();
 }
+
 void Game::_placeArmies() {
 	std::vector<Vertex*> possibleStartingVertices = map->getPotentialStartingRegions();
 	
@@ -272,6 +228,7 @@ void Game::_placeArmies() {
 		}
 	}
 }
+
 void Game::_assignResources() {
 
 	std::cout << "Resources Initialization..." << endl;
@@ -292,6 +249,7 @@ void Game::_assignResources() {
 		std::cout << "Player " << players[i]->getPlayerName() << " has " << players[i]->getCoins() << " coins" << endl;
 	}
 }
+
 void Game::_bid() {
 
 	int numPlayers = players.size();
@@ -359,7 +317,7 @@ void Game::runRoundsUntilEndGame() {
 	CardSpace cardSpace = CardSpace(*deck);
 
 	//Game ends when each players have certain numbers of cards
-	int endGameCardCount = 13;
+	int endGameCardCount = 3; //1
 	if (players.size() == 3) {
 		endGameCardCount = 10;
 	}
@@ -409,14 +367,6 @@ void Game::runRoundsUntilEndGame() {
 			std::cout << "You have " << players[i]->getCoins() << " coins left after card purchase" << endl;
 
 			//Perform action on bought card
-			///////////////////////////////////////////
-			////
-			////          Player's action block
-			////          players[i] gives you access to the current player
-			////
-			///////////////////////////////////////////
-
-			//We have an option to skip the action 
 			_listActions(cardBeingPurchased);
 
 			//If there are 2 actions
