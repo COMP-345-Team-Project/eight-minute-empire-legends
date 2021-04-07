@@ -64,7 +64,7 @@ vector<Card*> Player::getCards() {
 }
 
 void Player::addCard(Card* card) {
-	cards.push_back(card);
+	cards.push_back(card);	
 }
 
 std::string Player::getPlayerName() const {
@@ -78,7 +78,7 @@ vector<Vertex*> Player::GetDeployedVertices() {
 void Player::BuyCard(Card* cardBought, int costs) {
 	// These boys are nuked in the player destructor
 	cards.push_back(new Card(*cardBought));
-	PayCoin(costs);
+	PayCoin(costs);	
 }
 
 void Player::PayCoin(int amount) {
@@ -86,6 +86,8 @@ void Player::PayCoin(int amount) {
 		throw PlayerActionException("Insufficient fund");
 
 	coin -= amount;
+
+	Notify();
 }
 
 void Player::addElixirs(int elixir) {
@@ -124,6 +126,8 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	//Update the list of deployed region
 	if (!HasArmyDeployedInVertex(v))
 		AddDeployedVertex(v);
+
+	Notify();
 }
 
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
@@ -176,6 +180,8 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 				AddDeployedVertex(to);
 		}
 	}
+
+	Notify();
 }
 
 void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
@@ -198,6 +204,8 @@ void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
 	if (opponentArmies == 0) {
 		opponent->RemoveDeployedVertex(v);
 	}
+
+	Notify();
 }
 
 void Player::BuildCity(Vertex* v, int numOfCities) {
@@ -212,6 +220,8 @@ void Player::BuildCity(Vertex* v, int numOfCities) {
 
 	v->getTerritory()->addCitiesByPlayer(numOfCities, playerName);
 	availableCities -= numOfCities;
+
+	Notify();
 }
 
 void Player::InitResources(int coin, int armies, int cities) {

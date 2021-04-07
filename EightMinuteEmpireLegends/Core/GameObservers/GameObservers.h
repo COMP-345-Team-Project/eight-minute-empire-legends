@@ -13,11 +13,11 @@ class Observable
 {
 public:
 	virtual ~Observable() {};
-	virtual void attach(Observer*) = 0;
-	virtual void detach(Observer*) = 0;
-	virtual void notify() = 0;
+	virtual void Attach(Observer*) = 0;
+	virtual void Detach(Observer*) = 0;
+	virtual void Notify() = 0;
 protected:
 	Observable() {};
 private:
-	std::list<Observer*> _observers;
+	std::list<Observer*> *_observers;
 };

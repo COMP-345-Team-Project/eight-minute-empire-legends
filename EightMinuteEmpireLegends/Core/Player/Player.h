@@ -4,8 +4,9 @@
 #include "../Cards/Cards.h"
 #include "../Map/Map.h"
 #include "../Bidding/BiddingFacility.h"
+#include "../GameObservers/GameObservers.h"
 
-class Player
+class Player : public Observable
 {
 public:
 	//Constructors
