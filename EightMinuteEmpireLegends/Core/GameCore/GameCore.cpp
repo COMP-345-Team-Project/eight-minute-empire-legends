@@ -23,6 +23,10 @@ void Resources::assignInitialResources(vector<Player*> players) {
 	}
 }
 
+int Resources::getAssignedCities() {
+	return this->cities;
+}
+
 std::ostream& operator <<(std::ostream& os, const Resources* r) {
 	os << "coins : " << r->coins << std::endl << "armies : " << r->armies << std::endl << "cities : " << r->cities;
 	return os;
@@ -30,7 +34,7 @@ std::ostream& operator <<(std::ostream& os, const Resources* r) {
 
 // Game class implementation.
 
-Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) {
+Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) : Observable(){
 	this->resources = resources;
 	this->map = map;
 	this->deck = deck;
@@ -41,7 +45,7 @@ Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) 
 	}
 }
 
-Game::Game() { //For testing only
+Game::Game() : Observable() { //For testing only
 	this->resources = NULL;
 	this->map = NULL;
 	this->deck = NULL;
@@ -159,8 +163,8 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		//If there is a tie, we then compare the number of controlled regions
 		std::cout << "Both players have the same amount of coins, comparing controlled regions" << std::endl;
-		int p1RegionScore = p1->ComputeTerritoryScore();
-		int p2RegionScore = p2->ComputeTerritoryScore();
+		int p1RegionScore = p1->GetTerritoriesScore();
+		int p2RegionScore = p2->GetTerritoriesScore();
 
 		if (p1RegionScore > p2RegionScore) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
@@ -444,6 +448,11 @@ void Game::runRoundsUntilEndGame() {
 				//We only have 1 option
 				_performAction(cardBeingPurchased, players.at(i), 1);
 			}
+
+			//Recompute the score for each player
+			players.at(i)->ComputeScore(map, players);
+
+			notify();
 		}
 
 	}
@@ -767,139 +776,11 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 	return playerIndex;
 }
 
-// Gamebuilder class implementation. 
-
-Game* GameBuilder::build() {
-	std::vector<filesystem::path> maps = fetchMapFiles(_mapDir);
-	std::vector<std::string> names{};
-	std::cout << "Please select a map.\n" << std::endl;
-	int index = 0;
-	int mapSelection;
-	int numPlayers;
-
-	// Map selection
-	for (const auto& entry : maps) {		
-		std::cout << index << ") " << entry.filename() << std::endl;
-		index++;
+void Game::notify() {
+	list<Observer*>::iterator observerIter;
+	for (observerIter = _observers.begin(); observerIter == _observers.end(); observerIter++) {
+		(**observerIter).update();
 	}
-	std::cin >> mapSelection;
-	if (mapSelection < 0 || mapSelection >= maps.size()) {
-		throw GameBuilderException("ERR: Selection index out of range.");
-	}	
-
-	// Player selection
-	
-	bool validNum = false;	
-	while (!validNum) {		
-		std::cout << "Please enter the number of players (2-4) : ";
-		std::cin >> numPlayers;
-		if (cin.fail()) {
-			cin.clear();
-			cin.sync();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Invalid input. Please enter an integer.\n" << std::endl;
-		}
-		else if (numPlayers < 2 || numPlayers > 4) {
-			std::cout << "Player count selection out of range.\n" << std::endl;
-		}
-		else {
-			validNum = true;
-		}
-	}	
-	std::string plName;
-	bool validName;
-	for (int i = 0; i < numPlayers; i++) {
-		validName = false;
-		while (!validName) {			
-			std::cout << "Please enter a name for player " + i << " : ";
-			std::cin >> plName;			
-			if (std::find(names.begin(), names.end(), plName) != names.end()) {
-				std::cout << "Name has already been taken by another player. Please enter a unique name." << std::endl;
-			}
-			else {
-				validName = true;
-			}
-		}
-		names.push_back(plName);
-	}
-
-	return build(numPlayers, names, maps.at(mapSelection).u8string(), _configPath);
-}
-
-Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::string mapPath, std::string configPath) {
-	Resources* rsc = nullptr;
-	Map* map = nullptr;
-
-	// Initiallize resources if path to config is specified		
-	if (configPath != "") {
-		std::tuple<int, int, int> tResources;
-		try {
-			tResources = fetchConfigResources(configPath);
-			rsc = new Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
-		}
-		catch (ConfigFileException& e) {
-			std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
-			tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
-		}
-	}
-	else {
-		//Initiallize resources to default parameters if path to config is not specified
-		rsc = new Resources();
-	}
-
-	try {
-		map = MapLoader::parseMap(mapPath);
-	}
-	catch (MapLoaderException& e) {
-		std::cout << e.what() << std::endl;		
-	}
-
-	Deck* deck = new Deck(numPlayers);
-	BidTieBreakerByLastName tieBreaker;
-	BiddingFacility* bf = new BiddingFacility(tieBreaker);
-	std::vector<Player*> pl{};
-	for (int i = 0; i < numPlayers; i++) {
-		pl.push_back(new Player(names.at(i), bf));
-	}
-
-	//Crete a new game object and pass above objects to Game
-	return new Game(rsc, map, deck, pl);
-}
-
-// Helper function. Reads resources from config file.
-std::tuple<int, int, int> fetchConfigResources(std::string path) {
-	int coins;
-	int armies;
-	int cities;
-	std::string line;
-	char delim = '=';
-	std::ifstream rFile(path);
-	if (rFile.is_open()) {
-		while (getline(rFile, line)) {
-			if (line.substr(0, line.find(delim)) == "rCoins") {
-				coins = std::stoi(line.substr(line.find(delim) + 1));
-			}
-			if (line.substr(0, line.find(delim)) == "rArmies") {
-				armies = std::stoi(line.substr(line.find(delim) + 1));
-			}
-			if (line.substr(0, line.find(delim)) == "rCities") {
-				cities = std::stoi(line.substr(line.find(delim) + 1));
-			}
-		}
-		rFile.close();
-	}
-	else {
-		throw ConfigFileException("ERR: Unable to open file at " + path);
-	}
-	return std::make_tuple(coins, armies, cities);;
-}
-
-std::vector<filesystem::path> fetchMapFiles(std::string path) {
-	std::vector<filesystem::path> maps{};	
-	for (const auto& entry : filesystem::directory_iterator(path)) {
-		maps.push_back(entry.path());		
-	}
-	return maps;
 }
 
 //free functions

@@ -3,21 +3,22 @@
 
 class Observer {
 public:
-	~Observer();
-	virtual void Update() = 0;
-protected:
 	Observer();
+	~Observer();
+	virtual void update() = 0;
+	
 };
 
 class Observable
 {
 public:
-	virtual ~Observable() {};
-	virtual void attach(Observer*) = 0;
-	virtual void detach(Observer*) = 0;
+	Observable();
+	~Observable(); //Inline destructor
+	virtual void attach(Observer*);
+	virtual void detach(Observer*);
 	virtual void notify() = 0;
 protected:
-	Observable() {};
-private:
+	
 	std::list<Observer*> _observers;
 };
+

@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -166,13 +166,18 @@
     <ClInclude Include="Cards\Cards.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameCore\ConfigFileException.h" />
+    <ClInclude Include="GameCore\GameBuilder.h" />
     <ClInclude Include="GameCore\GameBuilderException.h" />
     <ClInclude Include="GameCore\GameCore.h" />
+    <ClInclude Include="GameObservers\GameObservers.h" />
+    <ClInclude Include="GameObservers\GameStatistics.h" />
     <ClInclude Include="MapLoader\MapLoader.h" />
     <ClInclude Include="MapLoader\MapLoaderException.h" />
     <ClInclude Include="Map\Map.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\PlayerScore.h" />
+    <ClInclude Include="Utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bidding\BiddingFacility.cpp">
@@ -197,12 +202,15 @@
     <ClCompile Include="GameCore\ConfigFileException.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="GameCore\GameBuilder.cpp" />
     <ClCompile Include="GameCore\GameBuilderException.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameCore\GameCore.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="GameObservers\GameObservers.cpp" />
+    <ClCompile Include="GameObservers\GameStatistics.cpp" />
     <ClCompile Include="MapLoader\MapLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
@@ -239,6 +247,8 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Player\PlayerScore.cpp" />
+    <ClCompile Include="Utilities\Utilities.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

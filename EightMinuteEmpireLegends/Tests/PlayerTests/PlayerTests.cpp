@@ -436,27 +436,31 @@ int PlayerTests::Test_ComputeScore() {
 
 	p2->addElixirs(card11->getElixer()); //Cards 11 has 1 elixir
 
+	//Compute the score 
+	vector<Player*> players{ p1, p2 };
+	p1->ComputeScore(map, players);
+	p2->ComputeScore(map, players);
+
 	//Validate the compute score based on territories owned
 	std::cout << "Asserting the scores return by the functions..." << std::endl;
-	assert(p1->ComputeTerritoryScore() == 6);
-	assert(p2->ComputeTerritoryScore() == 4);
+	assert(p1->GetTerritoriesScore() == 6);
+	assert(p2->GetTerritoriesScore() == 4);
 
 	//Validate the compute score based on continents owned
-	assert(p1->ComputeRegionalScore(map) == 2);
-	assert(p2->ComputeRegionalScore(map) == 1);
+	assert(p1->GetContinentsScore() == 2);
+	assert(p2->GetContinentsScore() == 1);
 
 	//Validate the points based of card abilities
-	assert(p1->ComputeAbilityScore() == 8);
-	assert(p2->ComputeAbilityScore() == 8);
+	assert(p1->GetAbilitiesScore() == 8);
+	assert(p2->GetAbilitiesScore() == 8);
 
 	//Validate the points based on the number of elixirs
-	vector<Player*> players{ p1, p2 };
-	assert(p1->ComputeElixirScore(players) == 2);
-	assert(p2->ComputeElixirScore(players) == 0);
+	assert(p1->GetElixirScore() == 2);
+	assert(p2->GetElixirScore() == 0);
 
 	//Finally we check the overall compute score function
-	assert(p1->ComputeScore(map, players) == 18);
-	assert(p2->ComputeScore(map, players) == 13);
+	assert(p1->GetTotalScore() == 18);
+	assert(p2->GetTotalScore() == 13);
 
 	Game testGame;
 	testGame.endGame(map, players);

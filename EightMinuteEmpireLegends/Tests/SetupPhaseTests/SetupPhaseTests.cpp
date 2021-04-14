@@ -1,7 +1,7 @@
 #include "SetupPhaseTests.h"
 
-
 #include "../../Core/GameCore/GameCore.h"
+#include "../../Core/GameCore/GameBuilder.h"
 #include "../../Core/MapLoader/MapLoader.h"
 
 
