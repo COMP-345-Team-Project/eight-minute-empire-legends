@@ -58,6 +58,9 @@
     <ClCompile Include="GameTests\GameTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ObserverTests\GameStatisticsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h">
@@ -85,6 +88,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameTests\GameTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObserverTests\GameStatisticsTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

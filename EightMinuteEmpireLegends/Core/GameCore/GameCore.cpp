@@ -49,6 +49,7 @@ Game::Game() : Observable() { //For testing only
 	this->resources = NULL;
 	this->map = NULL;
 	this->deck = NULL;
+	this->endGameCardCount = 0;
 } 
 
 // TODO: We sure about this? Pretty sure whoever builds it should destroy it, 
@@ -143,10 +144,12 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		if (p1Score > p2Score) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1Score < p2Score) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
@@ -154,10 +157,12 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		std::cout << "Both players tied, comparing remmaining coins" << std::endl;
 		if (p1->getCoins() > p2->getCoins()) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1->getCoins() < p2->getCoins()) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
@@ -168,14 +173,17 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		if (p1RegionScore > p2RegionScore) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1RegionScore < p2RegionScore) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
 		std::cout << " This game is a tie!" << std::endl;
+		notify();
 	}
 	else {
 		std::cout << " Current number of players not supported!" << std::endl;
@@ -227,10 +235,11 @@ std::ostream& operator <<(std::ostream& os, const Game* g) {
 
 // Startup Phase
 
-void Game::runSetupPhase() {
+void Game::runSetupPhase(int maxNumOfCards) {
 	_assignResources();
 	_bid();
 	_placeArmies();
+	_setEndGameConditions(maxNumOfCards);
 }
 void Game::_placeArmies() {
 	std::vector<Vertex*> possibleStartingVertices = map->getPotentialStartingRegions();
@@ -358,19 +367,25 @@ void Game::_bid() {
 
 }
 
+void Game::_setEndGameConditions(int maxNumOfCards) {
+	if (maxNumOfCards == 0) {
+		//Game ends when each players have certain numbers of cards
+		endGameCardCount = 13;
+		if (players.size() == 3) {
+			endGameCardCount = 10;
+		}
+		if (players.size() == 4) {
+			endGameCardCount = 8;
+		}
+	}
+	else {
+		endGameCardCount = maxNumOfCards;
+	}
+}
+
 void Game::runRoundsUntilEndGame() {
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
-
-	//Game ends when each players have certain numbers of cards
-	int endGameCardCount = 13;
-	if (players.size() == 3) {
-		endGameCardCount = 10;
-	}
-	if (players.size() == 4) {
-		endGameCardCount = 8;
-	}
-
 	int gameRound = 1;
 
 	//Main loop until game ends
@@ -448,11 +463,6 @@ void Game::runRoundsUntilEndGame() {
 				//We only have 1 option
 				_performAction(cardBeingPurchased, players.at(i), 1);
 			}
-
-			//Recompute the score for each player
-			players.at(i)->ComputeScore(map, players);
-
-			notify();
 		}
 
 	}
@@ -518,6 +528,9 @@ void Game::_performAction(Card* card, Player* player, int actionOrder) {
 			std::cout << "Unknown action.";
 		}
 	}
+
+	//We update the statistics everytime an action is done
+	notify();
 }
 
 bool Game::_confirm() {
@@ -777,8 +790,12 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 }
 
 void Game::notify() {
+	//Recompute the score for each player before updating the observers
+	for (int i=0; i<players.size(); i++)
+		players.at(i)->ComputeScore(map, players);
+
 	list<Observer*>::iterator observerIter;
-	for (observerIter = _observers.begin(); observerIter == _observers.end(); observerIter++) {
+	for (observerIter = _observers.begin(); observerIter != _observers.end(); observerIter++) {
 		(**observerIter).update();
 	}
 }

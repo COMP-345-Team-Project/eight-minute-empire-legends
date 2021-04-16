@@ -25,7 +25,7 @@ int Driver::RunAssignmentTwoDriver()
 	AssignmentTwoDriver ass2Driver;
 
 	//The main driver to run the game, show casing all of its functionality
-	ass2Driver.RunGame();
+	//ass2Driver.RunGame();
 
 	//Below here we have included mini-drivers to show case specific functionalities of the game
 	/*std::cout << "(1) Running the Game Start Driver..." << std::endl;
@@ -34,8 +34,10 @@ int Driver::RunAssignmentTwoDriver()
 	ass2Driver.RunSetupPhaseAndMainLoopDriver();
 	std::cout << "(4) Running the Player Driver..." << std::endl;
 	ass2Driver.RunPlayerDriver();*/
-	//std::cout << "(6) Running the Computer Score Driver..." << std::endl;
-	//ass2Driver.RunComputeScoreTest();
+	std::cout << "(6) Running the Computer Score Driver..." << std::endl;
+	ass2Driver.RunComputeScoreTest();
+
+	ass2Driver.RunGameStatisticsTests();
 	
 	return 0;
 }

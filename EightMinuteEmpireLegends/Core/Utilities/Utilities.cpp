@@ -45,3 +45,11 @@ void displayPlayerStats(Player* currPlayer, Map* map, vector<Player*> players) {
 	std::cout << endl;
 	std::cout << "Victory points: " << currPlayer->ComputeScore(map, players) << std::endl;
 }
+
+Vertex* findVertexById(Map* map, string id) {
+	vector<Vertex*> vertices = map->vertices();
+	for (vector<Vertex*>::iterator vertexIter = vertices.begin(); vertexIter != vertices.end(); vertexIter++) {
+		if ((**vertexIter).getId().compare(id) == 0)
+			return *vertexIter;
+	}
+}

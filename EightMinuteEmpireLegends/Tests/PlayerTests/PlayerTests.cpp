@@ -2,18 +2,11 @@
 
 #include "PlayerTests.h"
 
+#include "../../Core/Utilities/Utilities.h"
 #include "../../Core/Player/Player.h"
 #include "../../Core/GameCore/GameCore.h"
 #include "../../Core/Bidding/BidTieBreakerByLastName.h"
 #include "../../Core/MapLoader/MapLoader.h"
-
-Vertex* findVertexById(Map* map, string id) {
-	vector<Vertex*> vertices = map->vertices();
-	for (vector<Vertex*>::iterator vertexIter = vertices.begin(); vertexIter != vertices.end(); vertexIter++) {
-		if ((**vertexIter).getId().compare(id) == 0)
-			return *vertexIter;
-	}
-}
 
 PlayerTests::PlayerTests() {
 	numOfArmiesToDeploy = 1;
