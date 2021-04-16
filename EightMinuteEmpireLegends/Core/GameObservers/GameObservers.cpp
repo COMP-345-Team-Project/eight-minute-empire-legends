@@ -1,7 +1,6 @@
 #pragma once
 #include "../pch.h"
 #include "GameObservers.h"
-#include "../GameCore/GameCore.h"
 
 //#include <algorithm>
 //#include <list>
@@ -14,6 +13,7 @@ Observer::~Observer() {
 
 //Observable abstract class
 Observable::Observable() {
+	_observers = new std::list<Observer*>;
 };
 Observable::~Observable() {
 };
