@@ -94,6 +94,9 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 		pl.push_back(new Player(names.at(i), bf));
 	}
 
+	//Use PlayerBuilder to set player type (Computer or Human)
+
+
 	//Create the game and attach Observer
 	Game* newGame = new Game(rsc, map, deck, pl);
 	GameStatistics* gameStatsObserver = new GameStatistics(newGame); //THe observer attach it self to the game
