@@ -137,7 +137,7 @@ Card* Strategy::autoBuyCard(Player* player, CardSpace& cardSpace, Deck& deck, st
 				break;
 			}
 		}
-	}
+}
 
 	//Making Card Purchase
 	Card* cardBeingPurchased = cardSpace.sell(deck, cardIndex+1);
@@ -172,7 +172,7 @@ void Strategy::autoPerformAction(Game* game, Player* player, Card* cardBeingPurc
 	}
 	else {
 		std::cout << "Unknown action"<< endl;
-	}
+}
 
 	//Performing second action if available
 	if (cardBeingPurchased->getAndAction()) {
@@ -192,7 +192,7 @@ void Strategy::autoPerformAction(Game* game, Player* player, Card* cardBeingPurc
 		else {
 			std::cout << "Unknown action" << endl;
 		}
-	}
+}
 
 }
 

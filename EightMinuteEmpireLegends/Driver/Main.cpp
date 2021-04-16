@@ -8,8 +8,8 @@ int main(int argc, char** argv)
 
 	Driver driver;
 	//driver.RunAssignmentOneDriver();
-	driver.RunAssignmentTwoDriver();
-	//driver.RunStrategyDriver();
+	//driver.RunAssignmentTwoDriver();
+	driver.RunStrategyDriver();
 
 	return 0;
 }
