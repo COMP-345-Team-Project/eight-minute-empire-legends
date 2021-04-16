@@ -53,8 +53,6 @@ int Driver::RunStrategyDriver() {
 
 	PlayerBuilder::setPlayersType(validGame->getPlayers());
 
-	validGame->getPlayers()[0]->getStrategy()->buyCard();
-
 	//Temporarily set up a starting region to test code
 	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
 	validGame->getMap()->setStartingRegion(startingRegion);

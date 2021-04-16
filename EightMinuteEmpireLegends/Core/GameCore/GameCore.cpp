@@ -379,46 +379,22 @@ void Game::runRoundsUntilEndGame() {
 
 		std::cout << "\n\nRound " << gameRound++ << endl;
 
+		string changeStrategy = "N";
+		std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
+		std::cin >> changeStrategy;
+
+		if (changeStrategy == "Y" || changeStrategy == "y") {
+			PlayerBuilder::setPlayersType(players);
+		}
+
 		for (int i = 0; i < players.size(); i++) {
 
-			int cardInput = 1; //Position from user input
+			//Buy card based on strategy of each player
+			Card* cardBeingPurchased = players[i]->getStrategy()->buyCard(players[i], cardSpace, *deck);
 
-			std::cout << "\nCard Exchange Phase for Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
-
-			//Getting user input to buy cards
-			cardSpace.showCardSpace();
-
-			cout << "You have " << players[i]->getCoins() << " coins available" << endl;
-
-			cout << "Choose which card you'd like to buy from Card Space (1-6): ";
-			cin >> cardInput;
-
-			if (cardInput > 0 && cardInput < (cardSpace.getSize() + 1) && players[i]->getCoins() >= cardSpace.costCalc(cardInput - 1)) {
-				std::cout << "Card " << cardInput << " Successfully bought" << endl;
-			}
-			else if (cardInput > 0 && players[i]->getCoins() < cardSpace.costCalc(cardInput - 1)) {
-				std::cout << "!Not enough coins! Default to first free card. \n"; //Exception handler
-				cardInput = 1;
-			}
-			else {
-				std::cout << "!invalid selection! Default to first free card. \n";
-				cardInput = 1;
-			}
-			Card* cardBeingPurchased = cardSpace.sell(*deck, cardInput);
-			//Make the card purchase
-			players[i]->BuyCard(cardBeingPurchased, cardSpace.costCalc(cardInput - 1));
-
-			//Print coin balance
-			std::cout << "Card cost: " << cardSpace.costCalc(cardInput - 1) << endl;
-			std::cout << "You have " << players[i]->getCoins() << " coins left after card purchase" << endl;
-
-			//Perform action on bought card
-			///////////////////////////////////////////
-			////
-			////          Player's action block
-			////          players[i] gives you access to the current player
-			////
-			///////////////////////////////////////////
+			//Perform action based on strategy of each player
+			players[i]->getStrategy()->performAction(this,players[i],cardBeingPurchased);
+			/*
 
 			//We have an option to skip the action 
 			_listActions(cardBeingPurchased);
@@ -449,10 +425,16 @@ void Game::runRoundsUntilEndGame() {
 				_performAction(cardBeingPurchased, players.at(i), 1);
 			}
 
+			*/
+
+
+			
 			//Recompute the score for each player
 			players.at(i)->ComputeScore(map, players);
 
 			notify();
+			
+			
 		}
 
 	}

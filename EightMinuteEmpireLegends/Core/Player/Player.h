@@ -6,6 +6,7 @@
 #include "../Map/Map.h"
 #include "../Bidding/BiddingFacility.h"
 #include "PlayerStrategies.h"
+class Strategy;
 
 class Player
 {
