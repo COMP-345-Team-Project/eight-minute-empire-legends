@@ -33,9 +33,35 @@ int Driver::RunAssignmentTwoDriver()
 	std::cout << "(2 & 3 & 5) Running the Setup Phase and Main Game Loop Driver..." << std::endl;
 	ass2Driver.RunSetupPhaseAndMainLoopDriver();
 	std::cout << "(4) Running the Player Driver..." << std::endl;
-	ass2Driver.RunPlayerDriver();
-	std::cout << "(6) Running the Computer Score Driver..." << std::endl;
-	ass2Driver.RunComputeScoreTest();*/
+	ass2Driver.RunPlayerDriver();*/
+	//std::cout << "(6) Running the Computer Score Driver..." << std::endl;
+	//ass2Driver.RunComputeScoreTest();
 	
+	return 0;
+}
+
+
+#include "../Core/GameCore/GameCore.h"
+#include "../Core/GameCore/GameBuilder.h"
+#include "../Core/MapLoader/MapLoader.h"
+
+int Driver::RunStrategyDriver() {
+
+	std::vector<std::string> names{ "Coucou", "Banane" };
+	std::string mapPath = "..\\Tests\\SetupPhaseTests\\Resources\\narrows.json";
+	Game* validGame = GameBuilder::build(2, names, mapPath);
+
+	PlayerBuilder::setPlayersType(validGame->getPlayers());
+
+	validGame->getPlayers()[0]->getStrategy()->buyCard();
+
+	//Temporarily set up a starting region to test code
+	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
+	validGame->getMap()->setStartingRegion(startingRegion);
+	startingRegion->getTerritory()->setArmiesByPlayer(4, "Coucou");
+
+	validGame->runSetupPhase();
+	validGame->runRoundsUntilEndGame();
+
 	return 0;
 }

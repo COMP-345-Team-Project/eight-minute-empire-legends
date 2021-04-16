@@ -1,5 +1,6 @@
 #pragma once
 #include "../pch.h"
+#include "../GameObservers/GameObservers.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Bidding/BidTieBreakerByLastName.h"
@@ -31,9 +32,10 @@ public:
     //assign the initial resources to each player for the game setup
     void assignInitialResources(vector<Player*> players);    
     friend std::ostream& operator <<(std::ostream& os, const Resources* r);
+    int getAssignedCities();
 };
 
-class Game {
+class Game : public Observable {
 private:
     Resources* resources;
     Map* map;
@@ -76,6 +78,7 @@ public:
     void endGame();
     //End game
     void endGame(Map* map, vector<Player*> players);
+
     //Helper functions
     void PlaceArmies(Player* player, int numOfArmies);
     void MoveArmies(Player* player, int deployLimit);
@@ -84,14 +87,7 @@ public:
     Vertex* FindVertexById(Map* map, string id);
 
     void _assignResources(); //Call assignResources() from resource, need to be public for testing
-};
 
-//We use a GameBuilder to create a new game object instead of initializing the Game object directly
-class GameBuilder {
-public:
-    static Game* build();
-    static Game* build(int numPlayers, std::vector<std::string> names, std::string mapPath, std::string configPath = "");
+    //Observable abstract class implementation
+    void notify();
 };
-
-std::tuple<int, int, int> fetchConfigResources(std::string path);
-std::vector<filesystem::path> fetchMapFiles(std::string path);

@@ -8,16 +8,21 @@ public:
 	virtual void Update(std::string context) = 0;
 protected:
 	Observer();
+	~Observer();
+	virtual void update() = 0;
+	
 };
 
 class Observable
 {
 public:
 	Observable();
-	~Observable();
-	virtual void Attach(Observer* o);
-	virtual void Detach(Observer* o);
-	virtual void Notify(std::string context) = 0;	
-private:
-	std::list<Observer*> *_observers;
+	~Observable(); //Inline destructor
+	virtual void attach(Observer*);
+	virtual void detach(Observer*);
+	virtual void notify() = 0;
+protected:
+	
+	std::list<Observer*> _observers;
 };
+

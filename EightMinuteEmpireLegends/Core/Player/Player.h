@@ -1,9 +1,11 @@
 #pragma once
 #include "../pch.h"
 
+#include "PlayerScore.h"
 #include "../Cards/Cards.h"
 #include "../Map/Map.h"
 #include "../Bidding/BiddingFacility.h"
+#include "PlayerStrategies.h"
 #include "../GameObservers/GameObservers.h"
 
 class Player : public Observable
@@ -25,6 +27,7 @@ public:
 	std::string getPlayerName() const;
 	void addElixirs(int elixir);
 	int getElixirs();
+	Strategy* getStrategy();
 
 	//Player actions
 	bool HasArmyDeployedInVertex(Vertex* v); 
@@ -39,15 +42,20 @@ public:
 	void InitResources(int coin, int armies, int cities);
 	int ComputeScore(Map* map, vector<Player*> players);
 	void AddDeployedVertex(Vertex* v);
-	int ComputeTerritoryScore();
-	int ComputeRegionalScore(Map* map);
-	int ComputeAbilityScore();
-	int ComputeElixirScore(vector<Player*> players);
+	int GetTerritoriesScore();
+	int GetContinentsScore();
+	int GetAbilitiesScore();
+	int GetElixirScore();
+	int GetTotalScore();
 	vector<Vertex*> GetDeployedVertices();
+	PlayerScore getPlayerScore();
 	
 	//Operators overloading
 	Player& operator =(const Player& p);
 	friend std::ostream& operator <<(std::ostream& os, const Player* p);
+
+	//Strategy
+	void setStrategy(string strategy);
 	
 
 private:
@@ -63,10 +71,18 @@ private:
 	BiddingFacility* biddingFacility;
 	int elixir;
 
+	//Strategy
+	Strategy* strategy;
+
 	//Private methods
 	void RemoveDeployedVertex(Vertex* v);
 	bool OwnsContinent(std::map<string, int>& continentScores);
 	int CountCardsBasedOnType(string cardType);
+	PlayerScore playerScore;
+	int ComputeTerritoryScore();
+	int ComputeRegionalScore(Map* map);
+	int ComputeAbilityScore();
+	int ComputeElixirScore(vector<Player*> players);
 };
 
 class PlayerActionException : public std::exception
@@ -76,4 +92,9 @@ class PlayerActionException : public std::exception
 	public:
 		PlayerActionException(const std::string& msg);
 		const char* what() const throw();
+};
+
+class PlayerBuilder {
+public:
+	static void setPlayersType(vector<Player*> players);
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Core/GameCore/GameBuilder.h"
 #include "../../Core/GameCore/GameCore.h"
 #include "../../Core/MapLoader/MapLoader.h"
 #include "../../Core/MapLoader/MapLoaderException.h"
