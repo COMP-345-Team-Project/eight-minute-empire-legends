@@ -66,7 +66,7 @@ void GameStatistics::printPlayerStats(Player* player) {
 	std::cout << "******Player: " << player->getPlayerName() << "******" << std::endl;
 	std::cout << "Available coins: " << player->getCoins() << std::endl;
 	std::cout << "Available armies: " << player->getAvailableArmies() << std::endl;
-	std::cout << "Available cities: " << player->getAvailableArmies() << std::endl;
+	std::cout << "Available cities: " << player->getAvailableCities() << std::endl;
 	std::cout << "Total cards owned: " << player->getCards().size() << std::endl;
 
 	PlayerScore playerScore = player->getPlayerScore();
