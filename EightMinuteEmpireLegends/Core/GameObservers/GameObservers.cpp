@@ -22,9 +22,9 @@ void Observable::Detach(Observer* o) {
 	_observers->remove(o);
 };
 
-void Observable::Notify() {
+void Observable::Notify(std::string context) {
 	std::list<Observer*>::iterator i = _observers->begin();
 	for (; i != _observers->end(); ++i) {
-		(*i)->Update();
+		(*i)->Update(context);
 	}
 };

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -168,6 +168,8 @@
     <ClInclude Include="GameCore\ConfigFileException.h" />
     <ClInclude Include="GameCore\GameBuilderException.h" />
     <ClInclude Include="GameCore\GameCore.h" />
+    <ClInclude Include="GameObservers\GameObservers.h" />
+    <ClInclude Include="GameObservers\PhaseObserver.h" />
     <ClInclude Include="MapLoader\MapLoader.h" />
     <ClInclude Include="MapLoader\MapLoaderException.h" />
     <ClInclude Include="Map\Map.h" />
@@ -203,6 +205,8 @@
     <ClCompile Include="GameCore\GameCore.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="GameObservers\GameObservers.cpp" />
+    <ClCompile Include="GameObservers\PhaseObserver.cpp" />
     <ClCompile Include="MapLoader\MapLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>

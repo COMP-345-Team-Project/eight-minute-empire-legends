@@ -57,6 +57,9 @@
     <ClInclude Include="GameCore\GameBuilderException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObservers\GameObservers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -96,6 +99,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameCore\GameBuilderException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObservers\GameObservers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
