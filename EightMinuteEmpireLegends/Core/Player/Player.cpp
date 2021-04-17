@@ -90,7 +90,8 @@ void Player::PayCoin(int amount) {
 
 	coin -= amount;
 
-	Notify();
+	lastActionMessage = "Paid " + amount + std::to_string(amount) + " coin(s).";	
+	notify();
 }
 
 void Player::addElixirs(int elixir) {
@@ -130,7 +131,8 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	if (!HasArmyDeployedInVertex(v))
 		AddDeployedVertex(v);
 
-	Notify();
+	lastActionMessage = "Deployed " + std::to_string(numOfArmies) + " armie(s) to " + v->getTerritory()->getName();
+	notify();
 }
 
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
@@ -184,7 +186,9 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 		}
 	}
 
-	Notify();
+	lastActionMessage = "Moved " + std::to_string(numOfArmies) + " armie(s) from " + from->getTerritory()->getName() + " to " + to->getTerritory()->getName() + 
+		". " + std::to_string(remainingMoves) + " move(s) remain.";
+	notify();
 }
 
 void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
@@ -208,7 +212,8 @@ void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
 		opponent->RemoveDeployedVertex(v);
 	}
 
-	Notify();
+	lastActionMessage = "Defeated " + std::to_string(numOfArmies) + " of " + opponent->getPlayerName() + "'s armies";
+	notify();
 }
 
 void Player::BuildCity(Vertex* v, int numOfCities) {
@@ -224,7 +229,8 @@ void Player::BuildCity(Vertex* v, int numOfCities) {
 	v->getTerritory()->addCitiesByPlayer(numOfCities, playerName);
 	availableCities -= numOfCities;
 
-	Notify();
+	lastActionMessage = "Built " + std::to_string(numOfCities) + " citie(s) in " + v->getTerritory()->getName();
+	notify();
 }
 
 void Player::InitResources(int coin, int armies, int cities) {
@@ -470,8 +476,18 @@ void Player::setStrategy(string strategyName) {
 
 }
 
+void Player::notify() {
+	std::list<Observer*>::iterator i = _observers->begin();
+	for (; i != _observers->end(); ++i)
+		(*i)->update();
+}
+
 Strategy* Player::getStrategy() {
 	return strategy;
+}
+
+std::string Player::getLastActionMessage() {
+	return lastActionMessage;
 }
 
 void PlayerBuilder::setPlayersType(vector<Player*> players) {
@@ -494,8 +510,5 @@ void PlayerBuilder::setPlayersType(vector<Player*> players) {
 			pl->setStrategy("Human");
 			std::cout << pl->getPlayerName() << " is a Human" << endl;
 		}
-
-
 	}
 }
-

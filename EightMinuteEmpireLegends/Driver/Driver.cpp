@@ -52,7 +52,8 @@ int Driver::RunStrategyDriver() {
 	Game* validGame = GameBuilder::build(2, names, mapPath);
 
 	PlayerBuilder::setPlayersType(validGame->getPlayers());
-
+	
+	validGame->attachPlayersToPhaseObserver();
 	validGame->getPlayers()[0]->getStrategy()->buyCard();
 
 	//Temporarily set up a starting region to test code

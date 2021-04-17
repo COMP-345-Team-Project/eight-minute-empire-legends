@@ -5,12 +5,9 @@
 class Observer {
 public:
 	~Observer();
-	virtual void Update(std::string context) = 0;
-protected:
-	Observer();
-	~Observer();
 	virtual void update() = 0;
-	
+protected:
+	Observer();	
 };
 
 class Observable
@@ -22,7 +19,6 @@ public:
 	virtual void detach(Observer*);
 	virtual void notify() = 0;
 protected:
-	
-	std::list<Observer*> _observers;
+	std::list<Observer*> *_observers;
 };
 

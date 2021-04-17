@@ -28,6 +28,7 @@ public:
 	void addElixirs(int elixir);
 	int getElixirs();
 	Strategy* getStrategy();
+	std::string getLastActionMessage();
 
 	//Player actions
 	bool HasArmyDeployedInVertex(Vertex* v); 
@@ -55,8 +56,10 @@ public:
 	friend std::ostream& operator <<(std::ostream& os, const Player* p);
 
 	//Strategy
-	void setStrategy(string strategy);
-	
+	void setStrategy(string strategy);	
+
+	// Observable override
+	void notify();
 
 private:
 	//Private data members
@@ -67,6 +70,7 @@ private:
 	int availableCities;
 	vector<Vertex*> deployedVertices;
 	vector<Card*> cards;
+	std::string lastActionMessage;
 	
 	BiddingFacility* biddingFacility;
 	int elixir;
@@ -96,5 +100,5 @@ class PlayerActionException : public std::exception
 
 class PlayerBuilder {
 public:
-	static void setPlayersType(vector<Player*> players);
+	static void setPlayersType(vector<Player*> players);	
 };
