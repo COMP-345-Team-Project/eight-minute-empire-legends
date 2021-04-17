@@ -61,6 +61,9 @@ Game::~Game() {
 	if (neutralPlayer != nullptr) {
 		delete neutralPlayer;
 	}
+	if (phaseObserver != nullptr) {
+		delete this->phaseObserver;
+	}
 }
 
 Resources* Game::getResources() {
@@ -863,9 +866,15 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 	return playerIndex;
 }
 
+void Game::attachPlayersToPhaseObserver() {
+	for (Player* pl : players) {
+		PhaseObserver* phaseObs = new PhaseObserver(pl);
+	}
+}
+
 void Game::notify() {
 	list<Observer*>::iterator observerIter;
-	for (observerIter = _observers.begin(); observerIter == _observers.end(); observerIter++) {
+	for (observerIter = _observers->begin(); observerIter == _observers->end(); observerIter++) {
 		(**observerIter).update();
 	}
 }

@@ -4,18 +4,17 @@
 PhaseObserver::PhaseObserver() {};
 
 PhaseObserver::PhaseObserver(Player* p) : _player(p) {
-	_player->Attach(this);
+	_player->attach(this);
 };
 
 PhaseObserver::~PhaseObserver() {
-	_player->Detach(this);
+	_player->detach(this);
 };
 
-void PhaseObserver::Update(std::string context) {
-	this->context = context;
-	Display();
+void PhaseObserver::update() {	
+	displayMessage();
 };
 
-void PhaseObserver::Display() {
-	std::cout << _player->getPlayerName() << " : " << context << std::endl;
+void PhaseObserver::displayMessage() {
+	std::cout << _player->getPlayerName() << " : " << _player->getLastActionMessage() << std::endl;
 };

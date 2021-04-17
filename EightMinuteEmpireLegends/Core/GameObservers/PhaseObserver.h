@@ -8,12 +8,11 @@ class PhaseObserver : public Observer
 {
 private:
 	Player* _player;
-	std::string context;
+
+	void displayMessage();
 public:
 	PhaseObserver();
 	PhaseObserver(Player* p);
 	~PhaseObserver();
-	void Update(std::string context);
-	void Display();
+	void update();
 };
-
