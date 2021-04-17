@@ -204,7 +204,7 @@ void GameStatisticsTests::Test_Driver() {
 	Game* newGame = new Game(rsc, map, deck, pl);
 	GameStatistics* gameStatsObserver = new GameStatistics(newGame); //The observer attach it self to the game
 
-	newGame->runSetupPhase(1);
+	newGame->runSetupPhase(2);
 	newGame->runRoundsUntilEndGame();
 	newGame->endGame();
 

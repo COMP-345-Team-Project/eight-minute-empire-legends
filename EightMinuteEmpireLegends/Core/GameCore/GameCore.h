@@ -50,10 +50,6 @@ private:
     int _getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt);
     int _getArmiesForOperation(int limit);
     int _getPlayerIndexFromUserInput(std::string prompt);
-    
-    
-    void _promptPlayerToPerformAction(Card* card, std::string actionDisplay, int actionOrder, Player* player);
-    void _listActions(Card* card);
     void _setEndGameConditions(int maxNumOfCards);
    
 public:
@@ -95,10 +91,7 @@ public:
     void autoDestroyArmies(Player* currPlayer, int detroyLimit);
 
     Vertex* FindVertexById(Map* map, string id);
-
-    static void _listActions(Card* card);
-    static bool _confirm();
-
+   
     void _performAction(Card* card, Player* player, int actionNumber);
 
     void _assignResources(); //Call assignResources() from resource, need to be public for testing

@@ -2,6 +2,7 @@
 
 #include "../pch.h"
 #include "GameCore.h"
+#include "../Utilities/Utilities.h"
 
 // Resources class implementation
 
@@ -417,33 +418,6 @@ void Game::runRoundsUntilEndGame() {
 	}
 }
 
-void Game::_listActions(Card* card) {
-	std::string firstAction = card->getFirstAction();
-	std::string secondAction = card->getSecondAction();
-	std::cout << "The available action(s) is/are: " << std::endl;
-
-	//If we have 2 actions
-	if (secondAction.compare("") != 0) {
-		std::cout << "1. ";
-		card->printHelper(card->getFirstAction());
-		std::cout << std::endl;
-
-		std::cout << "2. ";
-		card->printHelper(card->getSecondAction());
-		std::cout << std::endl;
-
-		if (card->getAndAction()) //And action
-			std::cout << "You can perform both actions." << std::endl;
-		else //Or action
-			std::cout << "You can perform only one of the actions. Please select one of them." << std::endl;
-	}
-	else { //We only have 1 actions
-		std::cout << "1. ";
-		card->printHelper(card->getFirstAction());
-		std::cout << std::endl;
-	}
-}
-
 void Game::_performAction(Card* card, Player* player, int actionOrder) {
 	//Perform the first action
 	std::cout << "Perform action ";
@@ -460,7 +434,7 @@ void Game::_performAction(Card* card, Player* player, int actionOrder) {
 
 	std::cout << "? (Y/N)";
 
-	if (_confirm()) {
+	if (confirm()) {
 		if (action.compare("newArmy") == 0) {
 			PlaceArmies(player, card->getNewArmy());
 		}
@@ -480,22 +454,6 @@ void Game::_performAction(Card* card, Player* player, int actionOrder) {
 
 	//We update the statistics everytime an action is done
 	notify();
-}
-
-bool Game::_confirm() {
-	char confirm;
-	do {
-		std::cin >> confirm;
-		if (confirm == 'N') {
-			return false;
-		}
-		else if (confirm == 'Y') {
-			return true;
-		}
-		else {
-			std::cout << "Please enter Y for yes or N for no";
-		}
-	} while (true);
 }
 
 void Game::PlaceArmies(Player* player, int deployLimit) {
@@ -539,7 +497,7 @@ void Game::PlaceArmies(Player* player, int deployLimit) {
 		//Ask the player if he wants to continue
 		if (deployLimit > 0) {
 			std::cout << "Do you want to continue deploying? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				placeMoreArmies = false;
 			}
 		}
@@ -630,7 +588,7 @@ void Game::MoveArmies(Player* player, int moveLimit) {
 		//Ask the player if he wants to continue
 		if (moveLimit > 0) {
 			std::cout << "Do you want to continue moving? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				moveMoreArmies = false;
 			}
 		}
@@ -716,7 +674,7 @@ void Game::BuildCity(Player* player) {
 		//Ask the player if he wants to continue
 		if (continueBuilding) {
 			std::cout << "Do you want to continue building? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				continueBuilding = false;
 			}
 		}
@@ -793,7 +751,7 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 		//Ask the player if he wants to continue
 		if (detroyLimit > 0) {
 			std::cout << "Do you want to continue destroying armies? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				destroyMoreArmies = false;
 			}
 		}
