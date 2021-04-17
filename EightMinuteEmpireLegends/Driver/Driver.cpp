@@ -47,22 +47,15 @@ int Driver::RunAssignmentTwoDriver()
 
 int Driver::RunStrategyDriver() {
 
-	std::vector<std::string> names{ "Coucou", "Banane" };
+	std::vector<std::string> names{ "AAA", "BBB", "CCC" };
 	std::string mapPath = "..\\Tests\\SetupPhaseTests\\Resources\\narrows.json";
-	Game* validGame = GameBuilder::build(2, names, mapPath);
-
-	PlayerBuilder::setPlayersType(validGame->getPlayers());
-	
-	validGame->attachPlayersToPhaseObserver();
-	validGame->getPlayers()[0]->getStrategy()->buyCard();
-
+	Game* validGame = GameBuilder::build(3, names, mapPath);
+	PlayerBuilder::setPlayersType(validGame->getPlayers());	
 	//Temporarily set up a starting region to test code
 	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
 	validGame->getMap()->setStartingRegion(startingRegion);
 	startingRegion->getTerritory()->setArmiesByPlayer(4, "Coucou");
-
 	validGame->runSetupPhase();
 	validGame->runRoundsUntilEndGame();
-
 	return 0;
 }

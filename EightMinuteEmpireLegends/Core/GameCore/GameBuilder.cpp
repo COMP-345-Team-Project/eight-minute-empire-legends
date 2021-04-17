@@ -1,5 +1,6 @@
 #include "GameBuilder.h"
 #include "../GameObservers/GameStatistics.h"
+#include "../GameObservers/PhaseObserver.h"
 
 Game* GameBuilder::build() {
 	std::vector<filesystem::path> maps = fetchMapFiles(_mapDir);
@@ -100,6 +101,13 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 	//Create the game and attach Observer
 	Game* newGame = new Game(rsc, map, deck, pl);
 	GameStatistics* gameStatsObserver = new GameStatistics(newGame); //THe observer attach it self to the game
+
+	// Attach phase observer to players
+	PhaseObserver* phaseObserver;
+	for (Player* player : pl) {
+		phaseObserver = new PhaseObserver(player);
+	}
+	
 
 	//Crete a new game object and pass above objects to Game
 	return newGame;

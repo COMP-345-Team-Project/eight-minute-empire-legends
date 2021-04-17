@@ -1,7 +1,6 @@
 #pragma once
 #include "../pch.h"
 #include "GameObservers.h"
-#include "../GameCore/GameCore.h"
 
 //#include <algorithm>
 //#include <list>
