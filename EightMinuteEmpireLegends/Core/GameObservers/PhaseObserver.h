@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch.h"
 #include <iostream>
-#include "../GameObservers/GameObservers.h"
+#include "GameObservers.h"
 #include "../Player/player.h"
 
 class PhaseObserver : public Observer

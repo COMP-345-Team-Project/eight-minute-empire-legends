@@ -1,7 +1,6 @@
 #pragma once
 #include "../pch.h"
 #include "../GameObservers/GameObservers.h"
-#include "../GameObservers/PhaseObserver.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Bidding/BidTieBreakerByLastName.h"
@@ -42,8 +41,7 @@ private:
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
-    Player* neutralPlayer = nullptr; // Initialized if 2 player game
-    PhaseObserver* phaseObserver;
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game    
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding

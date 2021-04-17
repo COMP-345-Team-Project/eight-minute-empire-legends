@@ -16,5 +16,5 @@ void PhaseObserver::update() {
 };
 
 void PhaseObserver::displayMessage() {
-	std::cout << _player->getPlayerName() << " : " << _player->getLastActionMessage() << std::endl;
+	std::cout << "\n---------" << _player->getPlayerName() << " : " << _player->getLastActionMessage() << "---------\n" << std::endl;
 };
