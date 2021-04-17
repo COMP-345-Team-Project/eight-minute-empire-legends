@@ -7,6 +7,7 @@
 #include "../Bidding/BiddingFacility.h"
 #include "PlayerStrategies.h"
 #include "../GameObservers/GameObservers.h"
+class Strategy;
 
 class Player : public Observable
 {
