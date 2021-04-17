@@ -27,7 +27,7 @@ Card* HumanStrategy::buyCard(Player* player, CardSpace& cardSpace, Deck& deck) {
 	
 	int cardInput = 1; //Position from user input
 
-	std::cout << "\nCard Exchange Phase for Player " << player->getPlayerName() << endl;
+	std::cout << "\nCard Exchange Phase for Player " << player->getPlayerName() << "(Human Action)" << endl;
 
 	//Getting user input to buy cards
 	cardSpace.showCardSpace();
@@ -92,27 +92,108 @@ void HumanStrategy::performAction(Game* game, Player* player, Card* cardBeingPur
 	
 }
 
-void GreedyStrategy::buyCard(Player* player, CardSpace& cardSpace) {
-	autoBuyCard(cardSpace, "Greedy");
+Card* GreedyStrategy::buyCard(Player* player, CardSpace& cardSpace, Deck& deck) {
+	Card* cardBeingPurchased = autoBuyCard(player, cardSpace, deck, "Greedy");
+	return cardBeingPurchased;
 }
 
-void GreedyStrategy::performAction() {
-	std::cout << "Greedy performAction()" << std::endl;
+void GreedyStrategy::performAction(Game* game, Player* player, Card* cardBeingPurchased) {
+	autoPerformAction(game, player, cardBeingPurchased, "Greedy");
 }
 
-void ModerateStrategy::buyCard(Player* player, CardSpace& cardSpace) {
-	std::cout << "Moderate buyCard()" << std::endl;
+
+
+Card* ModerateStrategy::buyCard(Player* player, CardSpace& cardSpace, Deck& deck) {
+	Card* cardBeingPurchased = autoBuyCard(player, cardSpace, deck, "Moderate");
+	return cardBeingPurchased;
 }
 
-void ModerateStrategy::performAction() {
-	std::cout << "Moderate buyCard()" << std::endl;
+void ModerateStrategy::performAction(Game* game, Player* player, Card* cardBeingPurchased) {
+	autoPerformAction(game, player, cardBeingPurchased, "Moderate");
 }
 
-Card* Strategy::autoBuyCard(CardSpace& cardSpace, string strategy) {
-	std::cout << "Strategy: " << strategy << endl;
+
+
+Card* Strategy::autoBuyCard(Player* player, CardSpace& cardSpace, Deck& deck, string strategy) {
+
+	//Print out current cardSpace
+	std::cout << "\nCard Exchange Phase for Player " << player->getPlayerName() << "(Automated Action)" << endl;
 	cardSpace.showCardSpace();
+	std::cout << "You have " << player->getCoins() << " coins available" << endl;
 
-	return new Card();
+	int cardIndex = 0;
+
+	//Loop through cardSpace to find the suitable card for Greedy and Moderate strategy
+	for (int i = 0; i < cardSpace.getSize(); i++) {
+		if (strategy == "Greedy") {
+			if ((cardSpace.getCards()[i]->getFirstAction() == "buildCity" || cardSpace.getCards()[i]->getFirstAction() == "destroyArmy") && cardSpace.costCalc(i) <= player->getCoins()) {
+				cardIndex = i;
+				break;
+			}
+		}
+		else {
+			if ((cardSpace.getCards()[i]->getFirstAction() == "newArmy" || cardSpace.getCards()[i]->getFirstAction() == "moveArmy") && cardSpace.costCalc(i) <= player->getCoins()) {
+				cardIndex = i;
+				break;
+			}
+		}
+	}
+
+	//Making Card Purchase
+	Card* cardBeingPurchased = cardSpace.sell(deck, cardIndex+1);
+	player->BuyCard(cardBeingPurchased, cardSpace.costCalc(cardIndex));
+
+	//Print coin balance
+	std::cout << "Card cost: " << cardSpace.costCalc(cardIndex) << endl;
+	std::cout << "You have " << player->getCoins() << " coins left after card purchase" << endl;
+
+	return cardBeingPurchased;
+}
+
+void Strategy::autoPerformAction(Game* game, Player* player, Card* cardBeingPurchased, string strategy) {
+	
+	Game::_listActions(cardBeingPurchased);
+
+	//game->_performAction(cardBeingPurchased, player, 1);
+	
+	//Performing first action
+	if (cardBeingPurchased->getFirstAction() == "newArmy") {
+		//game->PlaceArmies(player, cardBeingPurchased->getNewArmy());
+		game->autoPlaceArmies(player, cardBeingPurchased->getNewArmy());
+	}
+	else if (cardBeingPurchased->getFirstAction() == "moveArmy") {
+		game->autoMoveArmies(player, cardBeingPurchased->getMoveArmy());
+	}
+	else if (cardBeingPurchased->getFirstAction() == "buildCity") {
+		game->autoBuildCity(player);
+	}
+	else if (cardBeingPurchased->getFirstAction() == "destroyArmy") {
+		game->autoDestroyArmies(player, cardBeingPurchased->getDestroyArmy());
+	}
+	else {
+		std::cout << "Unknown action"<< endl;
+	}
+
+	//Performing second action if available
+	if (cardBeingPurchased->getAndAction()) {
+
+		if (cardBeingPurchased->getSecondAction() == "newArmy") {
+			game->autoPlaceArmies(player, cardBeingPurchased->getNewArmy());
+		}
+		else if (cardBeingPurchased->getSecondAction() == "moveArmy") {
+			game->autoMoveArmies(player, cardBeingPurchased->getMoveArmy());
+		}
+		else if (cardBeingPurchased->getSecondAction() == "buildCity") {
+			game->autoBuildCity(player);
+		}
+		else if (cardBeingPurchased->getSecondAction() == "destroyArmy") {
+			game->autoDestroyArmies(player, cardBeingPurchased->getDestroyArmy());
+		}
+		else {
+			std::cout << "Unknown action" << endl;
+		}
+	}
+
 }
 
 

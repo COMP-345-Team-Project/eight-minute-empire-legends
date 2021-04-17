@@ -41,15 +41,20 @@ int Driver::RunAssignmentTwoDriver()
 }
 
 
+
+
+
+
+/*
 #include "../Core/GameCore/GameCore.h"
 #include "../Core/GameCore/GameBuilder.h"
 #include "../Core/MapLoader/MapLoader.h"
 
 int Driver::RunStrategyDriver() {
 
-	std::vector<std::string> names{ "Coucou", "Banane" };
+	std::vector<std::string> names{"AAA", "BBB", "CCC"};
 	std::string mapPath = "..\\Tests\\SetupPhaseTests\\Resources\\narrows.json";
-	Game* validGame = GameBuilder::build(2, names, mapPath);
+	Game* validGame = GameBuilder::build(3, names, mapPath);
 
 	PlayerBuilder::setPlayersType(validGame->getPlayers());
 
@@ -63,3 +68,4 @@ int Driver::RunStrategyDriver() {
 
 	return 0;
 }
+*/

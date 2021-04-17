@@ -81,9 +81,17 @@ public:
 
     //Helper functions
     void PlaceArmies(Player* player, int numOfArmies);
+    void autoPlaceArmies(Player* player, int numOfArmies);
+
     void MoveArmies(Player* player, int deployLimit);
+    void autoMoveArmies(Player* player, int deployLimit);
+
     void BuildCity(Player* player);
+    void autoBuildCity(Player* player);
+
     void DestroyArmies(Player* currPlayer, int detroyLimit);
+    void autoDestroyArmies(Player* currPlayer, int detroyLimit);
+
     Vertex* FindVertexById(Map* map, string id);
 
     static void _listActions(Card* card);

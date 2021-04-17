@@ -371,10 +371,11 @@ void Game::runRoundsUntilEndGame() {
 		endGameCardCount = 8;
 	}
 
+	PlayerBuilder::setPlayersType(players);
+
 	int gameRound = 1;
 
 	//Main loop until game ends
-	//End game condition
 	while (players[players.size() - 1]->getCards().size() < endGameCardCount) {
 
 		std::cout << "\n\nRound " << gameRound++ << endl;
@@ -394,45 +395,6 @@ void Game::runRoundsUntilEndGame() {
 
 			//Perform action based on strategy of each player
 			players[i]->getStrategy()->performAction(this,players[i],cardBeingPurchased);
-			/*
-
-			//We have an option to skip the action 
-			_listActions(cardBeingPurchased);
-
-			//If there are 2 actions
-			if (cardBeingPurchased->getSecondAction().compare("") != 0) {
-				//And actions
-				if (cardBeingPurchased->getAndAction()) {
-					_performAction(cardBeingPurchased, players.at(i), 1);
-					_performAction(cardBeingPurchased, players.at(i), 2);
-				}
-				//Or actions
-				else {
-					int option = -1;
-					do {
-						//We need to perform type checking somehow... to be implemented later
-						std::cin >> option;
-						if (option < 1 || option > 2) {
-							std::cout << "Invalid action option, please try again." << std::endl;
-						}
-					} while (option < 1 || option > 2);
-
-					_performAction(cardBeingPurchased, players.at(i), option);
-				}
-			}
-			else {
-				//We only have 1 option
-				_performAction(cardBeingPurchased, players.at(i), 1);
-			}
-
-			*/
-
-
-			
-			//Recompute the score for each player
-			players.at(i)->ComputeScore(map, players);
-
-			notify();
 			
 			
 		}
@@ -570,6 +532,45 @@ void Game::PlaceArmies(Player* player, int deployLimit) {
 	std::cout << "Finish placing new armies." << std::endl;
 }
 
+void Game::autoPlaceArmies(Player* player, int deployLimit) {
+
+	//Get the vertices where you can deploy your armies
+	vector<Vertex*> deployableVertices;
+
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex == map->getStartingRegion() || currVertex->getTerritory()->getCitiesByPlayer(player->getPlayerName())) {
+			deployableVertices.push_back(currVertex);
+		}
+	}
+
+	if (deployableVertices.size() == 0) {
+		std::cout << "No deployable regions! " << deployLimit << std::endl;
+		return;
+	}
+
+	//Display the vertex where armies can be added
+	std::cout << "\nRemaining armies to deployed: " << deployLimit << std::endl;
+
+	//Select the first vertex available
+	Vertex* chosenVertex = deployableVertices.at(0);
+
+	//Place all armies from this card to the above chosen vertex
+	int tobeDeployed = deployLimit;
+
+	//Deploying the armies
+	try {
+		player->PlaceNewArmies(map, chosenVertex, tobeDeployed);
+		deployLimit -= tobeDeployed;
+		std::cout << "Armies deployed successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+	
+	std::cout << "Finish placing new armies." << std::endl;
+}
+
 void Game::MoveArmies(Player* player, int moveLimit) {
 	bool moveMoreArmies = true;
 	while (moveLimit > 0 && moveMoreArmies) {
@@ -622,6 +623,48 @@ void Game::MoveArmies(Player* player, int moveLimit) {
 	std::cout << "Finished moving armies." << std::endl;
 }
 
+void Game::autoMoveArmies(Player* player, int moveLimit) {
+
+	//Display the vertex where armies can be added
+	std::cout << "\nRemaining moves: " << moveLimit << std::endl;
+
+	//Get the vertices where you have armies deployed
+	vector<Vertex*> fromVertices;
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex->getTerritory()->getArmiesByPlayer(player->getPlayerName()) > 0) {
+			fromVertices.push_back(currVertex);
+		}
+	}
+
+	if (fromVertices.size() == 0) {
+		std::cout << "You do not have any regions with armies! " << std::endl;
+		return;
+	}
+
+	//Move from first available vertex
+	Vertex* fromVertex = fromVertices.at(0);
+
+	//Move to first available vertex
+	vector<Vertex*> toVertices = map->adjacentVertices(fromVertex);
+	Vertex* toVertex = toVertices.at(0);
+
+	//Move all armies available from the card
+	int armiesMoved = moveLimit;
+
+	//Deploying the armies
+	try {
+		player->MoveArmies(map, fromVertex, toVertex, armiesMoved, moveLimit);
+		std::cout << "Armies moved successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
+	
+	std::cout << "Finished moving armies." << std::endl;
+}
+
 void Game::BuildCity(Player* player) {
 	bool continueBuilding = true;
 
@@ -668,6 +711,36 @@ void Game::BuildCity(Player* player) {
 	
 }
 
+void Game::autoBuildCity(Player* player) {
+
+	//Get the vertices where you have armies deployed
+	vector<Vertex*> validVertices;
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex->getTerritory()->getArmiesByPlayer(player->getPlayerName()) > 0) {
+			validVertices.push_back(currVertex);
+		}
+	}
+
+	if (validVertices.size() == 0) {
+		std::cout << "You do not have any regions with armies! " << std::endl;
+		return;
+	}
+
+	Vertex* buildVertex = validVertices.at(0);
+
+	try {
+		//We build 1 city at a time only
+		player->BuildCity(buildVertex, 1);
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
+	std::cout << "Finished building the city. " << std::endl;
+
+}
+
 void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 	bool destroyMoreArmies = true;
 	while (detroyLimit > 0 && destroyMoreArmies) {
@@ -710,6 +783,38 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 			std::cout << "No more army destruction allowed. Out of moves. " << std::endl;
 		}
 	}
+	std::cout << "Finish destroying armies." << std::endl;
+}
+
+void Game::autoDestroyArmies(Player* currPlayer, int detroyLimit) {
+
+	Player* opponent = players.at(0);
+
+	//Get the vertices where the opponent player has some armies deployed
+	vector<Vertex*> destroyableVertices = opponent->GetDeployedVertices();
+
+	std::cout << "\nRemaining armies can be destroyed: " << detroyLimit << std::endl;
+
+	if (destroyableVertices.size() == 0) {
+		std::cout << "There is no regions to be destroyed! " << std::endl;
+		return;
+	}
+
+	//Destroy the first possible army
+	Vertex* chosenVertex = destroyableVertices.at(0);
+
+	//Destroy 1 army at a time
+	int armiesToDestroy = 1;
+
+	try {
+		currPlayer->DestroyArmy(chosenVertex, opponent, armiesToDestroy);
+		detroyLimit -= armiesToDestroy;
+		std::cout << "Armies destroyed successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
 	std::cout << "Finish destroying armies." << std::endl;
 }
 
