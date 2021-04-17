@@ -41,3 +41,33 @@ int Driver::RunAssignmentTwoDriver()
 	
 	return 0;
 }
+
+
+
+
+
+
+/*
+#include "../Core/GameCore/GameCore.h"
+#include "../Core/GameCore/GameBuilder.h"
+#include "../Core/MapLoader/MapLoader.h"
+
+int Driver::RunStrategyDriver() {
+
+	std::vector<std::string> names{"AAA", "BBB", "CCC"};
+	std::string mapPath = "..\\Tests\\SetupPhaseTests\\Resources\\narrows.json";
+	Game* validGame = GameBuilder::build(3, names, mapPath);
+
+	PlayerBuilder::setPlayersType(validGame->getPlayers());
+
+	//Temporarily set up a starting region to test code
+	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
+	validGame->getMap()->setStartingRegion(startingRegion);
+	startingRegion->getTerritory()->setArmiesByPlayer(4, "Coucou");
+
+	validGame->runSetupPhase();
+	validGame->runRoundsUntilEndGame();
+
+	return 0;
+}
+*/

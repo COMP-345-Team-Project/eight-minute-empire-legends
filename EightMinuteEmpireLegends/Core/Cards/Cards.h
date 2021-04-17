@@ -95,6 +95,8 @@ public:
 
     //Getter
     int getSize();
+	
+	vector<Card*> getCardSpace();
 
 private:
     vector<Card*> deck;

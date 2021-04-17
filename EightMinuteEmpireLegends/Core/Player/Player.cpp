@@ -2,6 +2,7 @@
 #include "../pch.h"
 #include "Player.h"
 #include "../Cards/Cards.h"
+//#include "PlayerStrategies.h"
 
 Player::Player(std::string name, BiddingFacility* biddingFacility, bool isNeutral) : isNeutral(isNeutral), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0), playerScore() {}
 Player::Player(std::string name, BiddingFacility* biddingFacility) : isNeutral(false), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0), playerScore() {}
@@ -428,3 +429,47 @@ const char* PlayerActionException::what() const throw ()
 {
 	return errorMessage.c_str();
 }
+
+//Strategy
+void Player::setStrategy(string strategyName) {
+	delete strategy;
+
+	if (strategyName == "GreedyComputer")
+		strategy = new GreedyStrategy();
+	else if (strategyName == "ModerateComputer")
+		strategy = new ModerateStrategy();
+	else {
+		strategy = new HumanStrategy();
+	}
+
+}
+
+Strategy* Player::getStrategy() {
+	return strategy;
+}
+
+void PlayerBuilder::setPlayersType(vector<Player*> players) {
+	for (Player* pl : players) {
+		string playerType;
+		std::cout << "Type of player for " << pl->getPlayerName() << " (H)uman, (G)reedy Computer or (M)oderate Computer :" << endl;
+		std::cin >> playerType;
+
+		if (playerType == "G" || playerType == "g") {
+			pl->setStrategy("GreedyComputer");
+			std::cout << pl->getPlayerName() << " is a Greedy Computer" << endl;
+		}
+
+		else if (playerType == "M" || playerType == "m") {
+			pl->setStrategy("ModerateComputer");
+			std::cout << pl->getPlayerName() << " is a Moderate Computer" << endl;
+		}
+
+		else {
+			pl->setStrategy("Human");
+			std::cout << pl->getPlayerName() << " is a Human" << endl;
+		}
+
+
+	}
+}
+

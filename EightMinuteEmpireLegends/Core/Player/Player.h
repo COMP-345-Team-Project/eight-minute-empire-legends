@@ -5,6 +5,8 @@
 #include "../Cards/Cards.h"
 #include "../Map/Map.h"
 #include "../Bidding/BiddingFacility.h"
+#include "PlayerStrategies.h"
+class Strategy;
 
 class Player
 {
@@ -25,6 +27,7 @@ public:
 	std::string getPlayerName() const;
 	void addElixirs(int elixir);
 	int getElixirs();
+	Strategy* getStrategy();
 
 	//Player actions
 	bool HasArmyDeployedInVertex(Vertex* v); 
@@ -50,6 +53,9 @@ public:
 	//Operators overloading
 	Player& operator =(const Player& p);
 	friend std::ostream& operator <<(std::ostream& os, const Player* p);
+
+	//Strategy
+	void setStrategy(string strategy);
 	
 
 private:
@@ -64,6 +70,9 @@ private:
 	
 	BiddingFacility* biddingFacility;
 	int elixir;
+
+	//Strategy
+	Strategy* strategy;
 
 	//Private methods
 	void RemoveDeployedVertex(Vertex* v);
@@ -83,4 +92,9 @@ class PlayerActionException : public std::exception
 	public:
 		PlayerActionException(const std::string& msg);
 		const char* what() const throw();
+};
+
+class PlayerBuilder {
+public:
+	static void setPlayersType(vector<Player*> players);
 };
