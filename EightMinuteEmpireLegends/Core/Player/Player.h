@@ -8,7 +8,7 @@
 #include "PlayerStrategies.h"
 class Strategy;
 
-class Player
+class Player : public Observable
 {
 public:
 	//Constructors
