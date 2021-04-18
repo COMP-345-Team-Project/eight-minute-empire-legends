@@ -169,24 +169,32 @@
     <None Include="MapLoaderTests\Resources\wrongFormatFile.csv">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="SetupPhaseTests\Resources\bloodgulch.json" />
+    <None Include="SetupPhaseTests\Resources\guardian.json" />
+    <None Include="SetupPhaseTests\Resources\highground.json" />
+    <None Include="SetupPhaseTests\Resources\narrows.json" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BiddingTests\BiddingFacilityTests.cpp" />
     <ClCompile Include="CardsTests\CardsTests.cpp" />
     <ClCompile Include="GameStartTests\GameStartTests.cpp" />
+    <ClCompile Include="GameTests\GameTest.cpp" />
     <ClCompile Include="MapLoaderTests\MapLoaderTests.cpp" />
     <ClCompile Include="MapTests\MapTestUtils.cpp" />
     <ClCompile Include="MapTests\MapTests.cpp" />
     <ClCompile Include="PlayerTests\PlayerTests.cpp" />
+    <ClCompile Include="SetupPhaseTests\SetupPhaseTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingTests\BiddingFacilityTests.h" />
     <ClInclude Include="CardsTests\CardsTests.h" />
     <ClInclude Include="GameStartTests\GameStartTests.h" />
+    <ClInclude Include="GameTests\GameTest.h" />
     <ClInclude Include="MapLoaderTests\MapLoaderTests.h" />
     <ClInclude Include="MapTests\MapTestUtils.h" />
     <ClInclude Include="MapTests\MapTests.h" />
     <ClInclude Include="PlayerTests\PlayerTests.h" />
+    <ClInclude Include="SetupPhaseTests\SetupPhaseTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

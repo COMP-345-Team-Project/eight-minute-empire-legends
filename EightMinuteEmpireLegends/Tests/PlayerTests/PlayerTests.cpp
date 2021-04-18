@@ -24,7 +24,7 @@ PlayerTests::PlayerTests() {
 	playerName = "player1";
 	altPlayerName = "player2";
 	//Temporary fix for the running directory issue, will be removed after
-	mapPath = "C:/Users/thuan/Desktop/STUDY/COMP 345/eight-minute-empire-legends/EightMinuteEmpireLegends/Tests/MapLoaderTests/Resources/validJson_validMap.json";
+	mapPath = "../Tests/MapLoaderTests/Resources/validJson_validMap.json";
 }
 
 int PlayerTests::Test_PlaceArmies()
@@ -192,6 +192,7 @@ int PlayerTests::Test_DestroyArmies() {
 	BidTieBreakerByLastName bidTieBreakerByLastName;
 	BiddingFacility* biddingFacility = new BiddingFacility(bidTieBreakerByLastName);
 	Player* p1 = new Player(playerName, biddingFacility);
+	Player* p2 = new Player(altPlayerName, biddingFacility);
 
 	//Arrange
 	//Set the starting region then set some armies at the starting region
@@ -199,6 +200,7 @@ int PlayerTests::Test_DestroyArmies() {
 	map->setStartingRegion(region);
 	p1->InitResources(numOfCoins, numOfArmies, numOfCities);
 	p1->PlaceNewArmies(map, region, 3);
+	
 	//Make sure that region is added to deployedVertices of the player
 	assert(p1->HasArmyDeployedInVertex(region));
 
@@ -207,7 +209,17 @@ int PlayerTests::Test_DestroyArmies() {
 	//Remove more than deployed
 	bool errorCaught = false;
 	try {
-		p1->DestroyArmy(region, 4);
+		p1->DestroyArmy(region, p1, 4);
+	}
+	catch (PlayerActionException& ex) {
+		errorCaught = true;
+		std::cout << ex.what() << std::endl;
+	}
+	assert(errorCaught == true);
+	//Armies of opponent where you dont have any armies
+	errorCaught = false;
+	try {
+		p2->DestroyArmy(region, p1, 4);
 	}
 	catch (PlayerActionException& ex) {
 		errorCaught = true;
@@ -215,17 +227,23 @@ int PlayerTests::Test_DestroyArmies() {
 	}
 	assert(errorCaught == true);
 
+	//Initialize resources for player 2
+	p2->InitResources(numOfCoins, numOfArmies, numOfCities);
+	p2->PlaceNewArmies(map, region, 3);
+	//Make sure that region is added to deployedVertices of the player
+	assert(p2->HasArmyDeployedInVertex(region));
+
 	//Testing correct cases
 	std::cout << "Testing correct cases using assertions..." << std::endl;
-	p1->DestroyArmy(region, 2);
-	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 1);
-	assert(p1->getAvailableArmies() == 9);
-	assert(p1->HasArmyDeployedInVertex(region)); //still has 1 army
+	p1->DestroyArmy(region, p2, 2);
+	assert(region->getTerritory()->getArmiesByPlayer(altPlayerName) == 1);
+	assert(p2->getAvailableArmies() == 9);
+	assert(p2->HasArmyDeployedInVertex(region)); //still has 1 army
 	//Remove the last army
-	p1->DestroyArmy(region, 1);
-	assert(region->getTerritory()->getArmiesByPlayer(playerName) == 0);
-	assert(p1->getAvailableArmies() == 10);
-	assert(p1->HasArmyDeployedInVertex(region) == false); 
+	p1->DestroyArmy(region, p2, 1);
+	assert(region->getTerritory()->getArmiesByPlayer(altPlayerName) == 0);
+	assert(p2->getAvailableArmies() == 10);
+	assert(p2->HasArmyDeployedInVertex(region) == false); 
 
 	delete biddingFacility;
 	delete p1;
@@ -418,27 +436,31 @@ int PlayerTests::Test_ComputeScore() {
 
 	p2->addElixirs(card11->getElixer()); //Cards 11 has 1 elixir
 
+	//Compute the score 
+	vector<Player*> players{ p1, p2 };
+	p1->ComputeScore(map, players);
+	p2->ComputeScore(map, players);
+
 	//Validate the compute score based on territories owned
 	std::cout << "Asserting the scores return by the functions..." << std::endl;
-	assert(p1->ComputeTerritoryScore() == 6);
-	assert(p2->ComputeTerritoryScore() == 4);
+	assert(p1->GetTerritoriesScore() == 6);
+	assert(p2->GetTerritoriesScore() == 4);
 
 	//Validate the compute score based on continents owned
-	assert(p1->ComputeRegionalScore(map) == 2);
-	assert(p2->ComputeRegionalScore(map) == 1);
+	assert(p1->GetContinentsScore() == 2);
+	assert(p2->GetContinentsScore() == 1);
 
 	//Validate the points based of card abilities
-	assert(p1->ComputeAbilityScore() == 8);
-	assert(p2->ComputeAbilityScore() == 8);
+	assert(p1->GetAbilitiesScore() == 8);
+	assert(p2->GetAbilitiesScore() == 8);
 
 	//Validate the points based on the number of elixirs
-	vector<Player*> players{ p1, p2 };
-	assert(p1->ComputeElixirScore(players) == 2);
-	assert(p2->ComputeElixirScore(players) == 0);
+	assert(p1->GetElixirScore() == 2);
+	assert(p2->GetElixirScore() == 0);
 
 	//Finally we check the overall compute score function
-	assert(p1->ComputeScore(map, players) == 18);
-	assert(p2->ComputeScore(map, players) == 13);
+	assert(p1->GetTotalScore() == 18);
+	assert(p2->GetTotalScore() == 13);
 
 	Game testGame;
 	testGame.endGame(map, players);

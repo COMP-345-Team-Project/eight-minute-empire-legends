@@ -83,7 +83,7 @@ public:
     Deck(int numPlayer);
 
     //Add cards into the deck
-    void addCard(Card newCard);
+    void addCard(Card* newCard);
 
     //Changing the index position of the cards in the deck using random number
     void shuffle();
@@ -91,13 +91,15 @@ public:
     //Debug function to reveals all cards in deck
     void reveal();
     //Draw card from deck
-    Card draw();
+    Card* draw();
 
     //Getter
     int getSize();
+	
+	vector<Card*> getCardSpace();
 
 private:
-    vector<Card> deck;
+    vector<Card*> deck;
 
 };
 
@@ -105,7 +107,6 @@ private:
 class CardSpace {
 
 public:
-
     //CardSpace is hardcoded to draw 6 cards from deck upon initialization
     CardSpace(Deck& mainDeck);
 
@@ -116,7 +117,7 @@ public:
     CardSpace& operator =(const CardSpace& cardSpace);
 
     //Add new cards into the hand
-    void addCard(Card newCard);
+    void addCard(Card* newCard);
 
     //Print out all cards in CardSpace associated with their current cost for exchange
     void showCardSpace();
@@ -126,14 +127,14 @@ public:
 
     //Exchange function to allow player to buy cards from hand using coins
     //showHand function included for demonstration
-    Card exchange(Deck& mainDeck, bool demo);
+    Card* exchange(Deck& mainDeck, bool demo);
 
-    Card sell(Deck& mainDeck, int cardInput);
+    Card* sell(Deck& mainDeck, int cardInput);
 
     //Getter
     int getSize();
-    vector<Card> getCards();
+    vector<Card*> getCards();
 
 private:
-    vector<Card> cardSpace; //Store the 6 cards that are available for purchase
+    vector<Card*> cardSpace; //Store the 6 cards that are available for purchase
 };

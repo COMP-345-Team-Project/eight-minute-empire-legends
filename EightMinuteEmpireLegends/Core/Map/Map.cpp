@@ -12,7 +12,7 @@ Map::Map(const Map& m)
 	: name(m.name), v_vertices(m.v_vertices), v_edges(m.v_edges), v_continents(m.v_continents) {
 	if (m.startingRegion != nullptr) {
 		this->startingRegion = new Vertex(*m.startingRegion);
-	}	
+	}
 }
 
 Map::Map()
@@ -45,6 +45,55 @@ void Map::setStartingRegion(Vertex* v) {
 
 Vertex* Map::getStartingRegion() {
 	return this->startingRegion;
+}
+
+std::vector<Vertex*> Map::getPotentialStartingRegions()
+{
+	std::vector<Vertex*> possibleStartingTerritories;
+	// Find possible starting regions
+	for (Vertex* currTerritoryVertex : vertices()) {
+		// Must have water connection to another continent
+		bool hasWaterConnection = false;
+		// and be adjacent to a territory with, or have itself, another water connection
+		bool hasAdditionalWaterConnection = false;
+
+		std::vector<Vertex*> adjVerteces = adjacentVertices(currTerritoryVertex);
+
+		for (Vertex* adjTerritoryVertex : adjVerteces) {
+			if (adjTerritoryVertex->getTerritory()->getContinent() != currTerritoryVertex->getTerritory()->getContinent())
+			{
+				if (hasWaterConnection)
+				{
+					hasAdditionalWaterConnection = true;
+				}
+				else
+				{
+					hasWaterConnection = true;
+				}
+
+			}
+		}
+		if (hasWaterConnection && !hasAdditionalWaterConnection) {
+			for (Vertex* adjTerritoryVertex : adjVerteces)
+			{
+				if (hasAdditionalWaterConnection == true) {
+					break;
+				}
+				std::vector<Vertex*> adjadjTerritoryVerteces = adjacentVertices(adjTerritoryVertex);
+				for (Vertex* adjadjTerritoryVertex : adjadjTerritoryVerteces) {
+					if (adjadjTerritoryVertex->getTerritory()->getContinent() != adjTerritoryVertex->getTerritory()->getContinent()) {
+						hasAdditionalWaterConnection = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (hasWaterConnection && hasAdditionalWaterConnection) {
+			possibleStartingTerritories.push_back(currTerritoryVertex);
+		}
+	}
+	return possibleStartingTerritories;
 }
 
 int Map::numVertices() {
@@ -236,10 +285,10 @@ Map& Map::operator =(const Map& m) {
 	return *this;
 }
 
-std::ostream& operator <<(std::ostream& os, const Map* m) {	
+std::ostream& operator <<(std::ostream& os, const Map* m) {
 	os << "Map : " << m->name << std::endl;
 	os << "Vertices: [" << std::endl;
-	for (Vertex* v : const_cast<Map*>(m)->vertices()) {		
+	for (Vertex* v : const_cast<Map*>(m)->vertices()) {
 		os << v << std::endl;
 	}
 	os << "]\n" << "Edges : [" << std::endl;
@@ -252,7 +301,7 @@ std::ostream& operator <<(std::ostream& os, const Map* m) {
 	}
 	os << "]\n" << "Starting Region : ";
 	m->startingRegion != nullptr ? os << m->startingRegion : os << "None";
-	
+
 	return os;
 }
 

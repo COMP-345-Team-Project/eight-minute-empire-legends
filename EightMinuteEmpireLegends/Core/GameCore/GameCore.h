@@ -1,5 +1,6 @@
 #pragma once
 #include "../pch.h"
+#include "../GameObservers/GameObservers.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Bidding/BidTieBreakerByLastName.h"
@@ -12,9 +13,9 @@ const int _dCoins = 36;
 const int _dArmies = 18;
 const int _dCities = 3;
 
-// ./GameStartTests/Resources
+// ../Tests/GameStartTests/Resources
 const std::string _mapDir = "../Tests/GameStartTests/Resources";
-// ./../../config/EightMinuteEmpireLengendsPrefs.ini
+// ../../config/EightMinuteEmpireLengendsPrefs.ini
 const std::string _configPath = "../../config/EightMinuteEmpireLengendsPrefs.ini";
 
 //This represent the pile of resources provided by the game board
@@ -31,23 +32,31 @@ public:
     //assign the initial resources to each player for the game setup
     void assignInitialResources(vector<Player*> players);    
     friend std::ostream& operator <<(std::ostream& os, const Resources* r);
+    int getAssignedCities();
 };
 
-class Game {
+class Game : public Observable {
 private:
     Resources* resources;
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game
 
     void _placeArmies(); //2 players game are a bit different, check rules
-    void _assignResources(); //Call assignResources() from resource
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
     bool _isEndGame();
+    int _getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt);
+    int _getArmiesForOperation(int limit);
+    int _getPlayerIndexFromUserInput(std::string prompt);
+    
+    
+    void _promptPlayerToPerformAction(Card* card, std::string actionDisplay, int actionOrder, Player* player);
+    
 
 public:
     Game();
-    Game(Resources& resources, Map& map, Deck& deck, vector<Player*> players);
+    Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
     // Getters
@@ -55,24 +64,43 @@ public:
     Map* getMap();
     Deck* getDeck();
     std::vector<Player*> getPlayers();
+    void displayTerritories(std::vector<Vertex*> vertices);
+    void displayTerritories(std::vector<Vertex*> vertices, bool numbered);
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
-    void startUp();
+    void runSetupPhase();
 
     //Main game loop, part 3, 5
-    void startGame();
+    void runRoundsUntilEndGame();
 
+    //End game, announce winners, and cleanup
+    void endGame();
     //End game
     void endGame(Map* map, vector<Player*> players);
-};
 
-//We use a GameBuilder to create a new game object instead of initializing the Game object directly
-class GameBuilder {
-public:
-    static Game* build();
-    static Game* build(int numPlayers, std::vector<std::string> names, std::string mapPath, std::string configPath = "");
-};
+    //Helper functions
+    void PlaceArmies(Player* player, int numOfArmies);
+    void autoPlaceArmies(Player* player, int numOfArmies);
 
-std::tuple<int, int, int> fetchConfigResources(std::string path);
-std::vector<filesystem::path> fetchMapFiles(std::string path);
+    void MoveArmies(Player* player, int deployLimit);
+    void autoMoveArmies(Player* player, int deployLimit);
+
+    void BuildCity(Player* player);
+    void autoBuildCity(Player* player);
+
+    void DestroyArmies(Player* currPlayer, int detroyLimit);
+    void autoDestroyArmies(Player* currPlayer, int detroyLimit);
+
+    Vertex* FindVertexById(Map* map, string id);
+
+    static void _listActions(Card* card);
+    static bool _confirm();
+
+    void _performAction(Card* card, Player* player, int actionNumber);
+
+    void _assignResources(); //Call assignResources() from resource, need to be public for testing
+
+    //Observable abstract class implementation
+    void notify();
+};
