@@ -41,7 +41,7 @@ private:
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
-    Player* neutralPlayer = nullptr; // Initialized if 2 player game
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game    
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
@@ -100,6 +100,9 @@ public:
     void _performAction(Card* card, Player* player, int actionNumber);
 
     void _assignResources(); //Call assignResources() from resource, need to be public for testing
+
+    // Attaches players to a phase observer
+    void attachPlayersToPhaseObserver();
 
     //Observable abstract class implementation
     void notify();

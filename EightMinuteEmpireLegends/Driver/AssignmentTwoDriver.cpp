@@ -3,7 +3,7 @@
 #include "AssignmentTwoDriver.h"
 
 #include "../Tests/GameStartTests/GameStartTests.h"
-#include "../Tests/GameTests/GameTest.h";
+#include "../Tests/GameTests/GameTest.h"
 
 int AssignmentTwoDriver::RunGame()
 {

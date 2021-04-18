@@ -60,7 +60,7 @@ Game::~Game() {
 	}
 	if (neutralPlayer != nullptr) {
 		delete neutralPlayer;
-	}
+	}		
 }
 
 Resources* Game::getResources() {
@@ -865,7 +865,7 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 
 void Game::notify() {
 	list<Observer*>::iterator observerIter;
-	for (observerIter = _observers.begin(); observerIter == _observers.end(); observerIter++) {
+	for (observerIter = _observers->begin(); observerIter == _observers->end(); observerIter++) {
 		(**observerIter).update();
 	}
 }
