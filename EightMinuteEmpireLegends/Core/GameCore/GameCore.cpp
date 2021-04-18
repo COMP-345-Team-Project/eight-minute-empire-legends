@@ -389,6 +389,8 @@ void Game::runRoundsUntilEndGame() {
 	CardSpace cardSpace = CardSpace(*deck);
 	PlayerBuilder::setPlayersType(players);
 
+	PlayerBuilder::setPlayersType(players);
+
 	int gameRound = 1;
 
 	//Main loop until game ends
