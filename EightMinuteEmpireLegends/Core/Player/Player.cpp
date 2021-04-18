@@ -2,9 +2,10 @@
 #include "../pch.h"
 #include "Player.h"
 #include "../Cards/Cards.h"
+//#include "PlayerStrategies.h"
 
-Player::Player(std::string name, BiddingFacility* biddingFacility, bool isNeutral) : isNeutral(isNeutral), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
-Player::Player(std::string name, BiddingFacility* biddingFacility) : isNeutral(false), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0) {}
+Player::Player(std::string name, BiddingFacility* biddingFacility, bool isNeutral) : isNeutral(isNeutral), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0), playerScore() {}
+Player::Player(std::string name, BiddingFacility* biddingFacility) : isNeutral(false), playerName(name), coin(0), availableArmies(0), availableCities(0), biddingFacility(biddingFacility), elixir(0), playerScore() {}
 
 Player::~Player() {
 	vector<Card*>::iterator cardItter;
@@ -24,6 +25,7 @@ Player::Player(const Player& player){
 	this->cards = player.cards; //calling the assignment operator
 	this->biddingFacility = player.biddingFacility; //calling the assignment operator
 	this->elixir = player.elixir;
+	this->playerScore = player.playerScore;
 }
 
 Player& Player::operator =(const Player& p) {
@@ -35,6 +37,7 @@ Player& Player::operator =(const Player& p) {
 	this->cards = p.cards; //calling the assignment operator
 	this->biddingFacility = p.biddingFacility; //calling the assignment operator
 	this->elixir = p.elixir;
+	this->playerScore = p.playerScore;
 	return *this;
 }
 
@@ -238,19 +241,24 @@ void Player::RemoveDeployedVertex(Vertex* v) {
 }
 
 int Player::ComputeScore(Map* map, vector<Player*> players) {
-	return ComputeTerritoryScore() + ComputeRegionalScore(map) + ComputeAbilityScore() + ComputeElixirScore(players);
+	playerScore.clearScores();
+	ComputeTerritoryScore();
+	ComputeRegionalScore(map);
+	ComputeAbilityScore();
+	ComputeElixirScore(players);
+
+	return playerScore.getTotalScore();
 }
 
 int Player::ComputeTerritoryScore() {
-	int score = 0;
-
 	//The territory score equals to the number of regions owned
 	for (vector<Vertex*>::iterator vertexIter = deployedVertices.begin(); vertexIter != deployedVertices.end(); vertexIter++) {
-		if ((**vertexIter).getTerritory()->getOwner().compare(playerName) == 0)
-			score++;
+		if ((**vertexIter).getTerritory()->getOwner().compare(playerName) == 0) {
+			playerScore.addOwnedTerritories((**vertexIter).getTerritory()->getName());
+		}
 	}
 
-	return score;
+	return playerScore.getTerritoryScore();
 }
 
 int Player::ComputeRegionalScore(Map* map) {
@@ -283,11 +291,12 @@ int Player::ComputeRegionalScore(Map* map) {
 
 	//Now we check if this player has the maximum points in each continent
 	for (std::map<string, std::map<string, int>>::iterator iter = pointAccumulator.begin(); iter != pointAccumulator.end(); ++iter) {
-		if(this->OwnsContinent(iter->second))
-			continentPoints++;
+		if (this->OwnsContinent(iter->second)) {
+			playerScore.addOwnedContinents(iter->first);
+		}
 	}
 
-	return continentPoints;
+	return playerScore.getContinentScore();
 }
 
 bool Player::OwnsContinent(std::map<string, int>& continentScores) {
@@ -335,18 +344,23 @@ int Player::ComputeElixirScore(vector<Player*> players) {
 	std::string playerNameWithMaxElixir = (**player).getPlayerName();
 
 	//If the player with the maximum of elixir is not the player
-	if (playerNameWithMaxElixir.compare(playerName) != 0)
+	if (playerNameWithMaxElixir.compare(playerName) != 0){
 		return 0;
+	}
+		
 
 	//Else we check if there is a tied between players
 	for (vector<Player*>::iterator iter = players.begin(); iter != players.end(); ++iter) {
 		if ((**iter).getElixirs() == maxElixirs && playerNameWithMaxElixir.compare(playerName) != 0) {
 			//If the player ties with another player for the amount of elixirs
-			return 1;
+			playerScore.setElixirScore(1);
+			return playerScore.getElixirScore();
 		}
 	}
 
-	return 2;
+	//Player has the most amount of elixir
+	playerScore.setElixirScore(2);
+	return playerScore.getElixirScore();
 }
 
 int Player::CountCardsBasedOnType(string cardType) {
@@ -368,6 +382,7 @@ int Player::ComputeAbilityScore() {
 
 	for (int i = 0; i < cards.size(); i++) {
 		std::string specialAbility = cards.at(i)->getSpecialAbility();
+		playerScore.addAbility(specialAbility);
 		//First we check cards that grant 1 point per each card type, 1 card=1 point
 		if (specialAbility.compare("1VPperAncient") == 0) //1 point per ancient card
 			total += CountCardsBasedOnType("Ancient");
@@ -396,7 +411,32 @@ int Player::ComputeAbilityScore() {
 		}
 	}
 
+	playerScore.setAbilityScore(total);
 	return total;
+}
+
+int Player::GetTerritoriesScore() {
+	return playerScore.getTerritoryScore();
+}
+
+int Player::GetContinentsScore() {
+	return playerScore.getContinentScore();
+}
+
+int Player::GetAbilitiesScore() {
+	return playerScore.getAbilityScore();
+}
+
+int Player::GetElixirScore() {
+	return playerScore.getElixirScore();
+}
+
+int Player::GetTotalScore() {
+	return playerScore.getTotalScore();
+}
+
+PlayerScore Player::getPlayerScore() {
+	return playerScore;
 }
 
 PlayerActionException::PlayerActionException(const std::string& msg) : errorMessage(msg) {}
@@ -405,3 +445,47 @@ const char* PlayerActionException::what() const throw ()
 {
 	return errorMessage.c_str();
 }
+
+//Strategy
+void Player::setStrategy(string strategyName) {
+	delete strategy;
+
+	if (strategyName == "GreedyComputer")
+		strategy = new GreedyStrategy();
+	else if (strategyName == "ModerateComputer")
+		strategy = new ModerateStrategy();
+	else {
+		strategy = new HumanStrategy();
+	}
+
+}
+
+Strategy* Player::getStrategy() {
+	return strategy;
+}
+
+void PlayerBuilder::setPlayersType(vector<Player*> players) {
+	for (Player* pl : players) {
+		string playerType;
+		std::cout << "Type of player for " << pl->getPlayerName() << " (H)uman, (G)reedy Computer or (M)oderate Computer :" << endl;
+		std::cin >> playerType;
+
+		if (playerType == "G" || playerType == "g") {
+			pl->setStrategy("GreedyComputer");
+			std::cout << pl->getPlayerName() << " is a Greedy Computer" << endl;
+		}
+
+		else if (playerType == "M" || playerType == "m") {
+			pl->setStrategy("ModerateComputer");
+			std::cout << pl->getPlayerName() << " is a Moderate Computer" << endl;
+		}
+
+		else {
+			pl->setStrategy("Human");
+			std::cout << pl->getPlayerName() << " is a Human" << endl;
+		}
+
+
+	}
+}
+

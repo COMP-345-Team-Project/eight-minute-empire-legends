@@ -23,6 +23,10 @@ void Resources::assignInitialResources(vector<Player*> players) {
 	}
 }
 
+int Resources::getAssignedCities() {
+	return this->cities;
+}
+
 std::ostream& operator <<(std::ostream& os, const Resources* r) {
 	os << "coins : " << r->coins << std::endl << "armies : " << r->armies << std::endl << "cities : " << r->cities;
 	return os;
@@ -30,7 +34,7 @@ std::ostream& operator <<(std::ostream& os, const Resources* r) {
 
 // Game class implementation.
 
-Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) {
+Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) : Observable(){
 	this->resources = resources;
 	this->map = map;
 	this->deck = deck;
@@ -41,7 +45,7 @@ Game::Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players) 
 	}
 }
 
-Game::Game() { //For testing only
+Game::Game() : Observable() { //For testing only
 	this->resources = NULL;
 	this->map = NULL;
 	this->deck = NULL;
@@ -159,8 +163,8 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		//If there is a tie, we then compare the number of controlled regions
 		std::cout << "Both players have the same amount of coins, comparing controlled regions" << std::endl;
-		int p1RegionScore = p1->ComputeTerritoryScore();
-		int p2RegionScore = p2->ComputeTerritoryScore();
+		int p1RegionScore = p1->GetTerritoriesScore();
+		int p2RegionScore = p2->GetTerritoriesScore();
 
 		if (p1RegionScore > p2RegionScore) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
@@ -367,83 +371,32 @@ void Game::runRoundsUntilEndGame() {
 		endGameCardCount = 8;
 	}
 
+	PlayerBuilder::setPlayersType(players);
+
 	int gameRound = 1;
 
 	//Main loop until game ends
-	//End game condition
 	while (players[players.size() - 1]->getCards().size() < endGameCardCount) {
 
 		std::cout << "\n\nRound " << gameRound++ << endl;
 
+		string changeStrategy = "N";
+		std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
+		std::cin >> changeStrategy;
+
+		if (changeStrategy == "Y" || changeStrategy == "y") {
+			PlayerBuilder::setPlayersType(players);
+		}
+
 		for (int i = 0; i < players.size(); i++) {
 
-			int cardInput = 1; //Position from user input
+			//Buy card based on strategy of each player
+			Card* cardBeingPurchased = players[i]->getStrategy()->buyCard(players[i], cardSpace, *deck);
 
-			std::cout << "\nCard Exchange Phase for Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
-
-			//Getting user input to buy cards
-			cardSpace.showCardSpace();
-
-			cout << "You have " << players[i]->getCoins() << " coins available" << endl;
-
-			cout << "Choose which card you'd like to buy from Card Space (1-6): ";
-			cin >> cardInput;
-
-			if (cardInput > 0 && cardInput < (cardSpace.getSize() + 1) && players[i]->getCoins() >= cardSpace.costCalc(cardInput - 1)) {
-				std::cout << "Card " << cardInput << " Successfully bought" << endl;
-			}
-			else if (cardInput > 0 && players[i]->getCoins() < cardSpace.costCalc(cardInput - 1)) {
-				std::cout << "!Not enough coins! Default to first free card. \n"; //Exception handler
-				cardInput = 1;
-			}
-			else {
-				std::cout << "!invalid selection! Default to first free card. \n";
-				cardInput = 1;
-			}
-			Card* cardBeingPurchased = cardSpace.sell(*deck, cardInput);
-			//Make the card purchase
-			players[i]->BuyCard(cardBeingPurchased, cardSpace.costCalc(cardInput - 1));
-
-			//Print coin balance
-			std::cout << "Card cost: " << cardSpace.costCalc(cardInput - 1) << endl;
-			std::cout << "You have " << players[i]->getCoins() << " coins left after card purchase" << endl;
-
-			//Perform action on bought card
-			///////////////////////////////////////////
-			////
-			////          Player's action block
-			////          players[i] gives you access to the current player
-			////
-			///////////////////////////////////////////
-
-			//We have an option to skip the action 
-			_listActions(cardBeingPurchased);
-
-			//If there are 2 actions
-			if (cardBeingPurchased->getSecondAction().compare("") != 0) {
-				//And actions
-				if (cardBeingPurchased->getAndAction()) {
-					_performAction(cardBeingPurchased, players.at(i), 1);
-					_performAction(cardBeingPurchased, players.at(i), 2);
-				}
-				//Or actions
-				else {
-					int option = -1;
-					do {
-						//We need to perform type checking somehow... to be implemented later
-						std::cin >> option;
-						if (option < 1 || option > 2) {
-							std::cout << "Invalid action option, please try again." << std::endl;
-						}
-					} while (option < 1 || option > 2);
-
-					_performAction(cardBeingPurchased, players.at(i), option);
-				}
-			}
-			else {
-				//We only have 1 option
-				_performAction(cardBeingPurchased, players.at(i), 1);
-			}
+			//Perform action based on strategy of each player
+			players[i]->getStrategy()->performAction(this,players[i],cardBeingPurchased);
+			
+			
 		}
 
 	}
@@ -579,6 +532,45 @@ void Game::PlaceArmies(Player* player, int deployLimit) {
 	std::cout << "Finish placing new armies." << std::endl;
 }
 
+void Game::autoPlaceArmies(Player* player, int deployLimit) {
+
+	//Get the vertices where you can deploy your armies
+	vector<Vertex*> deployableVertices;
+
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex == map->getStartingRegion() || currVertex->getTerritory()->getCitiesByPlayer(player->getPlayerName())) {
+			deployableVertices.push_back(currVertex);
+		}
+	}
+
+	if (deployableVertices.size() == 0) {
+		std::cout << "No deployable regions! " << deployLimit << std::endl;
+		return;
+	}
+
+	//Display the vertex where armies can be added
+	std::cout << "\nRemaining armies to deployed: " << deployLimit << std::endl;
+
+	//Select the first vertex available
+	Vertex* chosenVertex = deployableVertices.at(0);
+
+	//Place all armies from this card to the above chosen vertex
+	int tobeDeployed = deployLimit;
+
+	//Deploying the armies
+	try {
+		player->PlaceNewArmies(map, chosenVertex, tobeDeployed);
+		deployLimit -= tobeDeployed;
+		std::cout << "Armies deployed successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+	
+	std::cout << "Finish placing new armies." << std::endl;
+}
+
 void Game::MoveArmies(Player* player, int moveLimit) {
 	bool moveMoreArmies = true;
 	while (moveLimit > 0 && moveMoreArmies) {
@@ -631,6 +623,48 @@ void Game::MoveArmies(Player* player, int moveLimit) {
 	std::cout << "Finished moving armies." << std::endl;
 }
 
+void Game::autoMoveArmies(Player* player, int moveLimit) {
+
+	//Display the vertex where armies can be added
+	std::cout << "\nRemaining moves: " << moveLimit << std::endl;
+
+	//Get the vertices where you have armies deployed
+	vector<Vertex*> fromVertices;
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex->getTerritory()->getArmiesByPlayer(player->getPlayerName()) > 0) {
+			fromVertices.push_back(currVertex);
+		}
+	}
+
+	if (fromVertices.size() == 0) {
+		std::cout << "You do not have any regions with armies! " << std::endl;
+		return;
+	}
+
+	//Move from first available vertex
+	Vertex* fromVertex = fromVertices.at(0);
+
+	//Move to first available vertex
+	vector<Vertex*> toVertices = map->adjacentVertices(fromVertex);
+	Vertex* toVertex = toVertices.at(0);
+
+	//Move all armies available from the card
+	int armiesMoved = moveLimit;
+
+	//Deploying the armies
+	try {
+		player->MoveArmies(map, fromVertex, toVertex, armiesMoved, moveLimit);
+		std::cout << "Armies moved successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
+	
+	std::cout << "Finished moving armies." << std::endl;
+}
+
 void Game::BuildCity(Player* player) {
 	bool continueBuilding = true;
 
@@ -677,6 +711,36 @@ void Game::BuildCity(Player* player) {
 	
 }
 
+void Game::autoBuildCity(Player* player) {
+
+	//Get the vertices where you have armies deployed
+	vector<Vertex*> validVertices;
+	for (int i = 0; i < map->vertices().size(); i++) {
+		Vertex* currVertex = map->vertices().at(i);
+		if (currVertex->getTerritory()->getArmiesByPlayer(player->getPlayerName()) > 0) {
+			validVertices.push_back(currVertex);
+		}
+	}
+
+	if (validVertices.size() == 0) {
+		std::cout << "You do not have any regions with armies! " << std::endl;
+		return;
+	}
+
+	Vertex* buildVertex = validVertices.at(0);
+
+	try {
+		//We build 1 city at a time only
+		player->BuildCity(buildVertex, 1);
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
+	std::cout << "Finished building the city. " << std::endl;
+
+}
+
 void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 	bool destroyMoreArmies = true;
 	while (detroyLimit > 0 && destroyMoreArmies) {
@@ -719,6 +783,38 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 			std::cout << "No more army destruction allowed. Out of moves. " << std::endl;
 		}
 	}
+	std::cout << "Finish destroying armies." << std::endl;
+}
+
+void Game::autoDestroyArmies(Player* currPlayer, int detroyLimit) {
+
+	Player* opponent = players.at(0);
+
+	//Get the vertices where the opponent player has some armies deployed
+	vector<Vertex*> destroyableVertices = opponent->GetDeployedVertices();
+
+	std::cout << "\nRemaining armies can be destroyed: " << detroyLimit << std::endl;
+
+	if (destroyableVertices.size() == 0) {
+		std::cout << "There is no regions to be destroyed! " << std::endl;
+		return;
+	}
+
+	//Destroy the first possible army
+	Vertex* chosenVertex = destroyableVertices.at(0);
+
+	//Destroy 1 army at a time
+	int armiesToDestroy = 1;
+
+	try {
+		currPlayer->DestroyArmy(chosenVertex, opponent, armiesToDestroy);
+		detroyLimit -= armiesToDestroy;
+		std::cout << "Armies destroyed successfully." << std::endl;
+	}
+	catch (PlayerActionException& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+
 	std::cout << "Finish destroying armies." << std::endl;
 }
 
@@ -767,139 +863,11 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 	return playerIndex;
 }
 
-// Gamebuilder class implementation. 
-
-Game* GameBuilder::build() {
-	std::vector<filesystem::path> maps = fetchMapFiles(_mapDir);
-	std::vector<std::string> names{};
-	std::cout << "Please select a map.\n" << std::endl;
-	int index = 0;
-	int mapSelection;
-	int numPlayers;
-
-	// Map selection
-	for (const auto& entry : maps) {		
-		std::cout << index << ") " << entry.filename() << std::endl;
-		index++;
+void Game::notify() {
+	list<Observer*>::iterator observerIter;
+	for (observerIter = _observers.begin(); observerIter == _observers.end(); observerIter++) {
+		(**observerIter).update();
 	}
-	std::cin >> mapSelection;
-	if (mapSelection < 0 || mapSelection >= maps.size()) {
-		throw GameBuilderException("ERR: Selection index out of range.");
-	}	
-
-	// Player selection
-	
-	bool validNum = false;	
-	while (!validNum) {		
-		std::cout << "Please enter the number of players (2-4) : ";
-		std::cin >> numPlayers;
-		if (cin.fail()) {
-			cin.clear();
-			cin.sync();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Invalid input. Please enter an integer.\n" << std::endl;
-		}
-		else if (numPlayers < 2 || numPlayers > 4) {
-			std::cout << "Player count selection out of range.\n" << std::endl;
-		}
-		else {
-			validNum = true;
-		}
-	}	
-	std::string plName;
-	bool validName;
-	for (int i = 0; i < numPlayers; i++) {
-		validName = false;
-		while (!validName) {			
-			std::cout << "Please enter a name for player " + i << " : ";
-			std::cin >> plName;			
-			if (std::find(names.begin(), names.end(), plName) != names.end()) {
-				std::cout << "Name has already been taken by another player. Please enter a unique name." << std::endl;
-			}
-			else {
-				validName = true;
-			}
-		}
-		names.push_back(plName);
-	}
-
-	return build(numPlayers, names, maps.at(mapSelection).u8string(), _configPath);
-}
-
-Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::string mapPath, std::string configPath) {
-	Resources* rsc = nullptr;
-	Map* map = nullptr;
-
-	// Initiallize resources if path to config is specified		
-	if (configPath != "") {
-		std::tuple<int, int, int> tResources;
-		try {
-			tResources = fetchConfigResources(configPath);
-			rsc = new Resources(std::get<0>(tResources), std::get<1>(tResources), std::get<2>(tResources));
-		}
-		catch (ConfigFileException& e) {
-			std::cout << "Uh oh! Configuration file not found. Resources will use default values." << std::endl << e.what() << std::endl;
-			tResources = std::make_tuple(_dCoins, _dArmies, _dCities);
-		}
-	}
-	else {
-		//Initiallize resources to default parameters if path to config is not specified
-		rsc = new Resources();
-	}
-
-	try {
-		map = MapLoader::parseMap(mapPath);
-	}
-	catch (MapLoaderException& e) {
-		std::cout << e.what() << std::endl;		
-	}
-
-	Deck* deck = new Deck(numPlayers);
-	BidTieBreakerByLastName tieBreaker;
-	BiddingFacility* bf = new BiddingFacility(tieBreaker);
-	std::vector<Player*> pl{};
-	for (int i = 0; i < numPlayers; i++) {
-		pl.push_back(new Player(names.at(i), bf));
-	}
-
-	//Crete a new game object and pass above objects to Game
-	return new Game(rsc, map, deck, pl);
-}
-
-// Helper function. Reads resources from config file.
-std::tuple<int, int, int> fetchConfigResources(std::string path) {
-	int coins;
-	int armies;
-	int cities;
-	std::string line;
-	char delim = '=';
-	std::ifstream rFile(path);
-	if (rFile.is_open()) {
-		while (getline(rFile, line)) {
-			if (line.substr(0, line.find(delim)) == "rCoins") {
-				coins = std::stoi(line.substr(line.find(delim) + 1));
-			}
-			if (line.substr(0, line.find(delim)) == "rArmies") {
-				armies = std::stoi(line.substr(line.find(delim) + 1));
-			}
-			if (line.substr(0, line.find(delim)) == "rCities") {
-				cities = std::stoi(line.substr(line.find(delim) + 1));
-			}
-		}
-		rFile.close();
-	}
-	else {
-		throw ConfigFileException("ERR: Unable to open file at " + path);
-	}
-	return std::make_tuple(coins, armies, cities);;
-}
-
-std::vector<filesystem::path> fetchMapFiles(std::string path) {
-	std::vector<filesystem::path> maps{};	
-	for (const auto& entry : filesystem::directory_iterator(path)) {
-		maps.push_back(entry.path());		
-	}
-	return maps;
 }
 
 //free functions
