@@ -86,50 +86,6 @@ void Game::endGame() {
 }
 
 void Game::endGame(Map* map, vector<Player*> players) {
-	//Please dont remove this code because this is optimize for a variable number of players
-	/*std::map<std::string, int> scores;
-	
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		scores.insert(pair<std::string, int>((**playerIter).getPlayerName(), (**playerIter).ComputeScore(map, players)));
-	}
-
-	//We find the player with the maximum score
-	std::map<std::string, int>::iterator winner = std::max_element(scores.begin(), scores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	std::string winnerName = winner->first;
-	int winnerScore = winner->second;
-
-	//We check to make sure that there is no tie
-	bool isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		std::string currPlayerName = (**playerIter).getPlayerName();
-		if (currPlayerName.compare(winnerName) != 0 && scores[currPlayerName] == winnerScore) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on score
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}
-
-	//We next check the number of coins
-	std::vector<Player*>::iterator mostCoinPlayer = std::max_element(players.begin(), players.end(), [](const Player* a, const Player* b)->bool { return a->getCoins() < b->getCoins(); });
-	winnerName = (**mostCoinPlayer).getPlayerName();
-	int winnerCoins = (**mostCoinPlayer).getCoins();
-	isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		if ((**playerIter).getPlayerName().compare(winnerName) != 0 && (**playerIter).getCoins() == winnerCoins) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on coins
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}*/
-
 	//Assume we only have 2 players for now
 	std::cout << "\n--------------Game ended, now Computing Scores-----------"<< std::endl;
 	if (players.size() == 2) {
@@ -387,8 +343,6 @@ void Game::_setEndGameConditions(int maxNumOfCards) {
 void Game::runRoundsUntilEndGame() {
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
-	PlayerBuilder::setPlayersType(players);
-
 	PlayerBuilder::setPlayersType(players);
 
 	int gameRound = 1;
