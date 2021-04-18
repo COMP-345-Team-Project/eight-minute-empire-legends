@@ -165,6 +165,7 @@
     <ClInclude Include="Bidding\BidTieBreakerByLastName.h" />
     <ClInclude Include="Cards\Cards.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameEngine\GameEnginePrompts.h" />
     <ClInclude Include="GameEngine\GameContext.h" />
     <ClInclude Include="GameCore\ConfigFileException.h" />
     <ClInclude Include="GameCore\GameBuilder.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="GameCore\GameCore.h" />
     <ClInclude Include="GameEngine\GameEngine.h" />
     <ClInclude Include="GameEngine\GameMode.h" />
+    <ClInclude Include="GameCore\GameReport.h" />
     <ClInclude Include="GameEngine\PlayerContext.h" />
     <ClInclude Include="GameEngine\PlayerType.h" />
     <ClInclude Include="GameObservers\GameObservers.h" />
@@ -205,7 +207,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="GameEngine\GameContext.cpp" />
     <ClCompile Include="GameCore\ConfigFileException.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -216,6 +217,7 @@
     <ClCompile Include="GameCore\GameCore.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="GameEngine\GameEnginePrompts.cpp" />
     <ClCompile Include="GameObservers\GameObservers.cpp" />
     <ClCompile Include="GameObservers\GameStatistics.cpp" />
     <ClCompile Include="GameEngine\GameEngine.cpp" />

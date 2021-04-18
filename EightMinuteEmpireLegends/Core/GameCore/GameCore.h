@@ -42,6 +42,7 @@ private:
     Deck* deck;
     std::vector<Player*> players;
     Player* neutralPlayer = nullptr; // Initialized if 2 player game
+    int endGameCardCount;
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
@@ -59,6 +60,9 @@ public:
     Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
+   // Retrofitting to support Tournament requirements
+    void setCustomEndGameCardCount(int cardCount);
+
     // Getters
     Resources* getResources();
     Map* getMap();
@@ -75,9 +79,9 @@ public:
     void runRoundsUntilEndGame();
 
     //End game, announce winners, and cleanup
-    void endGame();
+    GameReport endGame();
     //End game
-    void endGame(Map* map, vector<Player*> players);
+    GameReport endGame(Map* map, vector<Player*> players);
 
     //Helper functions
     void PlaceArmies(Player* player, int numOfArmies);

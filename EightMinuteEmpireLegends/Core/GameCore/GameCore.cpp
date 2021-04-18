@@ -2,6 +2,7 @@
 
 #include "../pch.h"
 #include "GameCore.h"
+#include "GameReport.h"
 
 // Resources class implementation
 
@@ -67,6 +68,11 @@ Resources* Game::getResources() {
 	return this->resources;
 }
 
+void Game::setCustomEndGameCardCount(int cardCount)
+{
+	this->endGameCardCount = cardCount;
+}
+
 Map* Game::getMap() {
 	return this->map;
 }
@@ -79,11 +85,11 @@ std::vector<Player*> Game::getPlayers() {
 	return this->players;
 }
 
-void Game::endGame() {
-	endGame(map, players);
+GameReport Game::endGame() {
+	return endGame(map, players);
 }
 
-void Game::endGame(Map* map, vector<Player*> players) {
+GameReport Game::endGame(Map* map, vector<Player*> players) {
 	//Please dont remove this code because this is optimize for a variable number of players
 	/*std::map<std::string, int> scores;
 	
@@ -141,41 +147,55 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		std::cout << p1->getPlayerName() << "'s score is: " << p1Score << std::endl;
 		std::cout << p2->getPlayerName() << "'s score is: " << p2Score << std::endl;
 
+		bool foundWinner = false;
+
 		if (p1Score > p2Score) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
-			return;
+			foundWinner = true;
 		}
 		else if (p1Score < p2Score) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
-			return;
+			foundWinner = true;
 		}
 
 		//If there is a tie, we compare the number of coins
-		std::cout << "Both players tied, comparing remmaining coins" << std::endl;
-		if (p1->getCoins() > p2->getCoins()) {
-			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
-			return;
-		}
-		else if (p1->getCoins() < p2->getCoins()) {
-			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
-			return;
+		if (!foundWinner) {
+			std::cout << "Both players tied, comparing remmaining coins" << std::endl;
+			if (p1->getCoins() > p2->getCoins()) {
+				std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+				foundWinner = true;
+			}
+			else if (p1->getCoins() < p2->getCoins()) {
+				std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+				foundWinner = true;
+			}
 		}
 
 		//If there is a tie, we then compare the number of controlled regions
 		std::cout << "Both players have the same amount of coins, comparing controlled regions" << std::endl;
 		int p1RegionScore = p1->GetTerritoriesScore();
 		int p2RegionScore = p2->GetTerritoriesScore();
-
-		if (p1RegionScore > p2RegionScore) {
-			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
-			return;
+		if (!foundWinner) {
+			if (p1RegionScore > p2RegionScore) {
+				std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			}
+			else if (p1RegionScore < p2RegionScore) {
+				std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			}
+			else {
+				std::cout << " This game is a tie!" << std::endl;
+			}
 		}
-		else if (p1RegionScore < p2RegionScore) {
-			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
-			return;
-		}
 
-		std::cout << " This game is a tie!" << std::endl;
+		
+		GameReport gameReport;
+		gameReport.cards.push_back(p1->getCards().size());
+		gameReport.cards.push_back(p2->getCards().size());
+		gameReport.coins.push_back(p1->getCoins());
+		gameReport.coins.push_back(p2->getCoins());
+		gameReport.victoryPoints.push_back(p1Score);
+		gameReport.victoryPoints.push_back(p2Score);
+		return gameReport;
 	}
 	else {
 		std::cout << " Current number of players not supported!" << std::endl;
@@ -363,12 +383,14 @@ void Game::runRoundsUntilEndGame() {
 	CardSpace cardSpace = CardSpace(*deck);
 
 	//Game ends when each players have certain numbers of cards
-	int endGameCardCount = 13;
-	if (players.size() == 3) {
-		endGameCardCount = 10;
-	}
-	if (players.size() == 4) {
-		endGameCardCount = 8;
+	if (endGameCardCount == 0) {
+		endGameCardCount = 13;
+		if (players.size() == 3) {
+			endGameCardCount = 10;
+		}
+		if (players.size() == 4) {
+			endGameCardCount = 8;
+		}
 	}
 
 	PlayerBuilder::setPlayersType(players);

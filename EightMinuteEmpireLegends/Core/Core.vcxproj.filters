@@ -90,6 +90,12 @@
     <ClInclude Include="GameEngine\PlayerType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameCore\GameReport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GameEnginePrompts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -152,7 +158,7 @@
     <ClCompile Include="GameEngine\GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine\GameContext.cpp">
+    <ClCompile Include="GameEngine\GameEnginePrompts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-enum GameMode
+enum class GameMode
 {
 	SINGLE_GAME,
 	TOURNAMENT
