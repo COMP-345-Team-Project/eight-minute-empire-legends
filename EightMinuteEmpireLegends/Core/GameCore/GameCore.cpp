@@ -2,6 +2,7 @@
 
 #include "../pch.h"
 #include "GameCore.h"
+#include "../Utilities/Utilities.h"
 
 // Resources class implementation
 

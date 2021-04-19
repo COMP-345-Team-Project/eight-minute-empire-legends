@@ -100,9 +100,10 @@ std::vector<GameReport> GameEngine::RunGame(GameContext gameContext)
 		if (gameContext.gameMode == GameMode::TOURNAMENT)
 		{
 			game->setCustomEndGameCardCount(10); // Limit to 20 turns
+			game->tournyMode = true;
 		}
 		game->runSetupPhase();
-		game->runRoundsUntilEndGame(gameContext.gameMode == GameMode::TOURNAMENT);
+		game->runRoundsUntilEndGame();
 		gameReports.push_back(game->endGame());
 	}
 

@@ -65,6 +65,7 @@ public:
     Resources* getResources();
     Map* getMap();
     Deck* getDeck();
+    bool tournyMode = false;
     std::vector<Player*> getPlayers();
     void displayTerritories(std::vector<Vertex*> vertices);
     void displayTerritories(std::vector<Vertex*> vertices, bool numbered);
@@ -75,7 +76,6 @@ public:
 
     //Main game loop, part 3, 5
     void runRoundsUntilEndGame();
-    void runRoundsUntilEndGame(bool tournyMode);
 
     //End game, announce winners, and cleanup
     GameReport endGame();
