@@ -8,6 +8,7 @@
 #include "../MapLoader/MapLoaderException.h"
 #include "ConfigFileException.h"
 #include "GameBuilderException.h"
+#include "GameReport.h"
 
 const int _dCoins = 36;
 const int _dArmies = 18;
@@ -57,10 +58,14 @@ public:
     Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
     ~Game();
 
+   // Retrofitting to support Tournament requirements
+    void setCustomEndGameCardCount(int cardCount);
+
     // Getters
     Resources* getResources();
     Map* getMap();
     Deck* getDeck();
+    bool tournyMode = false;
     std::vector<Player*> getPlayers();
     void displayTerritories(std::vector<Vertex*> vertices);
     void displayTerritories(std::vector<Vertex*> vertices, bool numbered);
@@ -73,9 +78,9 @@ public:
     void runRoundsUntilEndGame();
 
     //End game, announce winners, and cleanup
-    void endGame();
+    GameReport endGame();
     //End game
-    void endGame(Map* map, vector<Player*> players);
+    GameReport endGame(Map* map, vector<Player*> players);
 
     //Helper functions
     void PlaceArmies(Player* player, int numOfArmies);

@@ -62,11 +62,16 @@ Game::~Game() {
 	}
 	if (neutralPlayer != nullptr) {
 		delete neutralPlayer;
-	}		
+	}
 }
 
 Resources* Game::getResources() {
 	return this->resources;
+}
+
+void Game::setCustomEndGameCardCount(int cardCount)
+{
+	this->endGameCardCount = cardCount;
 }
 
 Map* Game::getMap() {
@@ -81,11 +86,11 @@ std::vector<Player*> Game::getPlayers() {
 	return this->players;
 }
 
-void Game::endGame() {
-	endGame(map, players);
+GameReport Game::endGame() {
+	return endGame(map, players);
 }
 
-void Game::endGame(Map* map, vector<Player*> players) {
+GameReport Game::endGame(Map* map, vector<Player*> players) {
 	//Assume we only have 2 players for now
 	std::cout << "\n--------------Game ended, now Computing Scores-----------"<< std::endl;
 	if (players.size() == 2) {
@@ -99,51 +104,65 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		std::cout << p1->getPlayerName() << "'s score is: " << p1Score << std::endl;
 		std::cout << p2->getPlayerName() << "'s score is: " << p2Score << std::endl;
 
+		bool foundWinner = false;
+
 		if (p1Score > p2Score) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
 			notify();
-			return;
+			foundWinner = true;
 		}
 		else if (p1Score < p2Score) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
 			notify();
-			return;
+			foundWinner = true;
 		}
 
 		//If there is a tie, we compare the number of coins
-		std::cout << "Both players tied, comparing remmaining coins" << std::endl;
-		if (p1->getCoins() > p2->getCoins()) {
-			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
-			notify();
-			return;
-		}
-		else if (p1->getCoins() < p2->getCoins()) {
-			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
-			notify();
-			return;
+		if (!foundWinner) {
+			std::cout << "Both players tied, comparing remmaining coins" << std::endl;
+			if (p1->getCoins() > p2->getCoins()) {
+				std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+				foundWinner = true;
+				notify();
+			}
+			else if (p1->getCoins() < p2->getCoins()) {
+				std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+				foundWinner = true;
+				notify();
+			}
 		}
 
 		//If there is a tie, we then compare the number of controlled regions
 		std::cout << "Both players have the same amount of coins, comparing controlled regions" << std::endl;
 		int p1RegionScore = p1->GetTerritoriesScore();
 		int p2RegionScore = p2->GetTerritoriesScore();
-
-		if (p1RegionScore > p2RegionScore) {
-			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
-			notify();
-			return;
+		if (!foundWinner) {
+			if (p1RegionScore > p2RegionScore) {
+				std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+				notify();
+			}
+			else if (p1RegionScore < p2RegionScore) {
+				std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+				notify();
+			}
+			else {
+				std::cout << " This game is a tie!" << std::endl;
+			}
 		}
-		else if (p1RegionScore < p2RegionScore) {
-			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
-			notify();
-			return;
-		}
 
-		std::cout << " This game is a tie!" << std::endl;
-		notify();
+		
+		GameReport gameReport;
+		gameReport.cards.push_back(p1->getCards().size());
+		gameReport.cards.push_back(p2->getCards().size());
+		gameReport.coins.push_back(p1->getCoins());
+		gameReport.coins.push_back(p2->getCoins());
+		gameReport.victoryPoints.push_back(p1Score);
+		gameReport.victoryPoints.push_back(p2Score);
+		return gameReport;
 	}
 	else {
 		std::cout << " Current number of players not supported!" << std::endl;
+		notify();
 	}
 }
 
@@ -321,7 +340,6 @@ void Game::_bid() {
 
 		std::cout << "Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
 	}
-
 }
 
 void Game::_setEndGameConditions(int maxNumOfCards) {
@@ -338,12 +356,18 @@ void Game::_setEndGameConditions(int maxNumOfCards) {
 	else {
 		endGameCardCount = maxNumOfCards;
 	}
+	if (tournyMode) {
+		endGameCardCount = 10;
+	}
 }
 
 void Game::runRoundsUntilEndGame() {
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
-	PlayerBuilder::setPlayersType(players);
+	if (!tournyMode)
+	{
+		PlayerBuilder::setPlayersType(players);
+	}
 
 	int gameRound = 1;
 
@@ -352,23 +376,24 @@ void Game::runRoundsUntilEndGame() {
 
 		std::cout << "\n\nRound " << gameRound++ << endl;
 
-		string changeStrategy = "N";
-		std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
-		std::cin >> changeStrategy;
+		if (!tournyMode) {
+			string changeStrategy = "N";
+			std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
+			std::cin >> changeStrategy;
 
-		if (changeStrategy == "Y" || changeStrategy == "y") {
-			PlayerBuilder::setPlayersType(players);
+			if (changeStrategy == "Y" || changeStrategy == "y") {
+				PlayerBuilder::setPlayersType(players);
+			}
 		}
-
 		for (int i = 0; i < players.size(); i++) {
 
 			//Buy card based on strategy of each player
 			Card* cardBeingPurchased = players[i]->getStrategy()->buyCard(players[i], cardSpace, *deck);
 
 			//Perform action based on strategy of each player
-			players[i]->getStrategy()->performAction(this,players[i],cardBeingPurchased);
-			
-			
+			players[i]->getStrategy()->performAction(this, players[i], cardBeingPurchased);
+
+
 		}
 
 	}

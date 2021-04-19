@@ -29,33 +29,28 @@
     {
       "id": "v6",
       "territoryName": "Region5",
-      "continentName": "continent1"
+      "continentName": "continent2"
     },
     {
       "id": "v7",
       "territoryName": "Region6",
-      "continentName": "continent1"
+      "continentName": "continent2"
     },
     {
       "id": "v8",
       "territoryName": "Region7",
-      "continentName": "continent1"
+      "continentName": "continent2"
     },
     {
       "id": "v9",
       "territoryName": "Region8",
-      "continentName": "continent1"
+      "continentName": "continent3"
     },
     {
       "id": "v10",
       "territoryName": "Region9",
-      "continentName": "continent1"
-    },
-    {
-      "id": "v11",
-      "territoryName": "Region10",
-      "continentName": "continent1"
-    }
+      "continentName": "continent3"
+    }    
   ],
   "edges": [
     {
@@ -75,38 +70,38 @@
     },
     {
       "id": "e4",
-      "v1": "v5",
-      "v2": "v6"
+      "v1": "v4",
+      "v2": "v1"
     },
     {
       "id": "e5",
-      "v1": "v6",
-      "v2": "v7"
+      "v1": "v1",
+      "v2": "v5"
     },
     {
       "id": "e6",
-      "v1": "v8",
-      "v2": "v9"
+      "v1": "v2",
+      "v2": "v5"
     },
     {
       "id": "e7",
-      "v1": "v10",
-      "v2": "v11"
+      "v1": "v3",
+      "v2": "v5"
     },
     {
       "id": "e8",
-      "v1": "v10",
-      "v2": "v8"
+      "v1": "v4",
+      "v2": "v5"
     },
     {
       "id": "e9",
-      "v1": "v10",
-      "v2": "v9"
+      "v1": "v2",
+      "v2": "v6"
     },
     {
       "id": "e10",
-      "v1": "v8",
-      "v2": "v5"
+      "v1": "v7",
+      "v2": "v6"
     },
     {
       "id": "e11",
@@ -115,48 +110,24 @@
     },
     {
       "id": "e12",
-      "v1": "v9",
-      "v2": "v6"
+      "v1": "v4",
+      "v2": "v9"
     },
     {
       "id": "e13",
       "v1": "v9",
-      "v2": "v7"
-    },
-    {
-      "id": "e14",
-      "v1": "v5",
-      "v2": "v1"
-    },
-    {
-      "id": "e15",
-      "v1": "v5",
-      "v2": "v2"
-    },
-    {
-      "id": "e16",
-      "v1": "v6",
-      "v2": "v2"
-    },
-    {
-      "id": "e17",
-      "v1": "v6",
-      "v2": "v3"
-    },
-    {
-      "id": "e18",
-      "v1": "v7",
-      "v2": "v3"
-    },
-    {
-      "id": "e19",
-      "v1": "v7",
-      "v2": "v4"
-    }
+      "v2": "v10"
+    }   
   ],
   "continents": [
     {
       "name": "continent1"
-    }    
+    },
+    {
+      "name": "continent2"
+    },
+    {
+      "name": "continent3"
+    }
   ]
 }

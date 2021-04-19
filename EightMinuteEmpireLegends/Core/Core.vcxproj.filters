@@ -75,6 +75,27 @@
     <ClInclude Include="Player\PlayerStrategies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngine\GameEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GameContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GameMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\PlayerContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\PlayerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\GameReport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GameEnginePrompts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -132,6 +153,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player\PlayerStrategies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\GameEnginePrompts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

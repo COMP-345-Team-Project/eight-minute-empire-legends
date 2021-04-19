@@ -30,22 +30,7 @@
       "id": "v6",
       "territoryName": "Region5",
       "continentName": "continent2"
-    },
-    {
-      "id": "v7",
-      "territoryName": "Region6",
-      "continentName": "continent3"
-    },
-    {
-      "id": "v8",
-      "territoryName": "Region7",
-      "continentName": "continent3"
-    },
-    {
-      "id": "v9",
-      "territoryName": "Region8",
-      "continentName": "continent3"
-    }
+    }    
   ],
   "edges": [
     {
@@ -55,38 +40,33 @@
     },
     {
       "id": "e2",
-      "v1": "v2",
+      "v1": "v1",
       "v2": "v3"
     },
     {
       "id": "e3",
-      "v1": "v2",
-      "v2": "v4"
+      "v1": "v3",
+      "v2": "v2"
     },
     {
       "id": "e4",
+      "v1": "v3",
+      "v2": "v4"
+    },
+    {
+      "id": "e5",
       "v1": "v4",
       "v2": "v5"
     },
     {
-      "id": "e5",
+      "id": "e6",
       "v1": "v5",
       "v2": "v6"
     },
     {
-      "id": "e6",
-      "v1": "v6",
-      "v2": "v8"
-    },
-    {
       "id": "e7",
-      "v1": "v7",
-      "v2": "v8"
-    },
-    {
-      "id": "e8",
-      "v1": "v8",
-      "v2": "v9"
+      "v1": "v6",
+      "v2": "v4"
     }    
   ],
   "continents": [
@@ -95,9 +75,6 @@
     },
     {
       "name": "continent2"
-    },
-    {
-      "name": "continent3"
     }
   ]
 }

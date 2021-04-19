@@ -86,6 +86,7 @@ void Player::BuyCard(Card* cardBought, int costs) {
 
 void Player::PayCoin(int amount) {
 	if (amount > coin)
+
 		throw PlayerActionException("Insufficient fund");
 
 	coin -= amount;
