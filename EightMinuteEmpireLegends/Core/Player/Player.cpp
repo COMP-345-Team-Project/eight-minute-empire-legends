@@ -90,7 +90,7 @@ void Player::PayCoin(int amount) {
 
 	coin -= amount;
 
-	lastActionMessage = "Paid " + std::to_string(amount) + std::to_string(amount) + " coin(s).";	
+	lastActionMessage = "Paid " + std::to_string(amount) + " coin(s).";	
 	notify();
 }
 
