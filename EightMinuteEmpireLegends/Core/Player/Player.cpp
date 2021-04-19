@@ -67,7 +67,7 @@ vector<Card*> Player::getCards() {
 }
 
 void Player::addCard(Card* card) {
-	cards.push_back(card);
+	cards.push_back(card);	
 }
 
 std::string Player::getPlayerName() const {
@@ -81,7 +81,7 @@ vector<Vertex*> Player::GetDeployedVertices() {
 void Player::BuyCard(Card* cardBought, int costs) {
 	// These boys are nuked in the player destructor
 	cards.push_back(new Card(*cardBought));
-	PayCoin(costs);
+	PayCoin(costs);	
 }
 
 void Player::PayCoin(int amount) {
@@ -89,6 +89,9 @@ void Player::PayCoin(int amount) {
 		throw PlayerActionException("Insufficient fund");
 
 	coin -= amount;
+
+	lastActionMessage = "Paid " + std::to_string(amount) + std::to_string(amount) + " coin(s).";	
+	notify();
 }
 
 void Player::addElixirs(int elixir) {
@@ -127,6 +130,9 @@ void Player::PlaceNewArmies(Map* map, Vertex* v, int numOfArmies) {
 	//Update the list of deployed region
 	if (!HasArmyDeployedInVertex(v))
 		AddDeployedVertex(v);
+
+	lastActionMessage = "Deployed " + std::to_string(numOfArmies) + " armie(s) to " + v->getTerritory()->getName();
+	notify();
 }
 
 void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int& remainingMoves) {
@@ -179,6 +185,10 @@ void Player::MoveArmies(Map* map, Vertex* from, Vertex* to, int numOfArmies, int
 				AddDeployedVertex(to);
 		}
 	}
+
+	lastActionMessage = "Moved " + std::to_string(numOfArmies) + " armie(s) from " + from->getTerritory()->getName() + " to " + to->getTerritory()->getName() + 
+		". " + std::to_string(remainingMoves) + " move(s) remain.";
+	notify();
 }
 
 void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
@@ -201,6 +211,9 @@ void Player::DestroyArmy(Vertex* v, Player* opponent, int numOfArmies) {
 	if (opponentArmies == 0) {
 		opponent->RemoveDeployedVertex(v);
 	}
+
+	lastActionMessage = "Defeated " + std::to_string(numOfArmies) + " of " + opponent->getPlayerName() + "'s armies";
+	notify();
 }
 
 void Player::BuildCity(Vertex* v, int numOfCities) {
@@ -215,6 +228,9 @@ void Player::BuildCity(Vertex* v, int numOfCities) {
 
 	v->getTerritory()->addCitiesByPlayer(numOfCities, playerName);
 	availableCities -= numOfCities;
+
+	lastActionMessage = "Built " + std::to_string(numOfCities) + " citie(s) in " + v->getTerritory()->getName();
+	notify();
 }
 
 void Player::InitResources(int coin, int armies, int cities) {
@@ -444,8 +460,18 @@ void Player::setStrategy(string strategyName) {
 
 }
 
+void Player::notify() {
+	std::list<Observer*>::iterator i = _observers->begin();
+	for (; i != _observers->end(); ++i)
+		(*i)->update();
+}
+
 Strategy* Player::getStrategy() {
 	return strategy;
+}
+
+std::string Player::getLastActionMessage() {
+	return lastActionMessage;
 }
 
 void PlayerBuilder::setPlayersType(vector<Player*> players) {
@@ -468,8 +494,5 @@ void PlayerBuilder::setPlayersType(vector<Player*> players) {
 			pl->setStrategy("Human");
 			std::cout << pl->getPlayerName() << " is a Human" << endl;
 		}
-
-
 	}
 }
-

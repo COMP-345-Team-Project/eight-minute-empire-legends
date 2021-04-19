@@ -62,10 +62,8 @@ int Driver::RunStrategyDriver() {
 	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
 	validGame->getMap()->setStartingRegion(startingRegion);
 	startingRegion->getTerritory()->setArmiesByPlayer(4, "Coucou");
-
 	validGame->runSetupPhase();
 	validGame->runRoundsUntilEndGame();
-
 	return 0;
 }
 */

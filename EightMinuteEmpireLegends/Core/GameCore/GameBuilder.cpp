@@ -1,5 +1,6 @@
 #include "GameBuilder.h"
 #include "../GameObservers/GameStatistics.h"
+#include "../GameObservers/PhaseObserver.h"
 
 Game* GameBuilder::build() {
 	std::vector<filesystem::path> maps = fetchMapFiles(_mapDir);
@@ -11,7 +12,7 @@ Game* GameBuilder::build() {
 
 	// Map selection
 	for (const auto& entry : maps) {
-		std::cout << index << ") " << entry.filename() << std::endl;
+		std::cout << std::to_string(index) << ") " << entry.filename() << std::endl;
 		index++;
 	}
 	std::cin >> mapSelection;
@@ -43,7 +44,7 @@ Game* GameBuilder::build() {
 	for (int i = 0; i < numPlayers; i++) {
 		validName = false;
 		while (!validName) {
-			std::cout << "Please enter a name for player " + i << " : ";
+			std::cout << "Please enter a name for player " + std::to_string(i) << " : ";
 			std::cin >> plName;
 			if (std::find(names.begin(), names.end(), plName) != names.end()) {
 				std::cout << "Name has already been taken by another player. Please enter a unique name." << std::endl;
@@ -100,6 +101,13 @@ Game* GameBuilder::build(int numPlayers, std::vector<std::string> names, std::st
 	//Create the game and attach Observer
 	Game* newGame = new Game(rsc, map, deck, pl);
 	GameStatistics* gameStatsObserver = new GameStatistics(newGame); //THe observer attach it self to the game
+
+	// Attach phase observer to players
+	PhaseObserver* phaseObserver;
+	for (Player* player : pl) {
+		phaseObserver = new PhaseObserver(player);
+	}
+	
 
 	//Crete a new game object and pass above objects to Game
 	return newGame;

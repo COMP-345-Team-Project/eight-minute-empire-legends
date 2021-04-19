@@ -62,7 +62,7 @@ Game::~Game() {
 	}
 	if (neutralPlayer != nullptr) {
 		delete neutralPlayer;
-	}
+	}		
 }
 
 Resources* Game::getResources() {
@@ -801,7 +801,7 @@ void Game::notify() {
 		players.at(i)->ComputeScore(map, players);
 
 	list<Observer*>::iterator observerIter;
-	for (observerIter = _observers.begin(); observerIter != _observers.end(); observerIter++) {
+	for (observerIter = _observers->begin(); observerIter != _observers->end(); observerIter++) {
 		(**observerIter).update();
 	}
 }

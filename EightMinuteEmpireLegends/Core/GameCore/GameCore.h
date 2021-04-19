@@ -96,6 +96,9 @@ public:
 
     void _assignResources(); //Call assignResources() from resource, need to be public for testing
 
+    // Attaches players to a phase observer
+    void attachPlayersToPhaseObserver();
+
     //Observable abstract class implementation
     void notify();
 };
