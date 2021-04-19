@@ -482,7 +482,7 @@ Card* CardSpace::sell(Deck& mainDeck, int cardInput) {
     Card* cardAdded = mainDeck.draw();
 
     //Handle when the deck is empty
-    if (cardAdded->getName() == "EMPTY") {
+    if (cardAdded == NULL) {
         cout << "No more new cards from deck" << endl;
     }
     else {

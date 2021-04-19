@@ -15,7 +15,7 @@ GameStatistics::GameStatistics(Game* game) : Observer() {
 	builtCitiesCount = new int[this->maxNumOfPlayer]{ 0, 0, 0, 0 };
 
 	//We hard code the symbols
-	graphSymbols = new char[this->maxNumOfPlayer]{ '*', '$', '%', '@' };
+	graphSymbols = new char[this->maxNumOfPlayer]{ '*', '-', '%', '@' };
 };
 
 GameStatistics::~GameStatistics() {
@@ -42,6 +42,11 @@ void GameStatistics::refreshData() {
 }
 
 void GameStatistics::update() {
+	std::cout << "\n***************************Updating Statistics***************************" << std::endl;
+	//Pull the data from the model
+	refreshData();
+
+	//Print out the player stats
 	vector<Player*> players = gameModel->getPlayers();
 
 	std::cout << "---------------------Player stats---------------------" << std::endl;
@@ -51,50 +56,61 @@ void GameStatistics::update() {
 		}
 	}
 
+	//Print the bar graph
 	std::cout << "---------------------Procession chart---------------------" << std::endl;
 	generateStatsTable();
+	std::cout << "\n*************************************************************************" << std::endl;
 }
 
 void GameStatistics::printPlayerStats(Player* player) {
 	std::cout << "******Player: " << player->getPlayerName() << "******" << std::endl;
 	std::cout << "Available coins: " << player->getCoins() << std::endl;
 	std::cout << "Available armies: " << player->getAvailableArmies() << std::endl;
-	std::cout << "Available cities: " << player->getAvailableArmies() << std::endl;
+	std::cout << "Available cities: " << player->getAvailableCities() << std::endl;
 	std::cout << "Total cards owned: " << player->getCards().size() << std::endl;
 
 	PlayerScore playerScore = player->getPlayerScore();
 	std::cout << "Number of owned regions: " << playerScore.getTerritoryScore() << std::endl;
-	std::cout << "Currently owned regions: " << std::endl;
+	std::cout << "Currently owned regions: ";
 	printVector(playerScore.getOwnedTerritories());
+	std::cout << std::endl;
 	std::cout << "Number of owned continents: " << playerScore.getContinentScore() << std::endl;
+	std::cout << "Currently owned continents: ";
 	printVector(playerScore.getOwnedContinents());
-	std::cout << "Abilities: " << std::endl;
+	std::cout << std::endl;
+	std::cout << "Abilities: ";
 	printVector(playerScore.getAbilities());
+	std::cout << std::endl;
 	std::cout << "Elixir points: " << playerScore.getElixirScore() << std::endl;
 	std::cout << "Total score: " << playerScore.getTotalScore() << std::endl;
 	std::cout << std::endl;
 }
 
 void GameStatistics::generateStatsTable() {
-	std::cout << "--------------------Summary----------------------" << std::endl;
-
 	int numOfPlayers = gameModel->getPlayers().size();
-	printCategory("Owned territories", territoryScores, numOfPlayers);
-	printCategory("Owned continents", continentScores, numOfPlayers);
-	printCategory("Built cities", builtCitiesCount, numOfPlayers);
 
-	std::cout << "0----5----10----15----20----25----30----35----40----45----50" << std::endl;
+	//Generates the bars
+	printCategory("Territories", territoryScores, numOfPlayers);
+	printCategory("Continents", continentScores, numOfPlayers);
+	printCategory("Cities\t", builtCitiesCount, numOfPlayers);
+
+	//Generate the x axis
+	std::cout << "\t\t0----5----10----15----20----25----30" << std::endl;
+
+	//Name of graph
+	std::cout << "Summary of number of territories/continents/cities owned by each player" << std::endl;
+
 	std::cout << std::endl;
 	std::cout << "Lengends:" << std::endl;
 
 	for (int i = 0; i < numOfPlayers; i++) {
-		std::cout << graphSymbols[i] << ": " << gameModel->getPlayers()[i];
+		std::cout << gameModel->getPlayers()[i]->getPlayerName() << ": " << graphSymbols[i] << std::endl;
 	}
 }
 
 void GameStatistics::printVector(vector<std::string> data) {
 	for (int i = 0; i < data.size(); i++) {
-		std::cout << data[i] << "\t";
+		std::cout << data[i] << "; ";
 	}
 }
 
@@ -107,10 +123,11 @@ void GameStatistics::printCategory(std::string categoryName, int values[], int s
 		// j corresponds to a value of the category
 		for (int j = 0; j < values[i]; j++) {
 			cout << graphSymbols[i];
+			//cout << "*";
 		}
 
 		cout << std::endl;
-		cout << "\t|";
+		cout << "\t\t|";
 	}
 
 	cout << std::endl;

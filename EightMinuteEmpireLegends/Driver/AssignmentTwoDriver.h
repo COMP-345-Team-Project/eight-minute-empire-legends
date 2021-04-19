@@ -11,5 +11,6 @@ public:
 	int RunSetupPhaseAndMainLoopDriver();
 	int RunPlayerDriver();
 	int RunComputeScoreTest();
+	int RunGameStatisticsTests();
 };
 

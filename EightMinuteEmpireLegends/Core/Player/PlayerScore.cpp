@@ -48,7 +48,7 @@ void PlayerScore::addOwnedTerritories(std::string territory) {
 
 void PlayerScore::addOwnedContinents(std::string continent) {
 	continentScore++;
-	ownedTerritories.push_back(continent);
+	ownedContinents.push_back(continent);
 }
 
 void PlayerScore::setElixirScore(int elixirScore) {

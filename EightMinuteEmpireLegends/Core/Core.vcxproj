@@ -178,6 +178,7 @@
     <ClInclude Include="GameEngine\PlayerType.h" />
     <ClInclude Include="GameObservers\GameObservers.h" />
     <ClInclude Include="GameObservers\GameStatistics.h" />
+    <ClInclude Include="GameObservers\PhaseObserver.h" />
     <ClInclude Include="MapLoader\MapLoader.h" />
     <ClInclude Include="MapLoader\MapLoaderException.h" />
     <ClInclude Include="Map\Map.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="GameEngine\GameEnginePrompts.cpp" />
     <ClCompile Include="GameObservers\GameObservers.cpp" />
     <ClCompile Include="GameObservers\GameStatistics.cpp" />
+    <ClCompile Include="GameObservers\PhaseObserver.cpp" />
     <ClCompile Include="GameEngine\GameEngine.cpp" />
     <ClCompile Include="MapLoader\MapLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>

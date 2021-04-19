@@ -25,7 +25,7 @@ int Driver::RunAssignmentTwoDriver()
 	AssignmentTwoDriver ass2Driver;
 
 	//The main driver to run the game, show casing all of its functionality
-	ass2Driver.RunGame();
+	//ass2Driver.RunGame();
 
 	//Below here we have included mini-drivers to show case specific functionalities of the game
 	/*std::cout << "(1) Running the Game Start Driver..." << std::endl;
@@ -62,10 +62,8 @@ int Driver::RunStrategyDriver() {
 	Vertex* startingRegion = validGame->FindVertexById(validGame->getMap(), "v3");
 	validGame->getMap()->setStartingRegion(startingRegion);
 	startingRegion->getTerritory()->setArmiesByPlayer(4, "Coucou");
-
 	validGame->runSetupPhase();
 	validGame->runRoundsUntilEndGame();
-
 	return 0;
 }
 */
