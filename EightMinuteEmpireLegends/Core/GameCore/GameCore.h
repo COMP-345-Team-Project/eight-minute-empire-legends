@@ -8,6 +8,7 @@
 #include "../MapLoader/MapLoaderException.h"
 #include "ConfigFileException.h"
 #include "GameBuilderException.h"
+#include "GameReport.h"
 
 const int _dCoins = 36;
 const int _dArmies = 18;
@@ -77,6 +78,7 @@ public:
 
     //Main game loop, part 3, 5
     void runRoundsUntilEndGame();
+    void runRoundsUntilEndGame(bool tournyMode);
 
     //End game, announce winners, and cleanup
     GameReport endGame();

@@ -1,13 +1,14 @@
 #pragma once
+#include "../pch.h"
 #include "GameContext.h"
-#include "GameReport.h"
+#include "../GameCore/GameReport.h"
+#include "PlayerContext.h"
 
 class GameEngine
 {
 public:
 	GameEngine();
 	GameContext BuildGameContextInteractively();
-	GameReport RunGame(GameContext gameContext);
-	void DisplayGameReport(GameReport gameReport);
+	std::vector<GameReport> RunGame(GameContext gameContext);
+	void DisplayGameReport(std::vector<GameReport> gameReports);
 };
-

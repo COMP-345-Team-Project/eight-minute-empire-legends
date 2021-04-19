@@ -375,15 +375,17 @@ void Game::_bid() {
 
 		std::cout << "Player " << i + 1 << ": " << players[i]->getPlayerName() << endl;
 	}
-
 }
 
 void Game::runRoundsUntilEndGame() {
+	runRoundsUntilEndGame(false);
+}
+void Game::runRoundsUntilEndGame(bool tournyMode) {
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
 
 	//Game ends when each players have certain numbers of cards
-	if (endGameCardCount == 0) {
+	if (!tournyMode) {
 		endGameCardCount = 13;
 		if (players.size() == 3) {
 			endGameCardCount = 10;
@@ -393,7 +395,10 @@ void Game::runRoundsUntilEndGame() {
 		}
 	}
 
-	PlayerBuilder::setPlayersType(players);
+	if (!tournyMode)
+	{
+		PlayerBuilder::setPlayersType(players);
+	}
 
 	int gameRound = 1;
 
@@ -402,23 +407,24 @@ void Game::runRoundsUntilEndGame() {
 
 		std::cout << "\n\nRound " << gameRound++ << endl;
 
-		string changeStrategy = "N";
-		std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
-		std::cin >> changeStrategy;
+		if (!tournyMode) {
+			string changeStrategy = "N";
+			std::cout << "Do you wish to change the strategy of any players? (Y)es or (N)o:";
+			std::cin >> changeStrategy;
 
-		if (changeStrategy == "Y" || changeStrategy == "y") {
-			PlayerBuilder::setPlayersType(players);
+			if (changeStrategy == "Y" || changeStrategy == "y") {
+				PlayerBuilder::setPlayersType(players);
+			}
 		}
-
 		for (int i = 0; i < players.size(); i++) {
 
 			//Buy card based on strategy of each player
 			Card* cardBeingPurchased = players[i]->getStrategy()->buyCard(players[i], cardSpace, *deck);
 
 			//Perform action based on strategy of each player
-			players[i]->getStrategy()->performAction(this,players[i],cardBeingPurchased);
-			
-			
+			players[i]->getStrategy()->performAction(this, players[i], cardBeingPurchased);
+
+
 		}
 
 	}

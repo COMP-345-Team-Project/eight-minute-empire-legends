@@ -14,7 +14,7 @@ GameMode GameEnginePrompts::forGameMode()
 		std::cout << "Please select either (T)ournament or (S)ingle game: ";
 		std::cin >> tournyOrSingle;
 
-		if (tournyOrSingle > 60) { tournyOrSingle -= 32; }
+		if (tournyOrSingle > 96) { tournyOrSingle -= 32; }
 		switch (tournyOrSingle)
 		{
 		case 'T':
@@ -26,11 +26,8 @@ GameMode GameEnginePrompts::forGameMode()
 			modeSelected = true;
 			break;
 		default:
-			break;
-		}
-		if (!modeSelected)
-		{
 			std::cout << "Please enter 'T' or 'S' as prompted." << std::endl;
+			break;
 		}
 	}
 	return gameMode;
@@ -50,6 +47,7 @@ std::string GameEnginePrompts::forMapFilename()
 		std::cout << index << ") " << entry.filename() << std::endl;
 		index++;
 	}
+	std::cout << "Enter selection here: ";
 	std::cin >> mapSelection;
 	if (mapSelection < 0 || mapSelection >= maps.size()) {
 		throw GameBuilderException("ERR: Selection index out of range.");
@@ -79,4 +77,34 @@ int GameEnginePrompts::forNumPlayers()
 		}
 	}
 	return numPlayers;
+}
+
+PlayerContext GameEnginePrompts::forPlayerContext()
+{
+	PlayerContext playerContext;
+	std::cout << "\n------ New player setup ------";
+	std::cout << "\nEnter player's last name: ";
+	std::cin >> playerContext.lastName;
+	std::cout << "Choose player strategy." << std::endl;
+	std::cout << "1) Human \n2) Greedy NPC \n3) Moderate NPC" << std::endl;
+	std::cout << "Enter choice here: ";
+	int stratChoice;
+	std::cin >> stratChoice;
+	switch (stratChoice)
+	{
+	case 1:
+		playerContext.strategy = PlayerType::HUMAN;
+		break;
+	case 2:
+		playerContext.strategy = PlayerType::NPC_GREEDY;
+		break;
+	case 3:
+		playerContext.strategy = PlayerType::NPC_MODERATE;
+		break;
+	default:
+		std::cout << "Please read next time...\nDefaulting to Moderate NPC.";
+		playerContext.strategy = PlayerType::NPC_MODERATE;
+		break;
+	}
+	return playerContext;
 }

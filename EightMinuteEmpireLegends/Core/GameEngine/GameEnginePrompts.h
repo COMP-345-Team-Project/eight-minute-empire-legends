@@ -10,4 +10,3 @@ public:
 	static int forNumPlayers();
 	static PlayerContext forPlayerContext();
 };
-
