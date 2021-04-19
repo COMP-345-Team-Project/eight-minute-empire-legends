@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "../Cards/Cards.h"
 #include "../GameCore/GameCore.h"
+#include "../Utilities/Utilities.h"
 
 Strategy::Strategy() {}
 
@@ -62,7 +63,7 @@ Card* HumanStrategy::buyCard(Player* player, CardSpace& cardSpace, Deck& deck) {
 void HumanStrategy::performAction(Game* game, Player* player, Card* cardBeingPurchased) {
 	
 	//We have an option to skip the action 
-	Game::_listActions(cardBeingPurchased);
+	listActions(cardBeingPurchased);
 
 	//If there are 2 actions
 	if (cardBeingPurchased->getSecondAction().compare("") != 0) {
@@ -152,7 +153,7 @@ Card* Strategy::autoBuyCard(Player* player, CardSpace& cardSpace, Deck& deck, st
 
 void Strategy::autoPerformAction(Game* game, Player* player, Card* cardBeingPurchased, string strategy) {
 	
-	Game::_listActions(cardBeingPurchased);
+	listActions(cardBeingPurchased);
 
 	//game->_performAction(cardBeingPurchased, player, 1);
 	

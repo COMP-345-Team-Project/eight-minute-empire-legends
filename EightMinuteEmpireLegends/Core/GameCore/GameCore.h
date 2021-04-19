@@ -41,7 +41,8 @@ private:
     Map* map;
     Deck* deck;
     std::vector<Player*> players;
-    Player* neutralPlayer = nullptr; // Initialized if 2 player game    
+    Player* neutralPlayer = nullptr; // Initialized if 2 player game
+    int endGameCardCount;
 
     void _placeArmies(); //2 players game are a bit different, check rules
     void _bid(); //Gather user inputs, then call the BiddingFacility to actually do the bidding
@@ -49,11 +50,8 @@ private:
     int _getVertexIndexFromUserInput(vector<Vertex*> vertices, std::string prompt);
     int _getArmiesForOperation(int limit);
     int _getPlayerIndexFromUserInput(std::string prompt);
-    
-    
-    void _promptPlayerToPerformAction(Card* card, std::string actionDisplay, int actionOrder, Player* player);
-    
-
+    void _setEndGameConditions(int maxNumOfCards);
+   
 public:
     Game();
     Game(Resources* resources, Map* map, Deck* deck, vector<Player*> players);
@@ -69,7 +67,7 @@ public:
     friend std::ostream& operator <<(std::ostream& os, const Game* g);
 
     //Set up phase
-    void runSetupPhase();
+    void runSetupPhase(int maxNumOfCards = 0);
 
     //Main game loop, part 3, 5
     void runRoundsUntilEndGame();
@@ -93,10 +91,7 @@ public:
     void autoDestroyArmies(Player* currPlayer, int detroyLimit);
 
     Vertex* FindVertexById(Map* map, string id);
-
-    static void _listActions(Card* card);
-    static bool _confirm();
-
+   
     void _performAction(Card* card, Player* player, int actionNumber);
 
     void _assignResources(); //Call assignResources() from resource, need to be public for testing

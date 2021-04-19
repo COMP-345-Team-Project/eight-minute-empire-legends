@@ -2,6 +2,7 @@
 
 #include "../pch.h"
 #include "GameCore.h"
+#include "../Utilities/Utilities.h"
 
 // Resources class implementation
 
@@ -49,6 +50,7 @@ Game::Game() : Observable() { //For testing only
 	this->resources = NULL;
 	this->map = NULL;
 	this->deck = NULL;
+	this->endGameCardCount = 0;
 } 
 
 // TODO: We sure about this? Pretty sure whoever builds it should destroy it, 
@@ -84,50 +86,6 @@ void Game::endGame() {
 }
 
 void Game::endGame(Map* map, vector<Player*> players) {
-	//Please dont remove this code because this is optimize for a variable number of players
-	/*std::map<std::string, int> scores;
-	
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		scores.insert(pair<std::string, int>((**playerIter).getPlayerName(), (**playerIter).ComputeScore(map, players)));
-	}
-
-	//We find the player with the maximum score
-	std::map<std::string, int>::iterator winner = std::max_element(scores.begin(), scores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	std::string winnerName = winner->first;
-	int winnerScore = winner->second;
-
-	//We check to make sure that there is no tie
-	bool isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		std::string currPlayerName = (**playerIter).getPlayerName();
-		if (currPlayerName.compare(winnerName) != 0 && scores[currPlayerName] == winnerScore) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on score
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}
-
-	//We next check the number of coins
-	std::vector<Player*>::iterator mostCoinPlayer = std::max_element(players.begin(), players.end(), [](const Player* a, const Player* b)->bool { return a->getCoins() < b->getCoins(); });
-	winnerName = (**mostCoinPlayer).getPlayerName();
-	int winnerCoins = (**mostCoinPlayer).getCoins();
-	isTied = false;
-	for (vector<Player*>::iterator playerIter = players.begin(); playerIter != players.end(); playerIter++) {
-		if ((**playerIter).getPlayerName().compare(winnerName) != 0 && (**playerIter).getCoins() == winnerCoins) {
-			isTied = true;
-			break;
-		}
-	}
-	//No tied based on coins
-	if (!isTied) {
-		std::cout << "The winner is player: " << winnerName << std::endl;
-		return;
-	}*/
-
 	//Assume we only have 2 players for now
 	std::cout << "\n--------------Game ended, now Computing Scores-----------"<< std::endl;
 	if (players.size() == 2) {
@@ -143,10 +101,12 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		if (p1Score > p2Score) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1Score < p2Score) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
@@ -154,10 +114,12 @@ void Game::endGame(Map* map, vector<Player*> players) {
 		std::cout << "Both players tied, comparing remmaining coins" << std::endl;
 		if (p1->getCoins() > p2->getCoins()) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1->getCoins() < p2->getCoins()) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
@@ -168,14 +130,17 @@ void Game::endGame(Map* map, vector<Player*> players) {
 
 		if (p1RegionScore > p2RegionScore) {
 			std::cout << "The winner is player: " << p1->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 		else if (p1RegionScore < p2RegionScore) {
 			std::cout << "The winner is player: " << p2->getPlayerName() << std::endl;
+			notify();
 			return;
 		}
 
 		std::cout << " This game is a tie!" << std::endl;
+		notify();
 	}
 	else {
 		std::cout << " Current number of players not supported!" << std::endl;
@@ -227,10 +192,11 @@ std::ostream& operator <<(std::ostream& os, const Game* g) {
 
 // Startup Phase
 
-void Game::runSetupPhase() {
+void Game::runSetupPhase(int maxNumOfCards) {
 	_assignResources();
 	_bid();
 	_placeArmies();
+	_setEndGameConditions(maxNumOfCards);
 }
 void Game::_placeArmies() {
 	std::vector<Vertex*> possibleStartingVertices = map->getPotentialStartingRegions();
@@ -358,19 +324,25 @@ void Game::_bid() {
 
 }
 
+void Game::_setEndGameConditions(int maxNumOfCards) {
+	if (maxNumOfCards == 0) {
+		//Game ends when each players have certain numbers of cards
+		endGameCardCount = 13;
+		if (players.size() == 3) {
+			endGameCardCount = 10;
+		}
+		if (players.size() == 4) {
+			endGameCardCount = 8;
+		}
+	}
+	else {
+		endGameCardCount = maxNumOfCards;
+	}
+}
+
 void Game::runRoundsUntilEndGame() {
 	//Creating a CardSpace
 	CardSpace cardSpace = CardSpace(*deck);
-
-	//Game ends when each players have certain numbers of cards
-	int endGameCardCount = 13;
-	if (players.size() == 3) {
-		endGameCardCount = 10;
-	}
-	if (players.size() == 4) {
-		endGameCardCount = 8;
-	}
-
 	PlayerBuilder::setPlayersType(players);
 
 	int gameRound = 1;
@@ -402,33 +374,6 @@ void Game::runRoundsUntilEndGame() {
 	}
 }
 
-void Game::_listActions(Card* card) {
-	std::string firstAction = card->getFirstAction();
-	std::string secondAction = card->getSecondAction();
-	std::cout << "The available action(s) is/are: " << std::endl;
-
-	//If we have 2 actions
-	if (secondAction.compare("") != 0) {
-		std::cout << "1. ";
-		card->printHelper(card->getFirstAction());
-		std::cout << std::endl;
-
-		std::cout << "2. ";
-		card->printHelper(card->getSecondAction());
-		std::cout << std::endl;
-
-		if (card->getAndAction()) //And action
-			std::cout << "You can perform both actions." << std::endl;
-		else //Or action
-			std::cout << "You can perform only one of the actions. Please select one of them." << std::endl;
-	}
-	else { //We only have 1 actions
-		std::cout << "1. ";
-		card->printHelper(card->getFirstAction());
-		std::cout << std::endl;
-	}
-}
-
 void Game::_performAction(Card* card, Player* player, int actionOrder) {
 	//Perform the first action
 	std::cout << "Perform action ";
@@ -445,7 +390,7 @@ void Game::_performAction(Card* card, Player* player, int actionOrder) {
 
 	std::cout << "? (Y/N)";
 
-	if (_confirm()) {
+	if (confirm()) {
 		if (action.compare("newArmy") == 0) {
 			PlaceArmies(player, card->getNewArmy());
 		}
@@ -462,22 +407,9 @@ void Game::_performAction(Card* card, Player* player, int actionOrder) {
 			std::cout << "Unknown action.";
 		}
 	}
-}
 
-bool Game::_confirm() {
-	char confirm;
-	do {
-		std::cin >> confirm;
-		if (confirm == 'N') {
-			return false;
-		}
-		else if (confirm == 'Y') {
-			return true;
-		}
-		else {
-			std::cout << "Please enter Y for yes or N for no";
-		}
-	} while (true);
+	//We update the statistics everytime an action is done
+	notify();
 }
 
 void Game::PlaceArmies(Player* player, int deployLimit) {
@@ -521,7 +453,7 @@ void Game::PlaceArmies(Player* player, int deployLimit) {
 		//Ask the player if he wants to continue
 		if (deployLimit > 0) {
 			std::cout << "Do you want to continue deploying? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				placeMoreArmies = false;
 			}
 		}
@@ -612,7 +544,7 @@ void Game::MoveArmies(Player* player, int moveLimit) {
 		//Ask the player if he wants to continue
 		if (moveLimit > 0) {
 			std::cout << "Do you want to continue moving? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				moveMoreArmies = false;
 			}
 		}
@@ -698,7 +630,7 @@ void Game::BuildCity(Player* player) {
 		//Ask the player if he wants to continue
 		if (continueBuilding) {
 			std::cout << "Do you want to continue building? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				continueBuilding = false;
 			}
 		}
@@ -775,7 +707,7 @@ void Game::DestroyArmies(Player* currPlayer, int detroyLimit) {
 		//Ask the player if he wants to continue
 		if (detroyLimit > 0) {
 			std::cout << "Do you want to continue destroying armies? (Y/N) ";
-			if (!_confirm()) {
+			if (!confirm()) {
 				destroyMoreArmies = false;
 			}
 		}
@@ -864,8 +796,12 @@ int Game::_getPlayerIndexFromUserInput(std::string prompt) {
 }
 
 void Game::notify() {
+	//Recompute the score for each player before updating the observers
+	for (int i=0; i<players.size(); i++)
+		players.at(i)->ComputeScore(map, players);
+
 	list<Observer*>::iterator observerIter;
-	for (observerIter = _observers->begin(); observerIter == _observers->end(); observerIter++) {
+	for (observerIter = _observers->begin(); observerIter != _observers->end(); observerIter++) {
 		(**observerIter).update();
 	}
 }

@@ -90,7 +90,7 @@ void Player::PayCoin(int amount) {
 
 	coin -= amount;
 
-	lastActionMessage = "Paid " + std::to_string(amount) + std::to_string(amount) + " coin(s).";	
+	lastActionMessage = "Paid " + std::to_string(amount) + " coin(s).";	
 	notify();
 }
 
@@ -316,42 +316,23 @@ int Player::ComputeRegionalScore(Map* map) {
 }
 
 bool Player::OwnsContinent(std::map<string, int>& continentScores) {
-	/*string owner = "";
-	int maxScore = 0;
-	bool tied = false;
-	
-	//Looping through all the scores of all players in a specific continent
-	for (std::map<string, int>::const_iterator iter = continentScores.begin(); iter != continentScores.end(); ++iter)
-	{
-		//If a player has a score higher than the known max score, set the owner to the player and set his score to maxScore
-		if (iter->second > maxScore) {
-			owner = iter->first;
-			maxScore = iter->second;
-			tied = false;
+	if (continentScores.size() > 0) {
+		std::map<std::string, int>::iterator owner = std::max_element(continentScores.begin(), continentScores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
+		std::string ownerName = owner->first;
+		int ownerArmies = owner->second;
+
+		//We must check that there is only 1 player that owns the continent
+		for (std::map<std::string, int>::iterator mapIter = continentScores.begin(); mapIter != continentScores.end(); mapIter++) {
+			if (mapIter->first.compare(ownerName) != 0 && mapIter->second == ownerArmies) {
+				ownerName = "";
+				break;
+			}
 		}
-		else if (iter->second == maxScore) {
-			tied = true;
-		}
+
+		return ownerName == playerName;
 	}
 
-	//If the owner is the player, returns true
-	if (owner.compare(this->playerName) == 0 && !tied)
-		return true;
-	else
-		return false;*/
-	std::map<std::string, int>::iterator owner = std::max_element(continentScores.begin(), continentScores.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b)->bool { return a.second < b.second; });
-	std::string ownerName = owner->first;
-	int ownerArmies = owner->second;
-
-	//We must check that there is only 1 player that owns the continent
-	for (std::map<std::string, int>::iterator mapIter = continentScores.begin(); mapIter != continentScores.end(); mapIter++) {
-		if (mapIter->first.compare(ownerName) != 0 && mapIter->second == ownerArmies) {
-			ownerName = "";
-			break;
-		}
-	}
-	
-	return ownerName == playerName;
+	return false;
 }
 
 int Player::ComputeElixirScore(vector<Player*> players) {
@@ -398,7 +379,10 @@ int Player::ComputeAbilityScore() {
 
 	for (int i = 0; i < cards.size(); i++) {
 		std::string specialAbility = cards.at(i)->getSpecialAbility();
-		playerScore.addAbility(specialAbility);
+
+		if (specialAbility.compare("") != 0)
+			playerScore.addAbility(specialAbility);
+
 		//First we check cards that grant 1 point per each card type, 1 card=1 point
 		if (specialAbility.compare("1VPperAncient") == 0) //1 point per ancient card
 			total += CountCardsBasedOnType("Ancient");

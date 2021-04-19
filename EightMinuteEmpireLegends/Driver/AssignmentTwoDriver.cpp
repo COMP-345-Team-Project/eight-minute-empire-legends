@@ -3,7 +3,8 @@
 #include "AssignmentTwoDriver.h"
 
 #include "../Tests/GameStartTests/GameStartTests.h"
-#include "../Tests/GameTests/GameTest.h"
+#include "../Tests/GameTests/GameTest.h";
+#include "../Tests/ObserverTests/GameStatisticsTests.h"
 
 int AssignmentTwoDriver::RunGame()
 {
@@ -66,5 +67,13 @@ int AssignmentTwoDriver::RunComputeScoreTest()
 {
 	PlayerTests playerTests;
 	playerTests.Test_ComputeScore();
+	return 0;
+}
+
+//Observer Tests
+int AssignmentTwoDriver::RunGameStatisticsTests() {
+	GameStatisticsTests gameStats;
+	//gameStats.Test_PrintPlayerStats();
+	gameStats.Test_Driver();
 	return 0;
 }
